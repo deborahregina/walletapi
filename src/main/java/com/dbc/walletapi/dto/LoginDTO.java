@@ -1,4 +1,4 @@
-package dto;
+package com.dbc.walletapi.dto;
 
 import com.sun.istack.NotNull;
 import lombok.Data;

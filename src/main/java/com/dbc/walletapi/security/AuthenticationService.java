@@ -1,13 +1,13 @@
-package security;
+package com.dbc.walletapi.security;
 
 
-import entity.UsuarioEntity;
+import com.dbc.walletapi.entity.UsuarioEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import service.UsuarioService;
+import com.dbc.walletapi.service.UsuarioService;
 
 import java.util.Optional;
 

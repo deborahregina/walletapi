@@ -1,10 +1,10 @@
-package security;
+package com.dbc.walletapi.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -30,14 +30,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable().and().cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/*").permitAll()
                 .antMatchers("/auth").permitAll()
 
-                .antMatchers("/auth/create/").hasRole("ADMIN") // CREATE - ADMIN
+             /*   .antMatchers("/auth/create/").hasRole("ADMIN") // CREATE - ADMIN
                 .antMatchers(HttpMethod.GET,"/**").hasAnyRole("USUARIO", "MARKETING", "ATENDIMENTO", "ADMIN") //ROLE_USUARIO
                 .antMatchers("/cliente/**", "/contato/**", "/endereco/**", "/pedido/**").hasRole("ATENDIMENTO")
                 .antMatchers("/produto/**").hasRole("MARKETING")
-                .antMatchers("/**").hasRole("ADMIN")
+                .antMatchers("/**").hasRole("ADMIN")*/
 
                 .anyRequest().authenticated()
 

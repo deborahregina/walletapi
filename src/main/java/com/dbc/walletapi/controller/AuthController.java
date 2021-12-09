@@ -1,10 +1,10 @@
-package controller;
+package com.dbc.walletapi.controller;
 
 
-import dto.LoginDTO;
-import dto.UsuarioCreateDTO;
-import dto.UsuarioDTO;
-import entity.UsuarioEntity;
+import com.dbc.walletapi.dto.LoginDTO;
+import com.dbc.walletapi.dto.UsuarioCreateDTO;
+import com.dbc.walletapi.dto.UsuarioDTO;
+import com.dbc.walletapi.entity.UsuarioEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import security.TokenService;
-import service.UsuarioService;
+import com.dbc.walletapi.security.TokenService;
+import com.dbc.walletapi.service.UsuarioService;
 
 import javax.validation.Valid;
 
