@@ -1,4 +1,4 @@
-package dto;
+package com.dbc.walletapi.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

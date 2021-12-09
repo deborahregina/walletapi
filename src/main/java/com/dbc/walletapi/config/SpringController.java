@@ -1,4 +1,4 @@
-package config;
+package com.dbc.walletapi.config;
 
 
 import org.springframework.web.bind.annotation.GetMapping;

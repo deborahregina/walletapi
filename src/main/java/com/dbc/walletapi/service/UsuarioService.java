@@ -1,14 +1,14 @@
-package service;
+package com.dbc.walletapi.service;
 
-import dto.UsuarioCreateDTO;
-import dto.UsuarioDTO;
-import entity.GrupoEntity;
-import entity.UsuarioEntity;
+import com.dbc.walletapi.dto.UsuarioCreateDTO;
+import com.dbc.walletapi.dto.UsuarioDTO;
+import com.dbc.walletapi.entity.GrupoEntity;
+import com.dbc.walletapi.entity.UsuarioEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import repository.GrupoRepository;
-import repository.UsuarioRepository;
+import com.dbc.walletapi.repository.GrupoRepository;
+import com.dbc.walletapi.repository.UsuarioRepository;
 
 import java.util.Optional;
 import java.util.stream.Collectors;

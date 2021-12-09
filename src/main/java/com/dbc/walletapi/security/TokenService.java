@@ -1,6 +1,6 @@
-package security;
+package com.dbc.walletapi.security;
 
-import entity.UsuarioEntity;
+import com.dbc.walletapi.entity.UsuarioEntity;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

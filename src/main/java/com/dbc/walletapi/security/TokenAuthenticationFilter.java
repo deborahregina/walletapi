@@ -1,4 +1,4 @@
-package security;
+package com.dbc.walletapi.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

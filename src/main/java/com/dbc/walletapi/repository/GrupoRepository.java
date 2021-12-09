@@ -1,6 +1,6 @@
-package repository;
+package com.dbc.walletapi.repository;
 
-import entity.GrupoEntity;
+import com.dbc.walletapi.entity.GrupoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package entity;
+package com.dbc.walletapi.entity;
 
 import lombok.Getter;
 import lombok.Setter;
