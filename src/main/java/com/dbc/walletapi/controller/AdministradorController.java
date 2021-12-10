@@ -52,7 +52,8 @@ public class AdministradorController {
         return token;
     }
 
-    @PostMapping("/create-gerente")
+
+    @PostMapping("/createGerente")
     @ApiOperation(value = "Criar gerente")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Criação feita com sucesso"),
@@ -63,4 +64,6 @@ public class AdministradorController {
     public GerenteDTO postGerente(@RequestBody GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
         return gerenteService.create(gerenteCreateDTO);
     }
+
+
 }
