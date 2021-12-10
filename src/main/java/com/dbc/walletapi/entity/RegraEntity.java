@@ -17,6 +17,7 @@ public class RegraEntity implements Serializable, GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_regra")
     @SequenceGenerator(name = "seq_regra", sequenceName = "seq_regra", allocationSize = 1)
+
     @Column(name = "id_regra")
     private Integer idRegra;
 

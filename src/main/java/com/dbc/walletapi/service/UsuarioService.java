@@ -18,16 +18,16 @@ public class UsuarioService {
     private final RegraRepository regraRepository;
 
     public Optional<UsuarioEntity> findByLoginAndSenha(String login, String senha) {
-        return usuarioRepository.findByLoginAndSenha(login, senha);
+        return usuarioRepository.findByUsuarioAndSenha(login, senha);
     }
 
     public Optional<UsuarioEntity> findByLogin(String login){
-        return usuarioRepository.findByLogin(login);
+        return usuarioRepository.findByUsuario(login);
     }
 
     public UsuarioDTO create(UsuarioCreateDTO usuarioCreateDTO) {
         UsuarioEntity entity = new UsuarioEntity();
-        entity.setLogin(usuarioCreateDTO.getUsuario());
+        entity.setUsuario(usuarioCreateDTO.getUsuario());
         entity.setSenha(new BCryptPasswordEncoder().encode(usuarioCreateDTO.getSenha()));
         entity.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra()).orElse(null));
 
@@ -38,6 +38,6 @@ public class UsuarioService {
                         .collect(Collectors.toList())
         );*/
         UsuarioEntity save = usuarioRepository.save(entity);
-        return new UsuarioDTO(save.getIdUsuario(), save.getUsername(), save.getRegraEntity().getIdRegra());
+        return new UsuarioDTO(save.getIdUsuario(), save.getUsername() , save.getRegraEntity().getIdRegra());
     }
 }
