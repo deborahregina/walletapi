@@ -21,11 +21,17 @@ public class ServicoEntity implements Serializable, GrantedAuthority {
     @Column(name = "id_servico")
     private Integer idServico;
 
+    @Column(name = "nome")
     private String nome;
+    @Column(name = "descricao")
     private String descricao;
+    @Column(name = "website")
     private String webSite;
+    @Column(name = "valor")
     private BigDecimal valor;
+    @Column(name = "moeda")
     private TipoMoeda moeda;
+    @Column(name = "periodicidade")
     private Integer periocidade;
 
 

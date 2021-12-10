@@ -3,6 +3,7 @@ package com.dbc.walletapi.controller;
 
 import com.dbc.walletapi.dto.*;
 import com.dbc.walletapi.entity.UsuarioEntity;
+import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.service.GerenteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,7 +44,7 @@ public class AdministradorController {
     }
 
     @PostMapping("/createGerente")
-    public GerenteDTO postGerente(@RequestBody GerenteCreateDTO gerenteCreateDTO) {
+    public GerenteDTO postGerente(@RequestBody GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
         return gerenteService.create(gerenteCreateDTO);
     }
 }
