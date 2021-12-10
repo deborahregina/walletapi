@@ -26,18 +26,14 @@ public class UsuarioService {
     }
 
     public UsuarioDTO create(UsuarioCreateDTO usuarioCreateDTO) {
+
         UsuarioEntity entity = new UsuarioEntity();
         entity.setUsuario(usuarioCreateDTO.getUsuario());
         entity.setSenha(new BCryptPasswordEncoder().encode(usuarioCreateDTO.getSenha()));
         entity.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra()).orElse(null));
 
-       /* entity.setGrupoEntity(
-                usuarioCreateDTO.getGrupos().stream()
-                        .map(grupoId -> grupoRepository.findById(grupoId)
-                                .orElse(null))
-                        .collect(Collectors.toList())
-        );*/
         UsuarioEntity save = usuarioRepository.save(entity);
         return new UsuarioDTO(save.getIdUsuario(), save.getUsername() , save.getRegraEntity().getIdRegra());
+
     }
 }

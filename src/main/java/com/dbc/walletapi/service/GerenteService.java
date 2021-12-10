@@ -7,6 +7,7 @@ import com.dbc.walletapi.dto.UsuarioDTO;
 import com.dbc.walletapi.entity.GerenteEntity;
 import com.dbc.walletapi.entity.UsuarioEntity;
 import com.dbc.walletapi.repository.GerenteRepository;
+import com.dbc.walletapi.repository.RegraRepository;
 import com.dbc.walletapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +21,23 @@ public class GerenteService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioService usuarioService;
     private final GerenteRepository gerenteRepository;
+    private final RegraRepository regraRepository;
 
     public GerenteDTO create(GerenteCreateDTO gerenteCreateDTO) {
 
 
-       /* UsuarioCreateDTO usuarioCreateDTO = gerenteCreateDTO.getUsuarioGerente();
+        UsuarioCreateDTO usuarioCreateDTO = gerenteCreateDTO.getUsuario();
         UsuarioEntity usuarioNovo = objectMapper.convertValue(usuarioCreateDTO, UsuarioEntity.class);
+
+        usuarioNovo.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra()).orElse(null));
         UsuarioEntity user = usuarioRepository.save(usuarioNovo);
-*/
+
+
         GerenteEntity gerenteEntity = objectMapper.convertValue(gerenteCreateDTO, GerenteEntity.class);
-        //gerenteEntity.setUsuario(user);
+        gerenteEntity.setUsuario(user);
         GerenteEntity novoGerente = gerenteRepository.save(gerenteEntity);
 
-               GerenteDTO gerenteDTO = objectMapper.convertValue(novoGerente, GerenteDTO.class);
+        GerenteDTO gerenteDTO = objectMapper.convertValue(novoGerente, GerenteDTO.class);
         return gerenteDTO;
 
     }
