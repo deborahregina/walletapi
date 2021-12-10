@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -33,9 +34,9 @@ public class GerenteEntity {
     @Column(name = "STATUS")
     private TipoStatus status;
 
-    //@JsonIgnore
-    //@OneToMany(mappedBy = "gerenteEntity", fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<ServicoEntity> servicos;
+    @JsonIgnore
+    @OneToMany(mappedBy = "gerenteEntity", fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServicoEntity> servicos;
 
 
 

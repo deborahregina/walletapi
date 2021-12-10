@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -23,14 +24,15 @@ public class ServicoEntity implements Serializable, GrantedAuthority {
     private String nome;
     private String descricao;
     private String webSite;
-    private Double valor;
-    private Double moeda;
+    private BigDecimal valor;
+    private TipoMoeda moeda;
     private Integer periocidade;
 
 
-//    @JsonIgnore
-//    @OneToOne(mappedBy = "gerente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
-//    private Gerente gerente;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_gerente", referencedColumnName = "id_gerente")
+    private GerenteEntity gerenteEntity;
 
 
     @Override
