@@ -43,8 +43,11 @@ public class AdministradorController {
         return token;
     }
 
+
     @PostMapping("/createGerente")
     public GerenteDTO postGerente(@RequestBody GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
         return gerenteService.create(gerenteCreateDTO);
     }
+
+
 }

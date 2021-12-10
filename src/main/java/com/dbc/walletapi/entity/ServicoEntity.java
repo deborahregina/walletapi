@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity(name= "SERIVCO")
-public class ServicoEntity implements Serializable, GrantedAuthority {
+public class ServicoEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_servico")
@@ -40,9 +40,8 @@ public class ServicoEntity implements Serializable, GrantedAuthority {
     @JoinColumn(name = "id_gerente", referencedColumnName = "id_gerente")
     private GerenteEntity gerenteEntity;
 
+    @Column(name = "status")
+    private TipoStatus status;
 
-    @Override
-    public String getAuthority() {
-        return null;
-    }
+
 }

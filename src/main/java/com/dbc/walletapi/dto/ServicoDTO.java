@@ -1,5 +1,6 @@
 package com.dbc.walletapi.dto;
 
+import com.dbc.walletapi.entity.TipoStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,8 @@ public class ServicoDTO {
     private Double moeda;
     @NotNull
     private Integer periocidade;
+
+    private TipoStatus status;
 //    private Gerente gerente;
 
 }
