@@ -27,25 +27,17 @@ public class GerenteService {
     private final RegraRepository regraRepository;
 
     public GerenteDTO create(GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
-
-
         UsuarioCreateDTO usuarioCreateDTO = gerenteCreateDTO.getUsuario();
         UsuarioEntity usuarioNovo = objectMapper.convertValue(usuarioCreateDTO, UsuarioEntity.class);
-
-
         usuarioNovo.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra()).orElseThrow(() -> new RegraDeNegocioException("Regra não encontrada!")));
         String senha = new BCryptPasswordEncoder().encode(usuarioNovo.getPassword());
         usuarioNovo.setSenha(senha);
         UsuarioEntity user = usuarioRepository.save(usuarioNovo);
-
-
         GerenteEntity gerenteEntity = objectMapper.convertValue(gerenteCreateDTO, GerenteEntity.class);
         gerenteEntity.setUsuario(user);
         GerenteEntity novoGerente = gerenteRepository.save(gerenteEntity);
-
         GerenteDTO gerenteDTO = objectMapper.convertValue(novoGerente, GerenteDTO.class);
         return gerenteDTO;
-
     }
 
 
