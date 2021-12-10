@@ -7,8 +7,12 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum TipoMoeda {
 
-    MOEDA1(1),
-    MOEDA2(2);
+    REAL(1),
+    DOLAR(2),
+    EURO(3),
+    IENE(4),
+    YUAN(5);
+
 
     private Integer tipo;
 

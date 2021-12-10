@@ -1,7 +1,5 @@
 package com.dbc.walletapi.dto;
 
-import com.dbc.walletapi.entity.TipoStatus;
-
 import com.dbc.walletapi.entity.GerenteEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +10,8 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServicoDTO {
+public class ServicoCreateDTO {
 
-    @NotNull
-    private Integer idServico;
     @NotNull
     private String nome;
     @NotNull
@@ -28,11 +24,5 @@ public class ServicoDTO {
     private Double moeda;
     @NotNull
     private Integer periocidade;
-
-    private TipoStatus status;
-
-    @NotNull
-    private GerenteDTO gerente;
-
 
 }
