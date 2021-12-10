@@ -33,6 +33,10 @@ public class UsuarioEntity implements UserDetails {
     @JoinColumn(name = "id_regra", referencedColumnName = "id_regra")
     private RegraEntity regraEntity;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "usuario")
+    private GerenteEntity gerenteEntity;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
