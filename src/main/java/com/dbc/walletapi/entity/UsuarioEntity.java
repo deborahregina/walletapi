@@ -1,5 +1,6 @@
 package com.dbc.walletapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,20 +27,15 @@ public class UsuarioEntity implements UserDetails {
     @Column(name = "senha")
     private String senha;
 
-    @ManyToMany
-    @JoinTable(
-            name = "USUARIO_GRUPO",
-            joinColumns = @JoinColumn(name = "id_usuario"),
-            inverseJoinColumns = @JoinColumn(name = "id_grupo")
-    )
-    private List<GrupoEntity> grupos;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_regra", referencedColumnName = "id_regra")
+    private RegraEntity regraEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        for (GrupoEntity grupoEntity : grupos) {
-            grantedAuthorities.addAll(grupoEntity.getRegras());
-        }
+        grantedAuthorities.add(regraEntity);
         return grantedAuthorities;
     }
 

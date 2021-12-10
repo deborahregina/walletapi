@@ -1,5 +1,6 @@
 package com.dbc.walletapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,8 +22,9 @@ public class RegraEntity implements Serializable, GrantedAuthority {
 
     private String nome;
 
-    @ManyToMany(mappedBy = "regras")
-    private List<GrupoEntity> grupos;
+    @JsonIgnore
+    @OneToMany(mappedBy = "regraEntity", fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UsuarioEntity> usuarios;
 
     @Override
     public String getAuthority() {

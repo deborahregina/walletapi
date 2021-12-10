@@ -12,5 +12,5 @@ import java.util.List;
 public class UsuarioCreateDTO {
     private String usuario;
     private String senha;
-    private List<Integer> grupos;
+    private Integer regra;
 }
