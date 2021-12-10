@@ -1,10 +1,9 @@
 package com.dbc.walletapi.controller;
 
 
-import com.dbc.walletapi.dto.LoginDTO;
-import com.dbc.walletapi.dto.UsuarioCreateDTO;
-import com.dbc.walletapi.dto.UsuarioDTO;
+import com.dbc.walletapi.dto.*;
 import com.dbc.walletapi.entity.UsuarioEntity;
+import com.dbc.walletapi.service.GerenteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,10 +22,11 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 @Validated
 @RequiredArgsConstructor
-public class AuthController {
+public class AdministradorController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final UsuarioService usuarioService;
+    private final GerenteService gerenteService;
 
     @PostMapping
     public String auth(@RequestBody @Valid LoginDTO loginDTO) {
@@ -42,8 +42,8 @@ public class AuthController {
         return token;
     }
 
-    @PostMapping("/create")
-    public UsuarioDTO postUsuario(@RequestBody UsuarioCreateDTO usuarioCreateDTO) {
-        return usuarioService.create(usuarioCreateDTO);
+    @PostMapping("/createGerente")
+    public GerenteDTO postGerente(@RequestBody GerenteCreateDTO gerenteCreateDTO) {
+        return gerenteService.create(gerenteCreateDTO);
     }
 }

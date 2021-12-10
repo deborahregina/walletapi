@@ -1,9 +1,9 @@
 package com.dbc.walletapi.repository;
 
-import com.dbc.walletapi.entity.GrupoEntity;
+import com.dbc.walletapi.entity.GerenteEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GrupoRepository extends JpaRepository<GrupoEntity, Integer> {
+public interface GerenteRepository extends JpaRepository<GerenteEntity, Integer> {
 }

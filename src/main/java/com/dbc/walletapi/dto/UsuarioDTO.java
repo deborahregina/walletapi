@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -11,9 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsuarioDTO {
+
     @NotNull
     private Integer idUsuario;
     @NotNull
     private String usuario;
-    private List<Integer> grupos;
+    private Integer regra;
 }

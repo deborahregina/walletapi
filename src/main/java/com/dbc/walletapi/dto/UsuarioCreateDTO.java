@@ -15,5 +15,5 @@ public class UsuarioCreateDTO {
     private String usuario;
     @NotNull
     private String senha;
-    private List<Integer> grupos;
+    private Integer regra;
 }
