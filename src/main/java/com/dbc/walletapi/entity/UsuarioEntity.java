@@ -18,11 +18,12 @@ public class UsuarioEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USUARIO_SEQUENCIA")
     @SequenceGenerator(name = "USUARIO_SEQUENCIA", sequenceName = "seq_usuario", allocationSize = 1)
+
     @Column(name = "id_usuario")
     private Integer idUsuario;
 
     @Column(name = "login")
-    private String login;
+    private String usuario;
 
     @Column(name = "senha")
     private String senha;
@@ -46,7 +47,7 @@ public class UsuarioEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.login;
+        return this.usuario;
     }
 
     @Override

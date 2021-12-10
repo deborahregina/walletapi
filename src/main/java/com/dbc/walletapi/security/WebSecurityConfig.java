@@ -33,11 +33,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/*").permitAll()
                 .antMatchers("/auth").permitAll()
 
-             /*   .antMatchers("/auth/create/").hasRole("ADMIN") // CREATE - ADMIN
-                .antMatchers(HttpMethod.GET,"/**").hasAnyRole("USUARIO", "MARKETING", "ATENDIMENTO", "ADMIN") //ROLE_USUARIO
-                .antMatchers("/cliente/**", "/contato/**", "/endereco/**", "/pedido/**").hasRole("ATENDIMENTO")
-                .antMatchers("/produto/**").hasRole("MARKETING")
-                .antMatchers("/**").hasRole("ADMIN")*/
+                .antMatchers("/auth/createGerente/").hasRole("ADMIN") // CREATE - ADMIN
+//                .antMatchers(HttpMethod.GET,"/**").hasAnyRole("USUARIO", "MARKETING", "ATENDIMENTO", "ADMIN") //ROLE_USUARIO
+//                .antMatchers("/cliente/**", "/contato/**", "/endereco/**", "/pedido/**").hasRole("ATENDIMENTO")
+//                .antMatchers("/produto/**").hasRole("MARKETING")
+//                .antMatchers("/**").hasRole("ADMIN")*/
 
                 .anyRequest().authenticated()
 
