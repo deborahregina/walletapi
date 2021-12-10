@@ -13,6 +13,7 @@ import com.dbc.walletapi.repository.RegraRepository;
 import com.dbc.walletapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,6 +34,8 @@ public class GerenteService {
 
 
         usuarioNovo.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra()).orElseThrow(() -> new RegraDeNegocioException("Regra não encontrada!")));
+        String senha = new BCryptPasswordEncoder().encode(usuarioNovo.getPassword());
+        usuarioNovo.setSenha(senha);
         UsuarioEntity user = usuarioRepository.save(usuarioNovo);
 
 
