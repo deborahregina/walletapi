@@ -25,7 +25,7 @@ public class ServicoDTO {
     private TipoMoeda moeda;
     private Integer periocidade;
     private TipoStatus status;
-    private GerenteDTO gerente;
+    //private GerenteDTO gerente;
 
 
 }

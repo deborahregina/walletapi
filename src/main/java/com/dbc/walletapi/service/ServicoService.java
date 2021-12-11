@@ -31,25 +31,21 @@ public class ServicoService {
         novoServico.setGerenteEntity(gerenteEntity);
         ServicoEntity servicoSalvo = servicoRepository.save(novoServico);
         ServicoDTO servicoDTO = objectMapper.convertValue(servicoSalvo, ServicoDTO.class);
-        GerenteDTO gerenteDTO = objectMapper.convertValue(gerenteEntity, GerenteDTO.class);
-        servicoDTO.setGerente(gerenteDTO);
         return servicoDTO;
     }
 
-    public ServicoDTO update(ServicoAtualizaDTO servicoAtualizaDTO, Integer idServico) throws RegraDeNegocioException{
-        ServicoEntity servicoParaAtaulizar = findById(idServico);
+    public ServicoDTO update(ServicoCreateDTO servicoAtualizaDTO, Integer idServico) throws RegraDeNegocioException{
+        ServicoEntity servicoParaAtualizar = findById(idServico);
 
-        servicoParaAtaulizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
-        GerenteEntity gerente = gerenteRepository.findById(servicoAtualizaDTO.getIdGerente())
-                .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
-        servicoParaAtaulizar.setGerenteEntity(gerente); // atualiza gerente
-        servicoParaAtaulizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
-        servicoParaAtaulizar.setValor(servicoAtualizaDTO.getValor()); // atualiza valor
-        servicoParaAtaulizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
-        servicoParaAtaulizar.setPeriocidade(servicoAtualizaDTO.getPeriocidade()); // atualiza periodicidade
-        servicoParaAtaulizar.setWebSite(servicoAtualizaDTO.getWebSite()); // atualiza website
+        servicoParaAtualizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
 
-        ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtaulizar);
+        servicoParaAtualizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
+        servicoParaAtualizar.setValor(servicoAtualizaDTO.getValor()); // atualiza valor
+        servicoParaAtualizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
+        servicoParaAtualizar.setPeriocidade(servicoAtualizaDTO.getPeriocidade()); // atualiza periodicidade
+        servicoParaAtualizar.setWebSite(servicoAtualizaDTO.getWebSite()); // atualiza website
+
+        ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtualizar);
         return objectMapper.convertValue(servicoEditado, ServicoDTO.class);
     }
 
@@ -74,16 +70,12 @@ public class ServicoService {
     public ServicoDTO listById(Integer idServico) throws RegraDeNegocioException {
         servicoRepository.findById(idServico).orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado!"));
         ServicoEntity servicoEntity = servicoRepository.getServicoById(idServico);
-        return fromEntity(servicoEntity);
+        return objectMapper.convertValue(servicoEntity, ServicoDTO.class);
+
     }
 
 
-    private ServicoDTO fromEntity(ServicoEntity servicoEntity) { // Transforma um entity em um DTO
-        ServicoDTO servicoDTO = objectMapper.convertValue(servicoEntity, ServicoDTO.class);
-        GerenteDTO gerenteDTO = objectMapper.convertValue(servicoEntity.getGerenteEntity(),GerenteDTO.class);
-        servicoDTO.setGerente(gerenteDTO);
-        return servicoDTO;
-    }
+
 
     public List<ServicoDTO> listByName(String nome) {
         return servicoRepository.findAll()

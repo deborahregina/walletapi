@@ -24,7 +24,7 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    @GetMapping("/listUsuario")
+    @GetMapping("/list-usuarios")
     @ApiOperation(value = "Listar usuarios")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Listagem feita com sucesso"),
