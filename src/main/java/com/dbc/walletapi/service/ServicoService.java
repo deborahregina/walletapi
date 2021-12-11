@@ -1,9 +1,6 @@
 package com.dbc.walletapi.service;
 
-import com.dbc.walletapi.dto.GerenteDTO;
-import com.dbc.walletapi.dto.ServicoAtualizaDTO;
-import com.dbc.walletapi.dto.ServicoCreateDTO;
-import com.dbc.walletapi.dto.ServicoDTO;
+import com.dbc.walletapi.dto.*;
 import com.dbc.walletapi.entity.GerenteEntity;
 import com.dbc.walletapi.entity.ServicoEntity;
 import com.dbc.walletapi.entity.TipoStatus;
@@ -63,7 +60,7 @@ public class ServicoService {
                 .collect(Collectors.toList());
     }
 
-    public void delete(Integer id) throws RegraDeNegocioException {
+    public void trocaStatus(Integer id) throws RegraDeNegocioException {
         ServicoEntity servicoEntity = findById(id);
         servicoEntity.setStatus(TipoStatus.INATIVO);
         servicoRepository.save(servicoEntity);
@@ -74,5 +71,26 @@ public class ServicoService {
                 .orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado"));
     }
 
+    public ServicoDTO listById(Integer idServico) throws RegraDeNegocioException {
+        servicoRepository.findById(idServico).orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado!"));
+        ServicoEntity servicoEntity = servicoRepository.getServicoById(idServico);
+        return fromEntity(servicoEntity);
+    }
+
+    private ServicoDTO fromEntity(ServicoEntity servicoEntity) { // Transforma um entity em um DTO
+        ServicoDTO servicoDTO = objectMapper.convertValue(servicoEntity, ServicoDTO.class);
+        GerenteDTO gerenteDTO = objectMapper.convertValue(servicoEntity.getGerenteEntity(),GerenteDTO.class);
+        servicoDTO.setGerente(gerenteDTO);
+        return servicoDTO;
+    }
+
+    public List<ServicoDTO> listByName(String nome) {
+        return servicoRepository.findAll()
+                .stream()
+                .filter(servico -> servico.getNome().toLowerCase().contains(nome.toLowerCase()))
+                .collect(Collectors.toList()).stream()
+                .map(servico -> objectMapper.convertValue(servico, ServicoDTO.class))
+                .collect(Collectors.toList());
+    }
 
 }

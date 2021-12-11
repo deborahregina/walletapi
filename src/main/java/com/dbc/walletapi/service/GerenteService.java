@@ -119,6 +119,15 @@ public class GerenteService {
         usuarioRepository.delete(gerenteEntity.getUsuario()); // Deleta o usuario e
     }
 
+    public List<GerenteDTO> listByName(String nome) {
+        return gerenteRepository.findAll()
+                .stream()
+                .filter(gerente -> gerente.getNomeCompleto().toLowerCase().contains(nome.toLowerCase()))
+                .collect(Collectors.toList()).stream()
+                .map(gerente -> objectMapper.convertValue(gerente, GerenteDTO.class))
+                .collect(Collectors.toList());
+    }
+
 
 
 }

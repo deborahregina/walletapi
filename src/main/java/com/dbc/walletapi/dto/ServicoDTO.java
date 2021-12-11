@@ -30,7 +30,7 @@ public class ServicoDTO {
     private TipoMoeda moeda;
     @NotNull
     private Integer periocidade;
-
+    @NotNull
     private TipoStatus status;
     @NotNull
     private GerenteDTO gerente;
