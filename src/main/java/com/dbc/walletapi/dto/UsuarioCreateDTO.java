@@ -1,5 +1,6 @@
 package com.dbc.walletapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,6 @@ public class UsuarioCreateDTO {
     private String usuario;
     @NotNull
     private String senha;
+    @JsonIgnore
     private Integer regra;
 }

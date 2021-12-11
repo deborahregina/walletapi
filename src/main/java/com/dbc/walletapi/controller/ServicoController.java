@@ -1,5 +1,7 @@
 package com.dbc.walletapi.controller;
 
+import com.dbc.walletapi.dto.GerenteDTO;
+import com.dbc.walletapi.dto.ServicoAtualizaDTO;
 import com.dbc.walletapi.dto.ServicoCreateDTO;
 import com.dbc.walletapi.dto.ServicoDTO;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
@@ -26,7 +28,7 @@ public class ServicoController {
     @PostMapping("/create-servico")
     @ApiOperation(value = "Criar serviço")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Criação feita com sucesso"),
+            @ApiResponse(code = 200, message = "Serviço criado com sucesso"),
             @ApiResponse(code = 400, message = "Dados inconsistentes ou faltantes"),
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
@@ -36,23 +38,23 @@ public class ServicoController {
         return servicoService.create(servicoCreateDTO, idGerente);
     }
 
-    @PostMapping("/edit-servico")
+    @PutMapping("/edit-servico")
     @ApiOperation(value = "Editar serviço")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Edição feita com sucesso"),
+            @ApiResponse(code = 200, message = "Serviço editado com sucesso"),
             @ApiResponse(code = 400, message = "Dados inconsistentes ou faltantes"),
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public ServicoDTO updateServico(@RequestBody @Valid ServicoCreateDTO servicoCreateDTO,
+    public ServicoDTO updateServico(@RequestBody @Valid ServicoAtualizaDTO servicoAtualizaDTO,
                                     @RequestParam Integer idServico) throws RegraDeNegocioException {
-        return servicoService.update(servicoCreateDTO, idServico);
+        return servicoService.update(servicoAtualizaDTO, idServico);
     }
 
-    @PostMapping("/list-servico")
+    @GetMapping("/list-servico")
     @ApiOperation(value = "Listar serviços")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Listagem feita com sucesso"),
+            @ApiResponse(code = 200, message = "Serviços listados com sucesso"),
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
@@ -60,17 +62,37 @@ public class ServicoController {
         return servicoService.list();
     }
 
-    @PostMapping("/delete-servico")
-    @ApiOperation(value = "Excluir serviço")
+    @DeleteMapping("/trocar-status")
+    @ApiOperation(value = "Trocar status do serviço")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Exclusão feita com sucesso"),
+            @ApiResponse(code = 200, message = "Troca de status feita com sucesso"),
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public void deleteServico(@RequestParam Integer idServico) throws RegraDeNegocioException {
+    public void trocaStatus(@RequestParam Integer idServico) throws RegraDeNegocioException {
         servicoService.delete(idServico);
     }
 
+    @GetMapping("/{idServico}")
+    @ApiOperation(value = "Lista servico por ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Gerente listado com sucesso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema"),
+            @ApiResponse(code = 400, message = "Gerente não encontrado")
+    })
+    public ServicoDTO listById (@PathVariable("idServico") Integer idServico) throws RegraDeNegocioException {
+        return servicoService.listById(idServico);
+    }
 
+    @GetMapping("/listar-por-nome")
+    @ApiOperation(value = "Lista serviços pelo nome")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Serviços listados com sucesso"),
+            @ApiResponse(code = 400, message = "Listagem não encontrada"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
+    })
+    public List<ServicoDTO> listarPorNome(@RequestParam("nome") String nome){
+        return servicoService.listByName(nome);
+    }
 
 }
