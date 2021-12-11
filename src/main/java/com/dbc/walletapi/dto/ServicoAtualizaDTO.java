@@ -1,9 +1,7 @@
 package com.dbc.walletapi.dto;
 
-import com.dbc.walletapi.entity.GerenteEntity;
 import com.dbc.walletapi.entity.TipoMoeda;
 import com.dbc.walletapi.entity.TipoStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +12,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServicoCreateDTO {
+public class ServicoAtualizaDTO {
 
     @NotNull
     private String nome;
@@ -30,7 +28,8 @@ public class ServicoCreateDTO {
     private Integer periocidade;
     @NotNull
     private TipoStatus status;
-
+    @NotNull
+    private Integer idGerente;
 
 
 }
