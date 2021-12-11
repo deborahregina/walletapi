@@ -13,7 +13,9 @@ public class GerenteCreateDTO {
     private String nomeCompleto;
     @Email
     private String email;
+
     private UsuarioCreateDTO usuario;
+
     private TipoStatus status;
 
 }

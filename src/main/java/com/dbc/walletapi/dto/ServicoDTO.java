@@ -1,5 +1,6 @@
 package com.dbc.walletapi.dto;
 
+import com.dbc.walletapi.entity.TipoMoeda;
 import com.dbc.walletapi.entity.TipoStatus;
 
 import com.dbc.walletapi.entity.GerenteEntity;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -23,14 +25,13 @@ public class ServicoDTO {
     @NotNull
     private String webSite;
     @NotNull
-    private Double valor;
+    private BigDecimal valor;
     @NotNull
-    private Double moeda;
+    private TipoMoeda moeda;
     @NotNull
     private Integer periocidade;
 
     private TipoStatus status;
-
     @NotNull
     private GerenteDTO gerente;
 

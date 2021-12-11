@@ -1,16 +1,19 @@
 package com.dbc.walletapi.service;
 
 import com.dbc.walletapi.dto.GerenteDTO;
+import com.dbc.walletapi.dto.ServicoAtualizaDTO;
 import com.dbc.walletapi.dto.ServicoCreateDTO;
 import com.dbc.walletapi.dto.ServicoDTO;
 import com.dbc.walletapi.entity.GerenteEntity;
 import com.dbc.walletapi.entity.ServicoEntity;
+import com.dbc.walletapi.entity.TipoStatus;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.repository.GerenteRepository;
 import com.dbc.walletapi.repository.ServicoRepository;
 import com.dbc.walletapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.reflect.ReflectionWorld;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,11 +39,20 @@ public class ServicoService {
         return servicoDTO;
     }
 
-    public ServicoDTO update(ServicoCreateDTO servicoCreateDTO, Integer idServico) throws RegraDeNegocioException{
-        findById(idServico);
-        ServicoEntity servicoEntity = objectMapper.convertValue(servicoCreateDTO, ServicoEntity.class);
-        servicoEntity.setIdServico(idServico);
-        ServicoEntity servicoEditado = servicoRepository.save(servicoEntity);
+    public ServicoDTO update(ServicoAtualizaDTO servicoAtualizaDTO, Integer idServico) throws RegraDeNegocioException{
+        ServicoEntity servicoParaAtaulizar = findById(idServico);
+
+        servicoParaAtaulizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
+        GerenteEntity gerente = gerenteRepository.findById(servicoAtualizaDTO.getIdGerente())
+                .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
+        servicoParaAtaulizar.setGerenteEntity(gerente); // atualiza gerente
+        servicoParaAtaulizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
+        servicoParaAtaulizar.setValor(servicoAtualizaDTO.getValor()); // atualiza valor
+        servicoParaAtaulizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
+        servicoParaAtaulizar.setPeriocidade(servicoAtualizaDTO.getPeriocidade()); // atualiza periodicidade
+        servicoParaAtaulizar.setWebSite(servicoAtualizaDTO.getWebSite()); // atualiza website
+
+        ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtaulizar);
         return objectMapper.convertValue(servicoEditado, ServicoDTO.class);
     }
 
@@ -53,7 +65,8 @@ public class ServicoService {
 
     public void delete(Integer id) throws RegraDeNegocioException {
         ServicoEntity servicoEntity = findById(id);
-        servicoRepository.delete(servicoEntity);
+        servicoEntity.setStatus(TipoStatus.INATIVO);
+        servicoRepository.save(servicoEntity);
     }
 
     public ServicoEntity findById(Integer id) throws RegraDeNegocioException {

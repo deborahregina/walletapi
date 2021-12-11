@@ -74,8 +74,6 @@ public class GerenteService {
 
     public GerenteDTO update(Integer idGerente, GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
 
-
-
         GerenteEntity gerenteEntity = gerenteRepository.getGerenteById(idGerente);
 
 
