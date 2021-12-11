@@ -24,11 +24,20 @@ public class GerenteController {
 
     private final GerenteService gerenteService;
 
+    @PostMapping("/CreateGerentes")
+    @ApiOperation(value = "Cria novo gerente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Gerente criado com sucesso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
+    })
+    public GerenteDTO create(@RequestBody @Valid GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
+        return gerenteService.create(gerenteCreateDTO);
+    }
 
     @GetMapping("/get-gerentes")
     @ApiOperation(value = "Lista todos os gerentes")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "gerentes listados com sucesso"),
+            @ApiResponse(code = 200, message = "Gerentes listados com sucesso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
     public List<GerenteDTO> list() throws RegraDeNegocioException {
@@ -38,7 +47,7 @@ public class GerenteController {
     @GetMapping("/{idGerente}")
     @ApiOperation(value = "Lista gerente por ID")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "gerente listado com sucesso"),
+            @ApiResponse(code = 200, message = "Gerente listado com sucesso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema"),
             @ApiResponse(code = 400, message = "Gerente não encontrado")
     })
@@ -49,8 +58,8 @@ public class GerenteController {
     @PutMapping("/idGerente")
     @ApiOperation(value = "Altera Gerente pelo id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "gerente alterado com sucesso"),
-            @ApiResponse(code = 400, message = "gerente não foi encontrado"),
+            @ApiResponse(code = 200, message = "Gerente alterado com sucesso"),
+            @ApiResponse(code = 400, message = "Gerente não foi encontrado"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
     public GerenteDTO update(@RequestParam("idGerente") Integer idGerente, @RequestBody @Valid GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
@@ -58,13 +67,24 @@ public class GerenteController {
     }
 
     @DeleteMapping("/{idGerente}")
-    @ApiOperation(value = "Exclui o produto pelo id")
+    @ApiOperation(value = "Exclui o gerente pelo id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Produtos listados com sucesso"),
-            @ApiResponse(code = 400, message = "Produto não encontrado"),
+            @ApiResponse(code = 200, message = "Gerente excluído com sucesso"),
+            @ApiResponse(code = 400, message = "Gerente não encontrado"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
     public void delete(@PathVariable("idGerente") Integer idGerente) throws Exception {
         gerenteService.delete(idGerente);
+    }
+
+    @GetMapping("/listar-por-nome")
+    @ApiOperation(value = "Lista gerentes pelo nome")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Gerentes listados com sucesso"),
+            @ApiResponse(code = 400, message = "Listagem não encontrada"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
+    })
+    public List<GerenteDTO> listarPorNome(@RequestParam("nome") String nome){
+        return gerenteService.listByName(nome);
     }
 }
