@@ -1,12 +1,19 @@
 package com.dbc.walletapi.dto;
 
-import com.sun.istack.NotNull;
+
 import lombok.Data;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class LoginDTO {
-    @NotNull
+
+    @NotNull(message = "Usuario não pode ser nulo")
+    @NotEmpty(message = "Usuario não pode ser vazio")
     private String usuario;
-    @NotNull
+
+    @NotNull(message = "Senha não pode ser nulo")
+    @NotEmpty(message = "Senha não pode ser vazio")
     private String senha;
 }

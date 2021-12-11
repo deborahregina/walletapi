@@ -4,6 +4,8 @@ import com.dbc.walletapi.entity.TipoStatus;
 import com.dbc.walletapi.entity.UsuarioEntity;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class GerenteDTO {
 
@@ -12,5 +14,6 @@ public class GerenteDTO {
     private String email;
     private UsuarioDTO usuario;
     private TipoStatus status;
+
 
 }

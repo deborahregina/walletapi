@@ -53,7 +53,7 @@ public class AdministradorController {
     }
 
 
-    @PostMapping("/createGerente")
+    @PostMapping("/create-gerente")
     @ApiOperation(value = "Criar gerente")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Criação feita com sucesso"),

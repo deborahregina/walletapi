@@ -25,7 +25,7 @@ public class GerenteController {
     private final GerenteService gerenteService;
 
 
-    @GetMapping("/getGerentes")
+    @GetMapping("/get-gerentes")
     @ApiOperation(value = "Lista todos os gerentes")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "gerentes listados com sucesso"),
