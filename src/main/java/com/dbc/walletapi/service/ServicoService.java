@@ -77,6 +77,7 @@ public class ServicoService {
         return fromEntity(servicoEntity);
     }
 
+
     private ServicoDTO fromEntity(ServicoEntity servicoEntity) { // Transforma um entity em um DTO
         ServicoDTO servicoDTO = objectMapper.convertValue(servicoEntity, ServicoDTO.class);
         GerenteDTO gerenteDTO = objectMapper.convertValue(servicoEntity.getGerenteEntity(),GerenteDTO.class);
