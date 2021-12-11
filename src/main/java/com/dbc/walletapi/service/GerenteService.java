@@ -32,6 +32,7 @@ public class GerenteService {
     private final RegraRepository regraRepository;
 
     public GerenteDTO create(GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
+        gerenteCreateDTO.getUsuario().setRegra(2);
         UsuarioCreateDTO usuarioCreateDTO = gerenteCreateDTO.getUsuario();
         UsuarioEntity usuarioNovo = objectMapper.convertValue(usuarioCreateDTO, UsuarioEntity.class);
         usuarioNovo.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra()).orElseThrow(() -> new RegraDeNegocioException("Regra não encontrada!")));
@@ -40,8 +41,11 @@ public class GerenteService {
         UsuarioEntity user = usuarioRepository.save(usuarioNovo);
         GerenteEntity gerenteEntity = objectMapper.convertValue(gerenteCreateDTO, GerenteEntity.class);
         gerenteEntity.setUsuario(user);
+        gerenteEntity.setStatus(TipoStatus.ATIVO);
+        UsuarioDTO usuarioDTO = objectMapper.convertValue(user,UsuarioDTO.class);
         GerenteEntity novoGerente = gerenteRepository.save(gerenteEntity);
         GerenteDTO gerenteDTO = objectMapper.convertValue(novoGerente, GerenteDTO.class);
+        gerenteDTO.setUsuario(usuarioDTO);
         return gerenteDTO;
     }
 
