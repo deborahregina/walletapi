@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
@@ -14,11 +15,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ServicoAtualizaDTO {
 
-    @NotNull
+    @NotNull(message = "Nome não pode ser nulo")
+    @NotEmpty(message = "Nome não pode ser vazio")
     private String nome;
-    @NotNull
+    @NotNull(message = "Descrição não pode ser nula")
+    @NotEmpty(message = "Descrição não pode ser vazia")
     private String descricao;
-    @NotNull
+    @NotNull(message = "Website não pode ser nulo")
+    @NotEmpty(message = "Website não pode ser vazio")
     private String webSite;
     @NotNull
     private BigDecimal valor;
