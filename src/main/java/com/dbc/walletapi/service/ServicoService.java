@@ -34,11 +34,15 @@ public class ServicoService {
         return servicoDTO;
     }
 
-    public ServicoDTO update(ServicoCreateDTO servicoAtualizaDTO, Integer idServico) throws RegraDeNegocioException{
+    public ServicoDTO update(ServicoAtualizaDTO servicoAtualizaDTO, Integer idServico) throws RegraDeNegocioException{
         ServicoEntity servicoParaAtualizar = findById(idServico);
 
         servicoParaAtualizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
 
+        GerenteEntity gerente = gerenteRepository.findById(servicoAtualizaDTO.getIdGerente())
+                .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado"));
+
+        servicoParaAtualizar.setGerenteEntity(gerente);
         servicoParaAtualizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
         servicoParaAtualizar.setValor(servicoAtualizaDTO.getValor()); // atualiza valor
         servicoParaAtualizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
