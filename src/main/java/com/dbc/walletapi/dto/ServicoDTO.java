@@ -1,6 +1,7 @@
 package com.dbc.walletapi.dto;
 
 import com.dbc.walletapi.entity.TipoMoeda;
+import com.dbc.walletapi.entity.TipoPeriodicidade;
 import com.dbc.walletapi.entity.TipoStatus;
 
 import com.dbc.walletapi.entity.GerenteEntity;
@@ -23,7 +24,7 @@ public class ServicoDTO {
     private String webSite;
     private BigDecimal valor;
     private TipoMoeda moeda;
-    private Integer periocidade;
+    private TipoPeriodicidade periocidade;
     private TipoStatus status;
     //private GerenteDTO gerente;
 

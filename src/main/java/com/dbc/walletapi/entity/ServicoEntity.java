@@ -32,7 +32,7 @@ public class ServicoEntity  {
     @Column(name = "moeda")
     private TipoMoeda moeda;
     @Column(name = "periodicidade")
-    private Integer periocidade;
+    private TipoPeriodicidade periocidade;
 
 
     @JsonIgnore

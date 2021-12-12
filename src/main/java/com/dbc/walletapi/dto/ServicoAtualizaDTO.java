@@ -1,10 +1,8 @@
 package com.dbc.walletapi.dto;
 
-import com.dbc.walletapi.entity.GerenteEntity;
 import com.dbc.walletapi.entity.TipoMoeda;
 import com.dbc.walletapi.entity.TipoPeriodicidade;
 import com.dbc.walletapi.entity.TipoStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +15,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServicoCreateDTO {
+public class ServicoAtualizaDTO {
 
     @NotNull(message = "Nome não pode ser nulo")
     @NotEmpty(message = "Nome não pode ser vazio")
@@ -36,5 +34,7 @@ public class ServicoCreateDTO {
     private TipoPeriodicidade periocidade;
     @NotNull
     private TipoStatus status;
+    @Min(value = 0, message = "O id deve ser maior que zero")
+    private Integer idGerente;
 
 }
