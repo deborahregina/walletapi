@@ -28,4 +28,5 @@ public class ServicoDTO {
     private TipoStatus status;
 
 
+
 }

@@ -39,8 +39,9 @@ public class ServicoService {
     }
 
     public ServicoDTO update(ServicoAtualizaDTO servicoAtualizaDTO, Integer idServico) throws RegraDeNegocioException{
-        ServicoEntity servicoParaAtaulizar = findById(idServico);
+        ServicoEntity servicoParaAtualizar = findById(idServico);
 
+    
         servicoParaAtaulizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
         servicoParaAtaulizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
         servicoParaAtaulizar.setValor(servicoAtualizaDTO.getValor()); // atualiza valor
@@ -49,6 +50,7 @@ public class ServicoService {
         servicoParaAtaulizar.setWebSite(servicoAtualizaDTO.getWebSite()); // atualiza website
 
         ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtaulizar);
+
         return objectMapper.convertValue(servicoEditado, ServicoDTO.class);
     }
 
@@ -71,10 +73,13 @@ public class ServicoService {
     }
 
     public ServicoDTO listById(Integer idServico) throws RegraDeNegocioException {
+
         ServicoEntity servicoEntity = servicoRepository.getServicoById(idServico) // Lista serviço ativo por ID
                 .orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado!"));
         return objectMapper.convertValue(servicoEntity, ServicoDTO.class);
     }
+
+
 
 
     public List<ServicoDTO> listByName(String nome) {

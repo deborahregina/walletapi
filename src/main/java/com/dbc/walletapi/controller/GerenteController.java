@@ -24,15 +24,6 @@ public class GerenteController {
 
     private final GerenteService gerenteService;
 
-    @PostMapping("/CreateGerentes")
-    @ApiOperation(value = "Cria novo gerente")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Gerente criado com sucesso"),
-            @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
-    })
-    public GerenteDTO create(@RequestBody @Valid GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
-        return gerenteService.create(gerenteCreateDTO);
-    }
 
     @GetMapping("/get-gerentes")
     @ApiOperation(value = "Lista todos os gerentes")

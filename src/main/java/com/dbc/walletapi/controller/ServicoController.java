@@ -1,6 +1,5 @@
 package com.dbc.walletapi.controller;
 
-import com.dbc.walletapi.dto.GerenteDTO;
 import com.dbc.walletapi.dto.ServicoAtualizaDTO;
 import com.dbc.walletapi.dto.ServicoCreateDTO;
 import com.dbc.walletapi.dto.ServicoDTO;
@@ -62,14 +61,14 @@ public class ServicoController {
         return servicoService.list();
     }
 
-    @DeleteMapping("/trocar-status")
+    @DeleteMapping("/delete-servico")
     @ApiOperation(value = "Trocar status do serviço")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Troca de status feita com sucesso"),
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public void trocaStatus(@RequestParam Integer idServico) throws RegraDeNegocioException {
+    public void delete(@RequestParam Integer idServico) throws RegraDeNegocioException {
         servicoService.delete(idServico);
     }
 
