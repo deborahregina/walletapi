@@ -35,8 +35,8 @@ public class ServicoService {
         novoServico.setGerenteEntity(gerenteEntity);
         novoServico.setStatus(TipoStatus.ATIVO);
         ServicoEntity servicoSalvo = servicoRepository.save(novoServico);
-        ServicoDTO servicoDTO = objectMapper.convertValue(servicoSalvo, ServicoDTO.class);
-        return servicoDTO;
+
+        return fromEntity(servicoSalvo);
     }
 
     public ServicoDTO update(ServicoAtualizaDTO servicoAtualizaDTO, Integer idServico) throws RegraDeNegocioException{
@@ -53,13 +53,13 @@ public class ServicoService {
 
         ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtualizar);
 
-        return objectMapper.convertValue(servicoEditado, ServicoDTO.class);
+        return fromEntity(servicoEditado);
     }
 
     public List<ServicoDTO> list() {
         return servicoRepository.getServicosAtivos().
                 stream()
-                .map(servico -> objectMapper.convertValue(servico, ServicoDTO.class))
+                .map(servico -> fromEntity(servico))
                 .collect(Collectors.toList());
     }
 
@@ -78,10 +78,8 @@ public class ServicoService {
 
         ServicoEntity servicoEntity = servicoRepository.getServicoById(idServico) // Lista serviço ativo por ID
                 .orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado!"));
-        return objectMapper.convertValue(servicoEntity, ServicoDTO.class);
+        return fromEntity(servicoEntity);
     }
-
-
 
 
     public List<ServicoDTO> listByName(String nome) {
@@ -89,8 +87,17 @@ public class ServicoService {
                 .stream()
                 .filter(servico -> servico.getNome().toLowerCase().contains(nome.toLowerCase()))
                 .collect(Collectors.toList()).stream()
-                .map(servico -> objectMapper.convertValue(servico, ServicoDTO.class))
+                .map(servico -> fromEntity(servico))
                 .collect(Collectors.toList());
+    }
+
+    public ServicoDTO fromEntity(ServicoEntity servicoEntity) {
+        ServicoDTO servicoDTO = objectMapper.convertValue(servicoEntity, ServicoDTO.class);
+        GerenteDTO gerente = objectMapper.convertValue(servicoEntity.getGerenteEntity(), GerenteDTO.class);
+        UsuarioDTO user = objectMapper.convertValue(servicoEntity.getGerenteEntity().getUsuario(), UsuarioDTO.class);
+        servicoDTO.setGerente(gerente);
+        servicoDTO.getGerente().setUsuario(user);
+        return servicoDTO;
     }
 
 }
