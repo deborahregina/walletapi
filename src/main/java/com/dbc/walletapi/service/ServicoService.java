@@ -33,6 +33,7 @@ public class ServicoService {
         }
         ServicoEntity novoServico = objectMapper.convertValue(servicoCreateDTO, ServicoEntity.class);
         novoServico.setGerenteEntity(gerenteEntity);
+        novoServico.setStatus(TipoStatus.ATIVO);
         ServicoEntity servicoSalvo = servicoRepository.save(novoServico);
         ServicoDTO servicoDTO = objectMapper.convertValue(servicoSalvo, ServicoDTO.class);
         return servicoDTO;
@@ -48,6 +49,7 @@ public class ServicoService {
         servicoParaAtualizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
         servicoParaAtualizar.setPeriocidade(servicoAtualizaDTO.getPeriocidade()); // atualiza periodicidade
         servicoParaAtualizar.setWebSite(servicoAtualizaDTO.getWebSite()); // atualiza website
+        servicoParaAtualizar.setStatus(TipoStatus.ATIVO);
 
         ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtualizar);
 
