@@ -47,16 +47,18 @@ public class GerenteController {
         return gerenteService.listById(idGerente);
     }
 
-    @PutMapping("/idGerente")
+    @PutMapping("/{idGerente}")
     @ApiOperation(value = "Altera Gerente pelo id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Gerente alterado com sucesso"),
             @ApiResponse(code = 400, message = "Gerente não foi encontrado"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
-    public GerenteDTO update(@RequestParam("idGerente") Integer idGerente, @RequestBody @Valid GerenteAtualizaDTO gerenteAtualizaDTO) throws RegraDeNegocioException {
+
+    public GerenteDTO update(@PathVariable("idGerente") Integer idGerente, @RequestBody @Valid GerenteAtualizaDTO gerenteAtualizaDTO) throws RegraDeNegocioException {
         return gerenteService.update(idGerente,gerenteAtualizaDTO);
     }
+ 
 
     @DeleteMapping("/{idGerente}")
     @ApiOperation(value = "Exclui o gerente pelo id")
