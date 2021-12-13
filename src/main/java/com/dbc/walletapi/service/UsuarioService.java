@@ -25,7 +25,6 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final RegraRepository regraRepository;
-    private IAuthenticationFacade authenticationFacade;
     private final GerenteRepository gerenteRepository;
 
 
