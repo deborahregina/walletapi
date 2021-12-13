@@ -1,9 +1,6 @@
 package com.dbc.walletapi.service;
 
-import com.dbc.walletapi.dto.GerenteCreateDTO;
-import com.dbc.walletapi.dto.GerenteDTO;
-import com.dbc.walletapi.dto.UsuarioCreateDTO;
-import com.dbc.walletapi.dto.UsuarioDTO;
+import com.dbc.walletapi.dto.*;
 import com.dbc.walletapi.entity.GerenteEntity;
 import com.dbc.walletapi.entity.RegraEntity;
 import com.dbc.walletapi.entity.TipoStatus;
@@ -74,23 +71,13 @@ public class GerenteService {
 
     }
 
-    public GerenteDTO update(Integer idGerente, GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
+    public GerenteDTO update(Integer idGerente, GerenteAtualizaDTO gerenteAtualizaDTO) throws RegraDeNegocioException {
 
         GerenteEntity gerenteEntity = gerenteRepository.findById(idGerente).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
 
 
-        UsuarioEntity usuarioAtualizar = gerenteEntity.getUsuario();
-
-
-        usuarioAtualizar.setRegraEntity(regraRepository.findById(gerenteCreateDTO.getUsuario().getRegra()).orElseThrow(() -> new RegraDeNegocioException("Regra não encontrada!")));
-        String senha = new BCryptPasswordEncoder().encode(gerenteCreateDTO.getUsuario().getSenha());
-        usuarioAtualizar.setSenha(senha);
-        UsuarioEntity user = usuarioRepository.save(usuarioAtualizar);
-
-        gerenteEntity.setUsuario(user);
-        gerenteEntity.setEmail(gerenteCreateDTO.getEmail());
-        gerenteEntity.setNomeCompleto(gerenteCreateDTO.getNomeCompleto());
-
+        gerenteEntity.setEmail(gerenteAtualizaDTO.getEmail());
+        gerenteEntity.setNomeCompleto(gerenteAtualizaDTO.getNomeCompleto());
 
         GerenteEntity gerenteAtualizado = gerenteRepository.save(gerenteEntity);
 

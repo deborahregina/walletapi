@@ -1,5 +1,6 @@
 package com.dbc.walletapi.controller;
 
+import com.dbc.walletapi.dto.GerenteAtualizaDTO;
 import com.dbc.walletapi.dto.GerenteCreateDTO;
 import com.dbc.walletapi.dto.GerenteDTO;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
@@ -53,8 +54,8 @@ public class GerenteController {
             @ApiResponse(code = 400, message = "Gerente não foi encontrado"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
-    public GerenteDTO update(@RequestParam("idGerente") Integer idGerente, @RequestBody @Valid GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
-        return gerenteService.update(idGerente,gerenteCreateDTO);
+    public GerenteDTO update(@RequestParam("idGerente") Integer idGerente, @RequestBody @Valid GerenteAtualizaDTO gerenteAtualizaDTO) throws RegraDeNegocioException {
+        return gerenteService.update(idGerente,gerenteAtualizaDTO);
     }
 
     @DeleteMapping("/{idGerente}")
