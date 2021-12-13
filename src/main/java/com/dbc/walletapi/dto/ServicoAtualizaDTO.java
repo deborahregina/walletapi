@@ -1,6 +1,7 @@
 package com.dbc.walletapi.dto;
 
 import com.dbc.walletapi.entity.TipoMoeda;
+import com.dbc.walletapi.entity.TipoPeriodicidade;
 import com.dbc.walletapi.entity.TipoStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,11 +30,9 @@ public class ServicoAtualizaDTO {
     @NotNull
     private TipoMoeda moeda;
     @NotNull
-    private Integer periocidade;
+    private TipoPeriodicidade periocidade;
     @NotNull
     private TipoStatus status;
-    @NotNull
-    private Integer idGerente;
 
 
 }

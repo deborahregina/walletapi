@@ -27,12 +27,14 @@ public class ServicoService {
     public ServicoDTO create(ServicoCreateDTO servicoCreateDTO, Integer idGerente) throws RegraDeNegocioException {
         GerenteEntity gerenteEntity = gerenteRepository.findById(idGerente).orElseThrow
                 (() -> new RegraDeNegocioException("Gerente não encontrado!"));
+
+        if(gerenteEntity.getStatus() == TipoStatus.INATIVO) {
+            throw new RegraDeNegocioException("Serviço deve ser atribuído para gerente ativo"); // Evitar atribuir gerente inativo para servico novo
+        }
         ServicoEntity novoServico = objectMapper.convertValue(servicoCreateDTO, ServicoEntity.class);
         novoServico.setGerenteEntity(gerenteEntity);
         ServicoEntity servicoSalvo = servicoRepository.save(novoServico);
         ServicoDTO servicoDTO = objectMapper.convertValue(servicoSalvo, ServicoDTO.class);
-        GerenteDTO gerenteDTO = objectMapper.convertValue(gerenteEntity, GerenteDTO.class);
-        servicoDTO.setGerente(gerenteDTO);
         return servicoDTO;
     }
 
@@ -40,9 +42,6 @@ public class ServicoService {
         ServicoEntity servicoParaAtaulizar = findById(idServico);
 
         servicoParaAtaulizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
-        GerenteEntity gerente = gerenteRepository.findById(servicoAtualizaDTO.getIdGerente())
-                .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
-        servicoParaAtaulizar.setGerenteEntity(gerente); // atualiza gerente
         servicoParaAtaulizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
         servicoParaAtaulizar.setValor(servicoAtualizaDTO.getValor()); // atualiza valor
         servicoParaAtaulizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
@@ -54,7 +53,7 @@ public class ServicoService {
     }
 
     public List<ServicoDTO> list() {
-        return servicoRepository.findAll().
+        return servicoRepository.getServicosAtivos().
                 stream()
                 .map(servico -> objectMapper.convertValue(servico, ServicoDTO.class))
                 .collect(Collectors.toList());
@@ -66,24 +65,17 @@ public class ServicoService {
         servicoRepository.save(servicoEntity);
     }
 
-    public ServicoEntity findById(Integer id) throws RegraDeNegocioException {
+    private ServicoEntity findById(Integer id) throws RegraDeNegocioException {  // esse método TEM que ser privado
         return servicoRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado"));
     }
 
     public ServicoDTO listById(Integer idServico) throws RegraDeNegocioException {
-        servicoRepository.findById(idServico).orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado!"));
-        ServicoEntity servicoEntity = servicoRepository.getServicoById(idServico);
-        return fromEntity(servicoEntity);
+        ServicoEntity servicoEntity = servicoRepository.getServicoById(idServico) // Lista serviço ativo por ID
+                .orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado!"));
+        return objectMapper.convertValue(servicoEntity, ServicoDTO.class);
     }
 
-
-    private ServicoDTO fromEntity(ServicoEntity servicoEntity) { // Transforma um entity em um DTO
-        ServicoDTO servicoDTO = objectMapper.convertValue(servicoEntity, ServicoDTO.class);
-        GerenteDTO gerenteDTO = objectMapper.convertValue(servicoEntity.getGerenteEntity(),GerenteDTO.class);
-        servicoDTO.setGerente(gerenteDTO);
-        return servicoDTO;
-    }
 
     public List<ServicoDTO> listByName(String nome) {
         return servicoRepository.findAll()

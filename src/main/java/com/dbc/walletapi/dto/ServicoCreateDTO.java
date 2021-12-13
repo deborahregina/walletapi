@@ -2,6 +2,7 @@ package com.dbc.walletapi.dto;
 
 import com.dbc.walletapi.entity.GerenteEntity;
 import com.dbc.walletapi.entity.TipoMoeda;
+import com.dbc.walletapi.entity.TipoPeriodicidade;
 import com.dbc.walletapi.entity.TipoStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,7 @@ public class ServicoCreateDTO {
     @NotNull
     private TipoMoeda moeda;
     @NotNull
-    private Integer periocidade;
+    private TipoPeriodicidade periocidade;
     @NotNull
     private TipoStatus status;
 

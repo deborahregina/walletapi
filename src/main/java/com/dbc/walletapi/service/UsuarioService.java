@@ -2,8 +2,13 @@ package com.dbc.walletapi.service;
 
 import com.dbc.walletapi.dto.UsuarioCreateDTO;
 import com.dbc.walletapi.dto.UsuarioDTO;
+import com.dbc.walletapi.entity.GerenteEntity;
+import com.dbc.walletapi.entity.TipoStatus;
 import com.dbc.walletapi.entity.UsuarioEntity;
+import com.dbc.walletapi.exceptions.RegraDeNegocioException;
+import com.dbc.walletapi.repository.GerenteRepository;
 import com.dbc.walletapi.repository.RegraRepository;
+import com.dbc.walletapi.security.IAuthenticationFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,13 +25,23 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final RegraRepository regraRepository;
+    private IAuthenticationFacade authenticationFacade;
+    private final GerenteRepository gerenteRepository;
 
-    public Optional<UsuarioEntity> findByLoginAndSenha(String login, String senha) {
-        return usuarioRepository.findByUsuarioAndSenha(login, senha);
-    }
 
-    public Optional<UsuarioEntity> findByLogin(String login){
-        return usuarioRepository.findByUsuario(login);
+
+    public Optional<UsuarioEntity> findByLogin(String login) throws RegraDeNegocioException {
+        Optional<UsuarioEntity> userEntity = usuarioRepository.findByUsuario(login);
+
+        if(userEntity.get().getIdUsuario() != 1) {
+            GerenteEntity gerenteEntity = gerenteRepository.findById(userEntity.get().getGerenteEntity().getIdGerente())
+                    .orElseThrow(()-> new RegraDeNegocioException("Gerente não encontrado!"));
+
+            if(gerenteEntity.getStatus() == TipoStatus.INATIVO) {
+                throw new RegraDeNegocioException("Não é possível logar com usuário inativo");
+            }
+        }
+        return userEntity;
     }
 
     public UsuarioDTO create(UsuarioCreateDTO usuarioCreateDTO) {
@@ -48,4 +63,5 @@ public class UsuarioService {
         return usuarioEntities.stream().map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class)).collect(Collectors.toList());
 
     }
+
 }

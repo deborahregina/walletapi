@@ -13,8 +13,5 @@ public interface GerenteRepository extends JpaRepository<GerenteEntity, Integer>
     @Query(value = "select * from gerente g where g.status = 0 ", nativeQuery = true)
     List<GerenteEntity> listaGerentesAtivos();
 
-    @Query(value = "select * from gerente g where g.status = 0 and g.id_gerente = :idGerente", nativeQuery = true)
-    GerenteEntity getGerenteById(Integer idGerente);
-
 
 }

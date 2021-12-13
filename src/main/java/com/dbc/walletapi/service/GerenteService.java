@@ -69,16 +69,14 @@ public class GerenteService {
     }
 
     public GerenteDTO listById(Integer idGerente) throws RegraDeNegocioException {
-        gerenteRepository.findById(idGerente).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
-        GerenteEntity gerenteEntity = gerenteRepository.getGerenteById(idGerente);
 
-        return fromEntity(gerenteEntity);
+        return fromEntity(gerenteRepository.findById(idGerente).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!")));
 
     }
 
     public GerenteDTO update(Integer idGerente, GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
 
-        GerenteEntity gerenteEntity = gerenteRepository.getGerenteById(idGerente);
+        GerenteEntity gerenteEntity = gerenteRepository.findById(idGerente).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
 
 
         UsuarioEntity usuarioAtualizar = gerenteEntity.getUsuario();
@@ -116,7 +114,6 @@ public class GerenteService {
         GerenteEntity gerenteEntity = gerenteRepository.getById(idGerente);
         gerenteEntity.setStatus(TipoStatus.INATIVO);
         gerenteRepository.save(gerenteEntity);
-        usuarioRepository.delete(gerenteEntity.getUsuario()); // Deleta o usuario e
     }
 
     public List<GerenteDTO> listByName(String nome) {

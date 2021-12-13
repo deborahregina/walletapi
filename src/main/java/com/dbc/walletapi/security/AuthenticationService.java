@@ -3,6 +3,7 @@ package com.dbc.walletapi.security;
 
 import com.dbc.walletapi.entity.UsuarioEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class AuthenticationService implements UserDetailsService {
     private final UsuarioService usuarioService;
 
+    @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         Optional<UsuarioEntity> usuario = usuarioService.findByLogin(login);
