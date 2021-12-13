@@ -34,6 +34,7 @@ public class ServicoDTO {
     private TipoPeriodicidade periocidade;
     @ApiModelProperty(value = "Status do serviço: ATIVO/INATIVO")
     private TipoStatus status;
+    private GerenteDTO gerente;
 
 
 

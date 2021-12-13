@@ -96,8 +96,11 @@ public class GerenteService {
         return gerenteDTO;
     }
 
-    public void delete(Integer idGerente){
-        GerenteEntity gerenteEntity = gerenteRepository.getById(idGerente);
+    public void delete(Integer idGerente) throws RegraDeNegocioException {
+        GerenteEntity gerenteEntity = gerenteRepository.findById(idGerente).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado"));
+        if (gerenteEntity.getStatus() == TipoStatus.INATIVO) {
+            throw new RegraDeNegocioException("Este gerente já está inativo.");
+        }
         gerenteEntity.setStatus(TipoStatus.INATIVO);
         gerenteRepository.save(gerenteEntity);
     }
