@@ -33,16 +33,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/auth").permitAll()
-                //.antMatchers("/username").permitAll()
+                .antMatchers("/username").permitAll()
                 .antMatchers("/auth/createGerente/").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/*").hasAnyRole("GERENTE", "ADMIN")
-//                .antMatchers("/cliente/**", "/contato/**", "/endereco/**", "/pedido/**").hasRole("ATENDIMENTO")
-//                .antMatchers("/produto/**").hasRole("MARKETING")
-//                .antMatchers("/**").hasRole("ADMIN")*/
-
+                .antMatchers("/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
 
-                //filtro de autenticação...
+                /* O ADM pode se autenticar e acessar todos os endpoints. o Gerente pode apenas se autenticar e acessas seus dados
+                * por meio de /username, que retorna um objeto com apenas suas informações */
+
                 .and().addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
     }
 
