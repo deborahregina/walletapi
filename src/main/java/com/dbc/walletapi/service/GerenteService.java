@@ -109,8 +109,7 @@ public class GerenteService {
         return gerenteDTO;
     }
 
-    public void delete(Integer idGerente) {
-
+    public void delete(Integer idGerente){
         GerenteEntity gerenteEntity = gerenteRepository.getById(idGerente);
         gerenteEntity.setStatus(TipoStatus.INATIVO);
         gerenteRepository.save(gerenteEntity);
