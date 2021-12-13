@@ -41,15 +41,15 @@ public class ServicoService {
     public ServicoDTO update(ServicoAtualizaDTO servicoAtualizaDTO, Integer idServico) throws RegraDeNegocioException{
         ServicoEntity servicoParaAtualizar = findById(idServico);
 
-    
-        servicoParaAtaulizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
-        servicoParaAtaulizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
-        servicoParaAtaulizar.setValor(servicoAtualizaDTO.getValor()); // atualiza valor
-        servicoParaAtaulizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
-        servicoParaAtaulizar.setPeriocidade(servicoAtualizaDTO.getPeriocidade()); // atualiza periodicidade
-        servicoParaAtaulizar.setWebSite(servicoAtualizaDTO.getWebSite()); // atualiza website
 
-        ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtaulizar);
+        servicoParaAtualizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
+        servicoParaAtualizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
+        servicoParaAtualizar.setValor(servicoAtualizaDTO.getValor()); // atualiza valor
+        servicoParaAtualizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
+        servicoParaAtualizar.setPeriocidade(servicoAtualizaDTO.getPeriocidade()); // atualiza periodicidade
+        servicoParaAtualizar.setWebSite(servicoAtualizaDTO.getWebSite()); // atualiza website
+
+        ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtualizar);
 
         return objectMapper.convertValue(servicoEditado, ServicoDTO.class);
     }
