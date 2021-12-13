@@ -34,7 +34,6 @@ public class ServicoAtualizaDTO {
     private TipoPeriodicidade periocidade;
     @NotNull
     private TipoStatus status;
-    @Min(value = 0, message = "O id deve ser maior que zero")
-    private Integer idGerente;
+
 
 }

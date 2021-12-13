@@ -33,8 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/auth").permitAll()
+                //.antMatchers("/username").permitAll()
                 .antMatchers("/auth/createGerente/").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/**").hasAnyRole("GERENTE", "ADMIN")
+                .antMatchers(HttpMethod.GET,"/*").hasAnyRole("GERENTE", "ADMIN")
 //                .antMatchers("/cliente/**", "/contato/**", "/endereco/**", "/pedido/**").hasRole("ATENDIMENTO")
 //                .antMatchers("/produto/**").hasRole("MARKETING")
 //                .antMatchers("/**").hasRole("ADMIN")*/

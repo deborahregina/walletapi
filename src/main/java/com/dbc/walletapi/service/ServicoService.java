@@ -27,6 +27,10 @@ public class ServicoService {
     public ServicoDTO create(ServicoCreateDTO servicoCreateDTO, Integer idGerente) throws RegraDeNegocioException {
         GerenteEntity gerenteEntity = gerenteRepository.findById(idGerente).orElseThrow
                 (() -> new RegraDeNegocioException("Gerente não encontrado!"));
+
+        if(gerenteEntity.getStatus() == TipoStatus.INATIVO) {
+            throw new RegraDeNegocioException("Serviço deve ser atribuído para gerente ativo"); // Evitar atribuir gerente inativo para servico novo
+        }
         ServicoEntity novoServico = objectMapper.convertValue(servicoCreateDTO, ServicoEntity.class);
         novoServico.setGerenteEntity(gerenteEntity);
         ServicoEntity servicoSalvo = servicoRepository.save(novoServico);
@@ -37,24 +41,21 @@ public class ServicoService {
     public ServicoDTO update(ServicoAtualizaDTO servicoAtualizaDTO, Integer idServico) throws RegraDeNegocioException{
         ServicoEntity servicoParaAtualizar = findById(idServico);
 
-        servicoParaAtualizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
+    
+        servicoParaAtaulizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
+        servicoParaAtaulizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
+        servicoParaAtaulizar.setValor(servicoAtualizaDTO.getValor()); // atualiza valor
+        servicoParaAtaulizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
+        servicoParaAtaulizar.setPeriocidade(servicoAtualizaDTO.getPeriocidade()); // atualiza periodicidade
+        servicoParaAtaulizar.setWebSite(servicoAtualizaDTO.getWebSite()); // atualiza website
 
-        GerenteEntity gerente = gerenteRepository.findById(servicoAtualizaDTO.getIdGerente())
-                .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado"));
+        ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtaulizar);
 
-        servicoParaAtualizar.setGerenteEntity(gerente);
-        servicoParaAtualizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
-        servicoParaAtualizar.setValor(servicoAtualizaDTO.getValor()); // atualiza valor
-        servicoParaAtualizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
-        servicoParaAtualizar.setPeriocidade(servicoAtualizaDTO.getPeriocidade()); // atualiza periodicidade
-        servicoParaAtualizar.setWebSite(servicoAtualizaDTO.getWebSite()); // atualiza website
-
-        ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtualizar);
         return objectMapper.convertValue(servicoEditado, ServicoDTO.class);
     }
 
     public List<ServicoDTO> list() {
-        return servicoRepository.findAll().
+        return servicoRepository.getServicosAtivos().
                 stream()
                 .map(servico -> objectMapper.convertValue(servico, ServicoDTO.class))
                 .collect(Collectors.toList());
@@ -66,16 +67,16 @@ public class ServicoService {
         servicoRepository.save(servicoEntity);
     }
 
-    public ServicoEntity findById(Integer id) throws RegraDeNegocioException {
+    private ServicoEntity findById(Integer id) throws RegraDeNegocioException {  // esse método TEM que ser privado
         return servicoRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado"));
     }
 
     public ServicoDTO listById(Integer idServico) throws RegraDeNegocioException {
-        servicoRepository.findById(idServico).orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado!"));
-        ServicoEntity servicoEntity = servicoRepository.getServicoById(idServico);
-        return objectMapper.convertValue(servicoEntity, ServicoDTO.class);
 
+        ServicoEntity servicoEntity = servicoRepository.getServicoById(idServico) // Lista serviço ativo por ID
+                .orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado!"));
+        return objectMapper.convertValue(servicoEntity, ServicoDTO.class);
     }
 
 

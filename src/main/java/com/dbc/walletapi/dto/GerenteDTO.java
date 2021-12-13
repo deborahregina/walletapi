@@ -15,5 +15,4 @@ public class GerenteDTO {
     private UsuarioDTO usuario;
     private TipoStatus status;
 
-
 }

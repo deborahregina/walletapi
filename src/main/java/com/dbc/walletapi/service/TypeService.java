@@ -10,6 +10,7 @@ import com.dbc.walletapi.entity.TipoStatus;
 import com.dbc.walletapi.entity.UsuarioEntity;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.repository.GerenteRepository;
+import com.dbc.walletapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,17 @@ import java.util.stream.Collectors;
 public class TypeService {
 
     private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final GerenteRepository gerenteRepository;
 
 
-    public TypeDTO list(String username) throws RegraDeNegocioException {
+    public TypeDTO list(String idUsuario) throws RegraDeNegocioException {
+
+        Integer idUser = Integer.valueOf(idUsuario);
 
         TypeDTO typeUserSistema = new TypeDTO();
-        UsuarioEntity usuarioRecuperado = usuarioService.findByLogin(username)
+        UsuarioEntity usuarioRecuperado = usuarioRepository.findById(idUser)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
 
         typeUserSistema.setIdUser(usuarioRecuperado.getIdUsuario());
