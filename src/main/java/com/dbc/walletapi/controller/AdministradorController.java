@@ -31,6 +31,7 @@ public class AdministradorController {
     private final UsuarioService usuarioService;
     private final GerenteService gerenteService;
 
+
     @PostMapping
     @ApiOperation(value = "Autenticação")
     @ApiResponses(value = {

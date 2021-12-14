@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
+
+
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final RegraRepository regraRepository;
