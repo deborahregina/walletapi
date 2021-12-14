@@ -2,6 +2,8 @@ package com.dbc.walletapi.security;
 
 import com.dbc.walletapi.entity.UsuarioEntity;
 
+import com.dbc.walletapi.exceptions.RegraDeNegocioException;
+import com.dbc.walletapi.repository.UsuarioRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,6 +26,7 @@ public class TokenService {
     static final String TOKEN_PREFIX = "Bearer";
     static final String HEADER_STRING = "Authorization";
     private static final String CLAIN_PERMISSOES = "permissoes";
+    private final UsuarioRepository usuarioRepository;
 
     @Value("${jwt.expiration}")
     private String expiration;
@@ -31,9 +34,12 @@ public class TokenService {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(UsuarioEntity usuario) {
+    public String generateToken(UsuarioEntity usuario) throws RegraDeNegocioException {
         Date generateDate = new Date();
 
+        if (usuarioRepository.findByUsuario(usuario.getUsuario()).get() == null) {
+            throw new RegraDeNegocioException("Usuário ou senha inválidos");
+        }
         //tempoExpiração
         Date exp = new Date(generateDate.getTime() + Long.parseLong(expiration));
 
