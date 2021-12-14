@@ -76,13 +76,13 @@ public class ServicoService {
 
     public ServicoDTO listById(Integer idServico) throws RegraDeNegocioException {
 
-        ServicoEntity servicoEntity = servicoRepository.getServicoById(idServico) // Lista serviço ativo por ID
+        ServicoEntity servicoEntity = servicoRepository.findById(idServico) // Lista serviço ativo ou inativo por ID
                 .orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado!"));
         return fromEntity(servicoEntity);
     }
 
 
-    public List<ServicoDTO> listByName(String nome) {
+    public List<ServicoDTO> listByName(String nome) { // Lista serviço ativo ou inativo por nome, ignorando case.
         return servicoRepository.findAll()
                 .stream()
                 .filter(servico -> servico.getNome().toLowerCase().contains(nome.toLowerCase()))
