@@ -43,12 +43,13 @@ public class UsuarioService {
         return userEntity;
     }
 
-    public UsuarioDTO create(UsuarioCreateDTO usuarioCreateDTO) {
+    public UsuarioDTO create(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
 
         UsuarioEntity entity = new UsuarioEntity();
         entity.setUsuario(usuarioCreateDTO.getUsuario());
         entity.setSenha(new BCryptPasswordEncoder().encode(usuarioCreateDTO.getSenha()));
-        entity.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra()).orElse(null));
+        entity.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra())
+                .orElseThrow(() ->  new RegraDeNegocioException("Regra não encontrada!")));
 
         UsuarioEntity save = usuarioRepository.save(entity);
         return new UsuarioDTO(save.getIdUsuario(), save.getUsername() , save.getRegraEntity().getIdRegra());

@@ -3,6 +3,7 @@ package com.dbc.walletapi.controller;
 
 import com.dbc.walletapi.dto.*;
 import com.dbc.walletapi.entity.UsuarioEntity;
+import com.dbc.walletapi.exceptions.CustomGlobalExceptionHandler;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.service.GerenteService;
 import io.swagger.annotations.ApiOperation;
@@ -13,10 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.dbc.walletapi.security.TokenService;
 import com.dbc.walletapi.service.UsuarioService;
 
@@ -62,8 +60,9 @@ public class AdministradorController {
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
     public GerenteDTO postGerente(@RequestBody GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
-        return gerenteService.create(gerenteCreateDTO);
-    }
 
+            return gerenteService.create(gerenteCreateDTO);
+
+    }
 
 }
