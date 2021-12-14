@@ -42,6 +42,13 @@ public class ServicoService {
     public ServicoDTO update(ServicoAtualizaDTO servicoAtualizaDTO, Integer idServico) throws RegraDeNegocioException{
         ServicoEntity servicoParaAtualizar = findById(idServico);
 
+        if(servicoAtualizaDTO.getIdGerente() != null) {
+            GerenteEntity gerente = gerenteRepository.findById(servicoAtualizaDTO.getIdGerente()).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
+            if (gerente.getStatus() == TipoStatus.INATIVO) {
+                throw new RegraDeNegocioException("Não é possível atribuir serviço para gerente inativo!");
+            }
+            servicoParaAtualizar.setGerenteEntity(gerente);
+        }
 
         servicoParaAtualizar.setDescricao(servicoAtualizaDTO.getDescricao()); // atualiza descricao
         servicoParaAtualizar.setMoeda(servicoAtualizaDTO.getMoeda()); // atualiza moeda
