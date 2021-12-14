@@ -31,6 +31,7 @@ public class AdministradorController {
     private final UsuarioService usuarioService;
     private final GerenteService gerenteService;
 
+
     @PostMapping
     @ApiOperation(value = "Autenticação")
     @ApiResponses(value = {
@@ -39,6 +40,7 @@ public class AdministradorController {
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
     public String auth(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
+        usuarioService.findByLogin(loginDTO.getUsuario()).orElseThrow(() -> new RegraDeNegocioException("Usuário ou senha inválidos"));
         UsernamePasswordAuthenticationToken user =
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getUsuario(),

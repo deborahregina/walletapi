@@ -39,6 +39,8 @@ public class ServicoAtualizaDTO {
     @NotNull
     @ApiModelProperty(value = "Periodicidade: MENSAL:0, TRIMESTRAL:1, SEMESTRAL:2, ANUAL:3")
     private TipoPeriodicidade periocidade;
+    @ApiModelProperty(value = "Id do gerente do serviço")
+    private Integer idGerente;
 
 
 

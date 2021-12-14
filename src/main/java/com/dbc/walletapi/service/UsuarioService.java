@@ -16,12 +16,15 @@ import org.springframework.stereotype.Service;
 import com.dbc.walletapi.repository.UsuarioRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
+
+
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final RegraRepository regraRepository;
@@ -32,15 +35,20 @@ public class UsuarioService {
     public Optional<UsuarioEntity> findByLogin(String login) throws RegraDeNegocioException {
         Optional<UsuarioEntity> userEntity = usuarioRepository.findByUsuario(login);
 
-        if(userEntity.get().getIdUsuario() != 1) {
-            GerenteEntity gerenteEntity = gerenteRepository.findById(userEntity.get().getGerenteEntity().getIdGerente())
-                    .orElseThrow(()-> new RegraDeNegocioException("Gerente não encontrado!"));
+        try {
+            if(userEntity.get().getIdUsuario() != 1) {
+                GerenteEntity gerenteEntity = gerenteRepository.findById(userEntity.get().getGerenteEntity().getIdGerente())
+                        .orElseThrow(()-> new RegraDeNegocioException("Gerente não encontrado!"));
 
-            if(gerenteEntity.getStatus() == TipoStatus.INATIVO) {
-                throw new RegraDeNegocioException("Não é possível logar com usuário inativo");
+                if(gerenteEntity.getStatus() == TipoStatus.INATIVO) {
+                    throw new RegraDeNegocioException("Não é possível logar com usuário inativo");
+                }
             }
+            return userEntity;
+        } catch (NoSuchElementException ex) {
+            throw new RegraDeNegocioException("Usuário ou senha inválidos");
         }
-        return userEntity;
+
     }
 
     public UsuarioDTO create(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
