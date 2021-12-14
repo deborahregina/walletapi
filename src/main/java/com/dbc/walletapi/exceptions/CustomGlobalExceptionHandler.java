@@ -1,6 +1,7 @@
 package com.dbc.walletapi.exceptions;
 
 import io.jsonwebtoken.SignatureException;
+import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,26 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
         return new ResponseEntity<>(body, headers, status);
     }
+
+    @ExceptionHandler(PSQLException.class)
+    public ResponseEntity<Object> handleException(PSQLException exception,
+                                                  HttpServletRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+
+        if(exception.getMessage().contains("usuario_login_key")) {
+            body.put("status", badRequest.value());
+            body.put("message", "Login já existente no banco");
+        }
+        else {
+            body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            body.put("message", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        }
+
+        return new ResponseEntity<>(body, badRequest);
+    }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleException(ConstraintViolationException exception,

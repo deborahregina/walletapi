@@ -30,32 +30,40 @@ public class TypeService {
 
     public TypeDTO list(String idUsuario) throws RegraDeNegocioException {
 
-        Integer idUser = Integer.valueOf(idUsuario);
+        try{
+            Integer idUser = Integer.valueOf(idUsuario);
 
-        TypeDTO typeUserSistema = new TypeDTO();
-        UsuarioEntity usuarioRecuperado = usuarioRepository.findById(idUser)
-                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
+            TypeDTO typeUserSistema = new TypeDTO();
+            UsuarioEntity usuarioRecuperado = usuarioRepository.findById(idUser)
+                    .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
 
-        typeUserSistema.setIdUser(usuarioRecuperado.getIdUsuario());
-        typeUserSistema.setUsuario(usuarioRecuperado.getUsuario());
-        if(usuarioRecuperado.getIdUsuario() == 1) {
-            return typeUserSistema;
-        }
+            typeUserSistema.setIdUser(usuarioRecuperado.getIdUsuario());
+            typeUserSistema.setUsuario(usuarioRecuperado.getUsuario());
+            if(usuarioRecuperado.getIdUsuario() == 1) {
+                return typeUserSistema;
+            }
 
-        GerenteEntity gerenteEntity = gerenteRepository.findById(usuarioRecuperado.getGerenteEntity().getIdGerente())
-                .orElseThrow(() ->new RegraDeNegocioException("Gerente não encontrado!"));
+            GerenteEntity gerenteEntity = gerenteRepository.findById(usuarioRecuperado.getGerenteEntity().getIdGerente())
+                    .orElseThrow(() ->new RegraDeNegocioException("Gerente não encontrado!"));
+
 
             List<ServicoDTO> listServicosDTO = gerenteEntity.getServicos().stream()
-                    .map(servicoEntity -> objectMapper.convertValue(servicoEntity,ServicoDTO.class)).collect(Collectors.toList());
+                    .map(servicoEntity -> objectMapper.convertValue(servicoEntity,ServicoDTO.class))
+                    .filter(servicoDTO -> servicoDTO.getStatus().equals(TipoStatus.ATIVO)).collect(Collectors.toList());
 
 
-        typeUserSistema.setIdGerente(gerenteEntity.getIdGerente());
-        typeUserSistema.setEmail(gerenteEntity.getEmail());
-        typeUserSistema.setNomeCompleto(gerenteEntity.getNomeCompleto());
-        typeUserSistema.setServicoDTOList(listServicosDTO);
-        typeUserSistema.setStatus(gerenteEntity.getStatus());
+            typeUserSistema.setIdGerente(gerenteEntity.getIdGerente());
+            typeUserSistema.setEmail(gerenteEntity.getEmail());
+            typeUserSistema.setNomeCompleto(gerenteEntity.getNomeCompleto());
+            typeUserSistema.setServicoDTOList(listServicosDTO);
+            typeUserSistema.setStatus(gerenteEntity.getStatus());
 
-        return typeUserSistema;
+            return typeUserSistema;
+
+        } catch (NumberFormatException ex) {
+            throw new RegraDeNegocioException("Usuário ou senha inválidos");
+        }
+
 
     }
 

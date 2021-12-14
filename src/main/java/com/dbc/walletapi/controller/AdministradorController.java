@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -37,17 +38,22 @@ public class AdministradorController {
             @ApiResponse(code = 400, message = "Dados incorretos"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public String auth(@RequestBody @Valid LoginDTO loginDTO) {
+    public String auth(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
         UsernamePasswordAuthenticationToken user =
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getUsuario(),
                         loginDTO.getSenha()
                 );
 
-        Authentication authenticate = authenticationManager.authenticate(user);
+        try {
+            Authentication authenticate = authenticationManager.authenticate(user);
 
-        String token = tokenService.generateToken((UsuarioEntity) authenticate.getPrincipal());
-        return token;
+            String token = tokenService.generateToken((UsuarioEntity) authenticate.getPrincipal());
+            return token;
+        } catch (BadCredentialsException ex) {
+            throw new RegraDeNegocioException("Usuário ou senha inválidos");
+        }
+
     }
 
 
