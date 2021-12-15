@@ -63,6 +63,7 @@ public class UsuarioService {
 
         return usuarioEntities.stream().map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class)).collect(Collectors.toList());
 
+
     }
 
 
