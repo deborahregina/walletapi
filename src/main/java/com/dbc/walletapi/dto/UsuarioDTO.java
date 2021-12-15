@@ -24,4 +24,6 @@ public class UsuarioDTO {
     @JsonIgnore
     @ApiModelProperty(value = "senha")
     private Integer regra;
+
+    //private TipoStatus status
 }

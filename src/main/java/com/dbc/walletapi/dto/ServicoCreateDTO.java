@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 
 @Data
@@ -31,6 +32,8 @@ public class ServicoCreateDTO {
     @NotNull(message = "Website não pode ser nulo")
     @NotEmpty(message = "Website não pode ser vazio")
     @ApiModelProperty(value = "Website do serviço")
+    @Pattern(regexp = "^((ftp|http|https):\\/\\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\\.[a-zA-Z]+)+((\\/)[\\w#]+)*(\\/\\w+\\?[a-zA-Z0-9_]+=\\w+(&[a-zA-Z0-9_]+=\\w+)*)?$")
+    // formato de website
     private String webSite;
     @NotNull
     @ApiModelProperty(value = "Valor do serviço em decimal, separado por .")

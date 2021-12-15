@@ -35,6 +35,7 @@ public class GerenteService {
         usuarioNovo.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra()).orElseThrow(() -> new RegraDeNegocioException("Regra não encontrada!")));
         String senha = new BCryptPasswordEncoder().encode(usuarioNovo.getPassword());
         usuarioNovo.setSenha(senha);
+        usuarioNovo.setStatus(TipoStatus.ATIVO); // usuário ativo
         UsuarioEntity user = usuarioRepository.save(usuarioNovo);
         GerenteEntity gerenteEntity = objectMapper.convertValue(gerenteCreateDTO, GerenteEntity.class);
         gerenteEntity.setUsuario(user);
@@ -102,6 +103,7 @@ public class GerenteService {
             throw new RegraDeNegocioException("Este gerente já está inativo.");
         }
         gerenteEntity.setStatus(TipoStatus.INATIVO);
+        gerenteEntity.getUsuario().setStatus(TipoStatus.INATIVO); // desativa usuário do gerente
         gerenteRepository.save(gerenteEntity);
     }
 

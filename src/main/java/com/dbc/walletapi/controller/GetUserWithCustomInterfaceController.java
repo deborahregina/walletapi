@@ -4,6 +4,7 @@ import com.dbc.walletapi.dto.TypeDTO;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.security.IAuthenticationFacade;
 import com.dbc.walletapi.service.TypeService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ public class GetUserWithCustomInterfaceController {
     private  TypeService typeService;
 
     @RequestMapping(value = "/username", method = RequestMethod.GET)
+    @ApiOperation(value = "Retornar informações do usuário autenticado.")
     @ResponseBody
     public TypeDTO currentUserNameSimple() throws RegraDeNegocioException {
         Authentication authentication = authenticationFacade.getAuthentication();

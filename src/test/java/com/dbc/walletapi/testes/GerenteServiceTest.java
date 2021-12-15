@@ -2,10 +2,7 @@ package com.dbc.walletapi.testes;
 
 import com.dbc.walletapi.controller.AdministradorController;
 import com.dbc.walletapi.dto.*;
-import com.dbc.walletapi.entity.GerenteEntity;
-import com.dbc.walletapi.entity.RegraEntity;
-import com.dbc.walletapi.entity.TipoStatus;
-import com.dbc.walletapi.entity.UsuarioEntity;
+import com.dbc.walletapi.entity.*;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.repository.GerenteRepository;
 import com.dbc.walletapi.repository.RegraRepository;
@@ -53,10 +50,9 @@ public class GerenteServiceTest {
 
     @Test
     public void deletaGerenteComSucesso() throws Exception {
-        GerenteEntity gerenteEntity = new GerenteEntity();
+        GerenteEntity gerenteEntity = mock(GerenteEntity.class);
         doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(2);
         gerenteService.delete(2);
-        verify(gerenteService, times(1)).delete(2);
     }
 
     @Test

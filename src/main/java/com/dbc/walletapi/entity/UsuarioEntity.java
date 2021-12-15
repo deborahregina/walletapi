@@ -37,6 +37,9 @@ public class UsuarioEntity implements UserDetails {
     @OneToOne(mappedBy = "usuario")
     private GerenteEntity gerenteEntity;
 
+    @Column(name = "status")
+    private TipoStatus status;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
@@ -71,6 +74,10 @@ public class UsuarioEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
+        if (this.status == TipoStatus.INATIVO) {
+            return false;
+        }
+
         return true;
     }
 }
