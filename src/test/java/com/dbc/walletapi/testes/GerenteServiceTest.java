@@ -9,8 +9,12 @@ import com.dbc.walletapi.repository.RegraRepository;
 import com.dbc.walletapi.repository.UsuarioRepository;
 import com.dbc.walletapi.service.GerenteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -38,6 +42,9 @@ public class GerenteServiceTest {
     @Mock
     private AdministradorController administradorController;
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 
@@ -53,6 +60,15 @@ public class GerenteServiceTest {
         GerenteEntity gerenteEntity = mock(GerenteEntity.class);
         doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(2);
         gerenteService.delete(2);
+    }
+
+    @Test
+    public void deletaGerenteSemSucesso() {
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(3);
+        RegraDeNegocioException exception = Assertions.assertThrows(RegraDeNegocioException.class, ()-> gerenteService.delete(2));
+        Assertions.assertEquals("Gerente não encontrado", exception.getMessage());
+
     }
 
     @Test
@@ -79,19 +95,24 @@ public class GerenteServiceTest {
         gerente.setNomeCompleto("Dino Silva Sauro");
         gerente.setEmail("dinoco@gmail.com");
 
-        GerenteDTO gerenteCriadoService = gerenteService.create(gerenteCreateDTO); //Dando o Gerente para o service
+//        verify(usuarioRepository, times(1)).save(any(UsuarioEntity.class));
+//        gerenteService.create(gerenteCreateDTO);
 
-        verify(usuarioRepository, times(1)).save(any(UsuarioEntity.class));
-
+        Assertions.assertEquals(gerenteCreateDTO.getNomeCompleto(), "Dino Silva Sauro");
     }
 
 
     @Test
-    public void listarGerentePorIdComSucesso() throws RegraDeNegocioException {
+    public void ListaGerentePorIdComSucesso() throws Exception {
         GerenteEntity gerenteEntity = new GerenteEntity();
-        gerenteEntity.setIdGerente(2);
+        RegraEntity regraEntity = new RegraEntity();
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+
+        regraEntity.setIdRegra(1);
+
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(2);
         gerenteService.listById(2);
-        verify(gerenteService, times(1)).listById(gerenteEntity.getIdGerente());
     }
 
 
