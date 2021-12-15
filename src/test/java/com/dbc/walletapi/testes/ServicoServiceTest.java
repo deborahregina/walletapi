@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import static org.mockito.Mockito.*;
 
@@ -103,18 +105,8 @@ public class ServicoServiceTest {
         servicoCreateDTO.setWebSite("www.google.com.br");
         servicoCreateDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
 
-        servicoSalvo.setNome("Google");
-        servicoSalvo.setDescricao("Novo serviço");
-        servicoSalvo.setMoeda(TipoMoeda.DOLAR);
-        servicoSalvo.setValor(new BigDecimal("10.00"));
-        servicoSalvo.setWebSite("www.google.com.br");
-        servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
-        servicoSalvo.setGerenteEntity(gerenteEntity);
-        doReturn(servicoSalvo).when(servicoRepository).save(any());
-
-
         ServicoDTO servicoDTO = servicoService.create(servicoCreateDTO,anyInt());  // Pegando o DTO do Service
-        Assertions.assertNotNull(servicoDTO);
+        Assertions.assertNull(servicoDTO);
 
     }
 
@@ -148,7 +140,7 @@ public class ServicoServiceTest {
 
     }
 
-    @Test
+    @Test(expected = RegraDeNegocioException.class)
     public void updateServicoSemSucessoServicoNaoExistente() throws RegraDeNegocioException {
 
         ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
@@ -163,7 +155,7 @@ public class ServicoServiceTest {
         servicoAtualizaDTO.setWebSite("www.google.com.br");
         servicoAtualizaDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
 
-        doReturn(Optional.of(servicoSalvo)).when(servicoRepository).findById(anyInt());
+        doReturn(Optional.empty()).when(servicoRepository).findById(anyInt()); // a "busca no banco" não retorna um objeto.
         servicoSalvo.setNome("Google");
         servicoSalvo.setDescricao("Novo serviço");
         servicoSalvo.setMoeda(TipoMoeda.DOLAR);
@@ -174,8 +166,104 @@ public class ServicoServiceTest {
         doReturn(servicoSalvo).when(servicoRepository).save(any());
 
         ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,anyInt());
-        Assertions.assertNotNull(servicoDTO);
+        Assertions.assertNull(servicoDTO); // Não salvou
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void updateServicoSemSucessoGerenteInexistente() throws RegraDeNegocioException {
+
+        ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
+        ServicoEntity servicoSalvo = new ServicoEntity();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+
+        doReturn(Optional.empty()).when(gerenteRepository).findById(anyInt());
+        servicoAtualizaDTO.setNome("Google");
+        servicoAtualizaDTO.setDescricao("Novo serviço");
+        servicoAtualizaDTO.setMoeda(TipoMoeda.DOLAR);
+        servicoAtualizaDTO.setValor(new BigDecimal("10.00"));
+        servicoAtualizaDTO.setWebSite("www.google.com.br");
+        servicoAtualizaDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
+
+        servicoSalvo.setNome("Google");
+        servicoSalvo.setDescricao("Novo serviço");
+        servicoSalvo.setMoeda(TipoMoeda.DOLAR);
+        servicoSalvo.setValor(new BigDecimal("10.00"));
+        servicoSalvo.setWebSite("www.google.com.br");
+        servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
+
+        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,anyInt());
+        Assertions.assertNull(servicoDTO); // Não salvou
 
     }
+
+    @Test
+    public void listByIdServicoComSucessoServicoExistente() throws RegraDeNegocioException {
+
+        ServicoDTO servicoDTO = new ServicoDTO();
+        ServicoEntity servicoSalvo = new ServicoEntity();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        GerenteDTO gerenteDTO = new GerenteDTO();
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+        servicoDTO.setNome("Google");
+        servicoDTO.setDescricao("Novo serviço");
+        servicoDTO.setMoeda(TipoMoeda.DOLAR);
+        servicoDTO.setValor(new BigDecimal("10.00"));
+        servicoDTO.setWebSite("www.google.com.br");
+        servicoDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
+        servicoDTO.setGerente(gerenteDTO);
+
+
+        servicoSalvo.setNome("Google");
+        servicoSalvo.setDescricao("Novo serviço");
+        servicoSalvo.setMoeda(TipoMoeda.DOLAR);
+        servicoSalvo.setValor(new BigDecimal("10.00"));
+        servicoSalvo.setWebSite("www.google.com.br");
+        servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
+        servicoSalvo.setGerenteEntity(gerenteEntity);
+        doReturn(Optional.of(servicoSalvo)).when(servicoRepository).findById(anyInt());
+
+        ServicoDTO servicolist = servicoService.listById(anyInt());
+        Assertions.assertNotNull(servicolist);
+
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void listByIdServicoSemSucessoServicoInexistente() throws RegraDeNegocioException {
+
+        ServicoDTO servicoDTO = new ServicoDTO();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        GerenteDTO gerenteDTO = new GerenteDTO();
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+        servicoDTO.setNome("Google");
+        servicoDTO.setDescricao("Novo serviço");
+        servicoDTO.setMoeda(TipoMoeda.DOLAR);
+        servicoDTO.setValor(new BigDecimal("10.00"));
+        servicoDTO.setWebSite("www.google.com.br");
+        servicoDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
+        servicoDTO.setGerente(gerenteDTO);
+
+        doReturn(Optional.empty()).when(servicoRepository).findById(anyInt());
+
+        ServicoDTO servicolist = servicoService.listById(anyInt());
+        Assertions.assertNotNull(servicolist);
+
+    }
+
+    @Test
+    public void listServicosComSucesso() {
+
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        List<ServicoEntity> servicosEntity = new ArrayList<>();
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+        doReturn(servicosEntity).when(servicoRepository).findAll();
+
+        List<ServicoDTO> servicosDTO =  servicoService.list();
+        Assertions.assertNotNull(servicosDTO);
+
+    }
+
 
 }
