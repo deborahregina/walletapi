@@ -265,5 +265,13 @@ public class ServicoServiceTest {
 
     }
 
+    @Test
+    public void listServicosPorNomeComSucesso() {
+
+
+        // falta esse aqui
+
+    }
+
 
 }
