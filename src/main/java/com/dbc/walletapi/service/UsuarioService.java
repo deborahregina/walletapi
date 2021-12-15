@@ -36,14 +36,6 @@ public class UsuarioService {
         Optional<UsuarioEntity> userEntity = usuarioRepository.findByUsuario(login);
 
         try {
-            if(userEntity.get().getIdUsuario() != 1) {
-                GerenteEntity gerenteEntity = gerenteRepository.findById(userEntity.get().getGerenteEntity().getIdGerente())
-                        .orElseThrow(()-> new RegraDeNegocioException("Gerente não encontrado!"));
-
-                if(gerenteEntity.getStatus() == TipoStatus.INATIVO) {
-                    throw new RegraDeNegocioException("Não é possível logar com usuário inativo");
-                }
-            }
             return userEntity;
         } catch (NoSuchElementException ex) {
             throw new RegraDeNegocioException("Usuário ou senha inválidos");
