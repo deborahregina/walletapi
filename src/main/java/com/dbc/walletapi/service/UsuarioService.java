@@ -28,8 +28,6 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final RegraRepository regraRepository;
-    private final GerenteRepository gerenteRepository;
-
 
 
     public Optional<UsuarioEntity> findByLogin(String login) throws RegraDeNegocioException {
@@ -63,8 +61,10 @@ public class UsuarioService {
 
         return usuarioEntities.stream().map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class)).collect(Collectors.toList());
 
-
     }
 
+    public void delete(UsuarioEntity usuario) {
+        usuario.setStatus(TipoStatus.INATIVO);
+    }
 
 }
