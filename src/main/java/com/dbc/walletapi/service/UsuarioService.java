@@ -59,6 +59,7 @@ public class UsuarioService {
         entity.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra())
                 .orElseThrow(() ->  new RegraDeNegocioException("Regra não encontrada!")));
 
+        entity.setStatus(TipoStatus.ATIVO);
         UsuarioEntity save = usuarioRepository.save(entity);
         return new UsuarioDTO(save.getIdUsuario(), save.getUsername() , save.getRegraEntity().getIdRegra());
 
@@ -71,5 +72,6 @@ public class UsuarioService {
         return usuarioEntities.stream().map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class)).collect(Collectors.toList());
 
     }
+
 
 }

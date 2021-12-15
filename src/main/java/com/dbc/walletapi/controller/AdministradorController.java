@@ -10,9 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -48,12 +46,23 @@ public class AdministradorController {
                 );
 
         try {
-            Authentication authenticate = authenticationManager.authenticate(user);
 
+            Authentication authenticate = authenticationManager.authenticate(user);
             String token = tokenService.generateToken((UsuarioEntity) authenticate.getPrincipal());
             return token;
+
         } catch (BadCredentialsException ex) {
+
             throw new RegraDeNegocioException("Usuário ou senha inválidos");
+
+        } catch (LockedException ex) {
+
+            throw new RegraDeNegocioException("Este usuário está bloqueado");
+
+        } catch (DisabledException ex) {
+
+            throw new RegraDeNegocioException("Usuário desativado");
+
         }
 
     }
