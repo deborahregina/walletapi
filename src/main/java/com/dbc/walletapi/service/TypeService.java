@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TypeService {
 
-    private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final GerenteRepository gerenteRepository;
