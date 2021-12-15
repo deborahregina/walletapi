@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class GerenteServiceTest {
 
+    @Spy
     @InjectMocks
     private GerenteService gerenteService;
 
@@ -61,8 +63,15 @@ public class GerenteServiceTest {
 
     @Test
     public void deletaGerenteComSucessoIdEncontrado() throws Exception {
+        UsuarioEntity usuario = new UsuarioEntity();
         GerenteEntity gerenteEntity = mock(GerenteEntity.class);
+
+        usuario.setUsuario("usuario");
+        usuario.setIdUsuario(1);
+        usuario.setStatus(TipoStatus.ATIVO);
+        usuario.setIdUsuario(3);
         doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(2);
+        gerenteEntity.setUsuario(usuario);
         gerenteService.delete(2);
     }
 
@@ -176,28 +185,32 @@ public class GerenteServiceTest {
     }
 
     @Test
-    public void updateGerenteComSucesso() throws RegraDeNegocioException {
-        GerenteAtualizaDTO gerenteAtualizaDTO = new GerenteAtualizaDTO();
-        GerenteEntity gerenteSalvo = new GerenteEntity();
-        UsuarioEntity usuarioEntity = new UsuarioEntity();
-        RegraEntity regraEntity = new RegraEntity();
+    public void updateGerenteComSucesso() throws RegraDeNegocioException {                  //Conferir
+       GerenteEntity gerenteEntity = new GerenteEntity();
+       UsuarioEntity usuarioEntity = new UsuarioEntity();
+       GerenteAtualizaDTO gerenteAtualizaDTO = new GerenteAtualizaDTO();
+       GerenteDTO gerenteDTO = new GerenteDTO();
 
-        doReturn(Optional.of(usuarioEntity)).when(usuarioRepository).findById(anyInt());
-        doReturn(Optional.of(regraEntity)).when(regraRepository).findById(anyInt());
+       gerenteAtualizaDTO.setNomeCompleto("Nome Atualizado");
+       gerenteAtualizaDTO.setEmail("email@gmail.com");
 
-        gerenteAtualizaDTO.setNomeCompleto("Dino Silva Sauro");
-        gerenteAtualizaDTO.setEmail("dinoco@gmail.com");
 
-        usuarioEntity.setRegraEntity(regraEntity);
-        usuarioEntity.setSenha("123");
-        doReturn(Optional.of(gerenteSalvo)).when(gerenteRepository).findById(anyInt());
-        gerenteSalvo.setNomeCompleto("Fran Silva Sauro");
-        gerenteSalvo.setEmail("dinoca@gmail.com");
-        gerenteSalvo.setUsuario(usuarioEntity);
-        doReturn(gerenteSalvo).when(gerenteRepository).save(any());
+       doReturn(Optional.of(usuarioEntity)).when(usuarioRepository).findById(anyInt());
+       gerenteEntity.setEmail(gerenteAtualizaDTO.getEmail());
+       gerenteEntity.setStatus(TipoStatus.ATIVO);
+       gerenteEntity.setUsuario(usuarioEntity);
+       gerenteEntity.setNomeCompleto(gerenteAtualizaDTO.getNomeCompleto());
 
-        GerenteDTO gerenteDTO = gerenteService.update(anyInt(),gerenteAtualizaDTO);
-        Assertions.assertNotNull(gerenteDTO);
+       usuarioEntity.setGerenteEntity(gerenteEntity);
+
+       doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+       doReturn(gerenteEntity).when(gerenteRepository).save(any());
+
+        doReturn(gerenteDTO).when(gerenteService).fromEntity(gerenteEntity);
+
+
+        gerenteDTO = gerenteService.update(2,gerenteAtualizaDTO);
+
     }
 
 
