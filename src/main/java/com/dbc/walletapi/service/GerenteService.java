@@ -33,8 +33,8 @@ public class GerenteService {
         usuarioNovo.setRegraEntity(regraRepository.findById(gerenteCreateDTO.getUsuario()
                 .getRegra()).orElseThrow(() -> new RegraDeNegocioException("Regra não encontrada!"))); // setando regra para usuário a ser criado.
 
-        String senha = new BCryptPasswordEncoder().encode(usuarioNovo.getPassword()); // critografia da senha.
-        usuarioNovo.setSenha(senha);
+         // critografia da senha.
+        usuarioNovo.setSenha(new BCryptPasswordEncoder().encode(usuarioNovo.getPassword()));
         usuarioNovo.setStatus(TipoStatus.ATIVO); // usuário novo definido como ativo
         UsuarioEntity user = usuarioRepository.save(usuarioNovo); // Salvando usuário
 
@@ -104,5 +104,19 @@ public class GerenteService {
     }
 
 
+    public GerenteDTO alteraSenha(LoginDTO loginDTO, Integer idGerente) throws RegraDeNegocioException {
+
+        GerenteEntity gerente = gerenteRepository.findById(idGerente)
+                .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
+
+        UsuarioEntity usuario = gerente.getUsuario();
+        usuario.setSenha(new BCryptPasswordEncoder().encode(loginDTO.getSenha()));
+        usuario.setUsuario(loginDTO.getUsuario());
+
+        usuarioRepository.save(usuario);
+
+        return fromEntity(gerente);
+
+    }
 
 }
