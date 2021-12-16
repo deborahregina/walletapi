@@ -8,6 +8,7 @@ import com.dbc.walletapi.service.ServicoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -256,11 +257,6 @@ public class ServicoServiceTest {
     @Test
     public void listServicosComSucesso() {
 
-        GerenteEntity gerenteEntity = new GerenteEntity();
-        List<ServicoEntity> servicosEntity = new ArrayList<>();
-
-        doReturn(servicosEntity).when(servicoRepository).findAll();
-
         List<ServicoDTO> servicosDTO =  servicoService.list();
         Assertions.assertNotNull(servicosDTO);
 
@@ -279,5 +275,46 @@ public class ServicoServiceTest {
 
     }
 
+    @Test
+    public void listServicoInativosComListaInativa() {
+        List<ServicoEntity> servicoEntities = new ArrayList<>();
+        ServicoEntity servicoInativo = new ServicoEntity();
+
+        servicoInativo.setStatus(TipoStatus.INATIVO);
+
+        servicoEntities.add(servicoInativo);
+
+        Assert.assertTrue(servicoService.ServicosInativos(servicoEntities));
+
+    }
+
+    @Test
+    public void listServicoInativosComListaAtiva() {
+        List<ServicoEntity> servicoEntities = new ArrayList<>();
+        ServicoEntity servicoAnativo = new ServicoEntity();
+
+        servicoAnativo.setStatus(TipoStatus.ATIVO);
+
+        servicoEntities.add(servicoAnativo);
+
+        Assert.assertFalse(servicoService.ServicosInativos(servicoEntities));
+
+    }
+
+    @Test
+    public void listServicoInativosComListaMista() {
+        List<ServicoEntity> servicoEntities = new ArrayList<>();
+        ServicoEntity servicoAnativo = new ServicoEntity();
+        ServicoEntity servicoInativo = new ServicoEntity();
+
+        servicoAnativo.setStatus(TipoStatus.ATIVO);
+        servicoInativo.setStatus(TipoStatus.INATIVO);
+
+        servicoEntities.add(servicoAnativo);
+        servicoEntities.add(servicoInativo);
+
+        Assert.assertFalse(servicoService.ServicosInativos(servicoEntities));
+
+    }
 
 }

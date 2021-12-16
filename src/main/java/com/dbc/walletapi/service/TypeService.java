@@ -1,6 +1,7 @@
 package com.dbc.walletapi.service;
 
 
+import com.dbc.walletapi.dto.LoginDTO;
 import com.dbc.walletapi.dto.ServicoDTO;
 import com.dbc.walletapi.dto.TypeDTO;
 import com.dbc.walletapi.dto.UsuarioDTO;
@@ -13,6 +14,7 @@ import com.dbc.walletapi.repository.GerenteRepository;
 import com.dbc.walletapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,6 +58,46 @@ public class TypeService {
             return typeUserSistema;
 
         } catch (NumberFormatException ex) {
+            throw new RegraDeNegocioException("Usuário ou senha inválidos");
+        }
+
+    }
+
+    public TypeDTO alterarSenhaELoginUsuarioDoAutenticado(String idUser, LoginDTO loginDTO) throws RegraDeNegocioException {
+
+        try{
+            Integer idUsuario = Integer.valueOf(idUser); // Transforma a string que contém o ID do usuário em inteiro
+            TypeDTO typeUserSistema = new TypeDTO();
+            UsuarioEntity usuarioRecuperado = usuarioRepository.findById(idUsuario)
+                    .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!")); // Recupera usuário
+
+            usuarioRecuperado.setUsuario(loginDTO.getUsuario());
+            usuarioRecuperado.setSenha(new BCryptPasswordEncoder().encode(loginDTO.getSenha()));
+            UsuarioEntity novosDadosUsuario = usuarioRepository.save(usuarioRecuperado);
+
+            typeUserSistema.setIdUser(novosDadosUsuario.getIdUsuario());
+            typeUserSistema.setUsuario(novosDadosUsuario.getUsuario());
+
+            if(usuarioRecuperado.getIdUsuario() == 1) { // Caso for gerente, não há mais dados para incrementar nessa variável.
+                return typeUserSistema;
+            }
+
+            GerenteEntity gerenteEntity = gerenteRepository.findById(usuarioRecuperado.getGerenteEntity().getIdGerente()) // caso for um gerente, precisa salvar serviços
+                    .orElseThrow(() ->new RegraDeNegocioException("Gerente não encontrado!"));
+
+            List<ServicoDTO> listServicosDTO = gerenteEntity.getServicos().stream()
+                    .map(servicoEntity -> objectMapper.convertValue(servicoEntity,ServicoDTO.class))
+                    .filter(servicoDTO -> servicoDTO.getStatus().equals(TipoStatus.ATIVO)).collect(Collectors.toList()); // Filtra apenas serviços ativos daquele gerente
+
+            typeUserSistema.setIdGerente(gerenteEntity.getIdGerente());
+            typeUserSistema.setEmail(gerenteEntity.getEmail());
+            typeUserSistema.setNomeCompleto(gerenteEntity.getNomeCompleto());
+            typeUserSistema.setServicoDTOList(listServicosDTO);
+            typeUserSistema.setStatus(gerenteEntity.getStatus());
+
+            return typeUserSistema;
+
+        } catch (NumberFormatException | RegraDeNegocioException ex) {
             throw new RegraDeNegocioException("Usuário ou senha inválidos");
         }
 

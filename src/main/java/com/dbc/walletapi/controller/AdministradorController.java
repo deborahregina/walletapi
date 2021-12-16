@@ -81,4 +81,19 @@ public class AdministradorController {
 
     }
 
+    @PutMapping("/{idGerente}")
+    @ApiOperation(value = "Alterar Login e senha de um gerente por Id do gerente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Alteração feita com sucesso"),
+            @ApiResponse(code = 400, message = "Dados inconsistentes ou faltantes"),
+            @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
+    })
+
+    public GerenteDTO alterarSenha(@RequestBody @Valid LoginDTO loginDTO, @PathVariable("idGerente") Integer IdGerente) throws RegraDeNegocioException {
+
+        return gerenteService.alteraSenha(loginDTO, IdGerente);
+
+    }
+
 }
