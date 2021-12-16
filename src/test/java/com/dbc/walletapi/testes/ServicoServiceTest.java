@@ -28,7 +28,6 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class ServicoServiceTest {
 
-    @Spy
     @InjectMocks
     private ServicoService servicoService;
 
@@ -50,9 +49,10 @@ public class ServicoServiceTest {
 
     @Test
     public void deletaServicoComSucessoIdEncontrado() throws Exception {
-        ServicoEntity servicoEntity = mock(ServicoEntity.class);
-        doReturn(Optional.of(servicoEntity)).when(servicoRepository).findById(2);
+        ServicoEntity servicoEntity = new ServicoEntity();
+        doReturn(Optional.of(servicoEntity)).when(servicoRepository).findById(anyInt());
         servicoService.delete(2);
+        Assertions.assertEquals(TipoStatus.INATIVO, servicoEntity.getStatus());
     }
 
     @Test(expected = RegraDeNegocioException.class)
@@ -89,6 +89,13 @@ public class ServicoServiceTest {
 
         ServicoDTO servicoDTO = servicoService.create(servicoCreateDTO,2);  // Pegando o DTO do Service
         Assertions.assertNotNull(servicoDTO);
+        Assertions.assertNotNull(servicoDTO.getGerente());
+        Assertions.assertEquals(servicoDTO.getNome(),"Google");
+        Assertions.assertEquals(servicoDTO.getDescricao(),"Novo serviço");
+        Assertions.assertEquals(servicoDTO.getMoeda(),TipoMoeda.DOLAR);
+        Assertions.assertEquals(servicoDTO.getPeriocidade(),TipoPeriodicidade.ANUAL);
+        Assertions.assertEquals(servicoDTO.getValor(),new BigDecimal("10.00"));
+        Assertions.assertEquals(servicoDTO.getWebSite(),"www.google.com.br");
 
 }
 
@@ -270,7 +277,7 @@ public class ServicoServiceTest {
 
         doReturn(listaServicos).when(servicoRepository).findAll();
 
-        List<ServicoDTO> servicoDTOList = servicoService.listByName(anyString());
+        List<ServicoDTO> servicoDTOList = servicoService.listByName("anyString()");
         Assertions.assertNotNull(servicoDTOList);
 
     }

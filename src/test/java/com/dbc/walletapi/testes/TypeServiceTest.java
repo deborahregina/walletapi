@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class TypeServiceTest {
 
-    @Spy
+
     @InjectMocks
     private TypeService typeService;
 
@@ -92,10 +92,11 @@ public class TypeServiceTest {
         GerenteEntity gerenteEntity = new GerenteEntity();
         UsuarioEntity usuario = new UsuarioEntity();
 
+        usuario.setIdUsuario(1);
+        gerenteEntity.setUsuario(usuario);
         doReturn(Optional.of(usuario)).when(usuarioRepository).findById(anyInt());
         doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
 
-        usuario.setIdUsuario(anyInt());
 
         TypeDTO typeDTO = typeService.list(String.valueOf(gerenteEntity.getUsuario().getIdUsuario()));
         Assert.assertNotNull(typeDTO);
