@@ -74,9 +74,8 @@ public class GerenteController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
     public void delete(
-            @ApiParam(name = "ID do gerente",value = "Endpoint para deletar gerente por ID")
             @PathVariable("idGerente") Integer idGerente) throws Exception {
-        gerenteService.delete(idGerente);
+            gerenteService.delete(idGerente);
     }
 
     @GetMapping("/listar-por-nome")

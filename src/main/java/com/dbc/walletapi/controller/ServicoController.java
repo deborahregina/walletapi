@@ -74,8 +74,7 @@ public class ServicoController {
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
     public void delete(
-            @ApiParam(name = "ID do serviço",value = "Endpoint para deletar conta existente")
-            @PathVariable Integer idServico) throws RegraDeNegocioException {
+        @PathVariable Integer idServico) throws RegraDeNegocioException {
         servicoService.delete(idServico);
     }
 

@@ -27,6 +27,7 @@ public class GerenteService {
     private final UsuarioService usuarioService;
     private final GerenteRepository gerenteRepository;
     private final RegraRepository regraRepository;
+    private final ServicoService servicoService;
 
     public GerenteDTO create(GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
         gerenteCreateDTO.getUsuario().setRegra(2); // REGRA 2 - GERENTE (REGRA 1 - ADM)
@@ -41,10 +42,7 @@ public class GerenteService {
         GerenteEntity gerenteEntity = objectMapper.convertValue(gerenteCreateDTO, GerenteEntity.class);
         gerenteEntity.setUsuario(user);
         gerenteEntity.setStatus(TipoStatus.ATIVO);
-        UsuarioDTO usuarioDTO = objectMapper.convertValue(user,UsuarioDTO.class);
-        GerenteEntity novoGerente = gerenteRepository.save(gerenteEntity);
-        /*GerenteDTO gerenteDTO = objectMapper.convertValue(novoGerente, GerenteDTO.class);
-        gerenteDTO.setUsuario(usuarioDTO);*/
+        gerenteRepository.save(gerenteEntity);
         return fromEntity(gerenteEntity);
     }
 
@@ -102,9 +100,14 @@ public class GerenteService {
         if (gerenteEntity.getStatus() == TipoStatus.INATIVO) {
             throw new RegraDeNegocioException("Este gerente já está inativo.");
         }
-        gerenteEntity.setStatus(TipoStatus.INATIVO);
-        usuarioService.delete(gerenteEntity.getUsuario()); // desativa usuário do gerente
-        gerenteRepository.save(gerenteEntity);
+
+        if(servicoService.ServicosInativos(gerenteEntity.getServicos())) {
+            gerenteEntity.setStatus(TipoStatus.INATIVO);
+            usuarioService.delete(gerenteEntity.getUsuario()); // desativa usuário do gerente
+            gerenteRepository.save(gerenteEntity);
+        }
+        else throw new RegraDeNegocioException("Este gerente tem serviços ativos");
+
     }
 
     public List<GerenteDTO> listByName(String nome) {

@@ -107,4 +107,14 @@ public class ServicoService {
         return servicoDTO;
     }
 
+    public boolean ServicosInativos(List<ServicoEntity> servicoEntities) {
+
+        for(ServicoEntity servico: servicoEntities) {
+            if (servico.getStatus() == TipoStatus.ATIVO) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
