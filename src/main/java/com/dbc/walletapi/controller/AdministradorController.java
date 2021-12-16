@@ -66,7 +66,6 @@ public class AdministradorController {
 
     }
 
-
     @PostMapping("/create-gerente")
     @ApiOperation(value = "Criar gerente")
     @ApiResponses(value = {
@@ -76,8 +75,7 @@ public class AdministradorController {
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
 
-    public GerenteDTO postGerente(
-    @RequestBody @Valid GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
+    public GerenteDTO postGerente(@RequestBody @Valid GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
 
             return gerenteService.create(gerenteCreateDTO);
 

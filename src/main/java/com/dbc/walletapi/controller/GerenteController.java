@@ -44,7 +44,9 @@ public class GerenteController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema"),
             @ApiResponse(code = 400, message = "Gerente não encontrado")
     })
+
     public GerenteDTO listById(@PathVariable("idGerente") Integer idGerente) throws RegraDeNegocioException {
+
         return gerenteService.listById(idGerente);
     }
 
@@ -56,7 +58,9 @@ public class GerenteController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
 
+
     public GerenteDTO update(@PathVariable("idGerente") Integer idGerente, @RequestBody @Valid GerenteAtualizaDTO gerenteAtualizaDTO) throws RegraDeNegocioException {
+
         return gerenteService.update(idGerente,gerenteAtualizaDTO);
     }
  
@@ -80,6 +84,7 @@ public class GerenteController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
     public List<GerenteDTO> listarPorNome(@RequestParam("nome") String nome) {
+
         return gerenteService.listByName(nome);
     }
 }

@@ -26,7 +26,7 @@ public class GerenteService {
     private final ServicoService servicoService;
 
     public GerenteDTO create(GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
-        // Primeiro deve ser salvo o usuário do novo gerente criado.
+  // Primeiro deve ser salvo o usuário do novo gerente criado.
         gerenteCreateDTO.getUsuario().setRegra(2); // seta regra 2 (gerente) para o novo usuário que vai ser criado, para o gerente.
         UsuarioEntity usuarioNovo = objectMapper.convertValue(gerenteCreateDTO.getUsuario(), UsuarioEntity.class); //conversão de UsuarioCreateDTO para UsuarioEntity.
 
@@ -46,6 +46,7 @@ public class GerenteService {
 
         return fromEntity(novoGerente); // retorno de um GerenteDTO.
     }
+
 
     public List<GerenteDTO> list() {
 
@@ -75,6 +76,7 @@ public class GerenteService {
         usuarioDTO.setRegra(gerenteEntity.getUsuario().getRegraEntity().getIdRegra());
         gerenteDTO.setUsuario(usuarioDTO);
         return gerenteDTO;
+
     }
 
     public void delete(Integer idGerente) throws RegraDeNegocioException {
