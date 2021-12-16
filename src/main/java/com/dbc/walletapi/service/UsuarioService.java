@@ -66,5 +66,8 @@ public class UsuarioService {
 
     }
 
+    public void delete(UsuarioEntity usuario) {
+        usuario.setStatus(TipoStatus.INATIVO);
+    }
 
 }

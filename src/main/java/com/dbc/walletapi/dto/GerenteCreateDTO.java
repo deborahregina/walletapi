@@ -22,8 +22,8 @@ public class GerenteCreateDTO {
 
     @NotNull(message = "Email não pode ser nulo")
     @NotEmpty(message = "Email não pode ser vazio")
-    @Email(message = "Usar formato de email válido")
     @ApiModelProperty(value = "E-mail do Gerente")
+    @Email(message = "Usar formato de email válido")
     private String email;
 
     @ApiModelProperty(value = "Usuário e senha do gerente")

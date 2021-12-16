@@ -76,7 +76,7 @@ public class AdministradorController {
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public GerenteDTO postGerente(@RequestBody GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
+    public GerenteDTO postGerente(@RequestBody @Valid GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
 
             return gerenteService.create(gerenteCreateDTO);
 

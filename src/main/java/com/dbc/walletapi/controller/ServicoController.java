@@ -6,6 +6,7 @@ import com.dbc.walletapi.dto.ServicoDTO;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.service.ServicoService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,10 @@ public class ServicoController {
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public ServicoDTO createServico(@RequestBody @Valid ServicoCreateDTO servicoCreateDTO,
-                                    @PathVariable Integer idGerente) throws RegraDeNegocioException {
+    public ServicoDTO createServico(
+            @ApiParam(name = "Servico e ID gerente",value = "Endpoint para criar conta para algum gerente")
+            @RequestBody @Valid ServicoCreateDTO servicoCreateDTO,
+            @PathVariable Integer idGerente) throws RegraDeNegocioException {
         return servicoService.create(servicoCreateDTO, idGerente);
     }
 
@@ -45,8 +48,10 @@ public class ServicoController {
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public ServicoDTO updateServico(@RequestBody @Valid ServicoAtualizaDTO servicoAtualizaDTO,
-                                    @PathVariable Integer idServico) throws RegraDeNegocioException {
+    public ServicoDTO updateServico(
+            @ApiParam(name = "Servico novo e ID",value = "Endpoint para alterar conta existente")
+            @RequestBody @Valid ServicoAtualizaDTO servicoAtualizaDTO,
+            @PathVariable Integer idServico) throws RegraDeNegocioException {
         return servicoService.update(servicoAtualizaDTO, idServico);
     }
 
@@ -68,7 +73,8 @@ public class ServicoController {
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public void delete(@PathVariable Integer idServico) throws RegraDeNegocioException {
+    public void delete(
+            @PathVariable Integer idServico) throws RegraDeNegocioException {
         servicoService.delete(idServico);
     }
 
@@ -79,7 +85,9 @@ public class ServicoController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema"),
             @ApiResponse(code = 400, message = "Gerente não encontrado")
     })
-    public ServicoDTO listById (@PathVariable("idServico") Integer idServico) throws RegraDeNegocioException {
+    public ServicoDTO listById (
+            @ApiParam(name = "ID do serviço",value = "Endpoint para listar conta existente")
+            @PathVariable("idServico") Integer idServico) throws RegraDeNegocioException {
         return servicoService.listById(idServico);
     }
 
@@ -90,7 +98,9 @@ public class ServicoController {
             @ApiResponse(code = 400, message = "Listagem não encontrada"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
-    public List<ServicoDTO> listarPorNome(@RequestParam("nome") String nome){
+    public List<ServicoDTO> listarPorNome(
+            @ApiParam(name = "Nome",value = "Endpoint para listar contas por parte do nome")
+            @RequestParam("nome") String nome){
         return servicoService.listByName(nome);
     }
 

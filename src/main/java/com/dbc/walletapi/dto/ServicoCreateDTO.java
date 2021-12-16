@@ -37,6 +37,7 @@ public class ServicoCreateDTO {
     private String webSite;
     @NotNull
     @ApiModelProperty(value = "Valor do serviço em decimal, separado por .")
+    @Min(0)
     private BigDecimal valor;
     @NotNull
     @ApiModelProperty(value = "Nome da moeda em que se contrata o serviço: DOLAR:0, REAL:1, EURO:2, IENE:3, YUAN:4")
