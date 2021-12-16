@@ -8,6 +8,7 @@ import com.dbc.walletapi.repository.GerenteRepository;
 import com.dbc.walletapi.repository.RegraRepository;
 import com.dbc.walletapi.repository.UsuarioRepository;
 import com.dbc.walletapi.service.GerenteService;
+import com.dbc.walletapi.service.ServicoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class GerenteServiceTest {
 
-    @Spy
+
     @InjectMocks
     private GerenteService gerenteService;
 
@@ -48,7 +49,7 @@ public class GerenteServiceTest {
     private UsuarioRepository usuarioRepository;
 
     @Mock
-    private AdministradorController administradorController;
+    private ServicoService servicoService;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -62,23 +63,52 @@ public class GerenteServiceTest {
     }
 
     @Test
-    public void deletaGerenteComSucessoIdEncontrado() throws Exception {
+    public void deletaGerenteComSucessoIdEncontradoServicosInativos() throws Exception {
         UsuarioEntity usuario = new UsuarioEntity();
-        GerenteEntity gerenteEntity = mock(GerenteEntity.class);
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        List<ServicoEntity> listaServicos = new ArrayList<>();
 
+
+        gerenteEntity.setServicos(listaServicos);
         usuario.setUsuario("usuario");
         usuario.setIdUsuario(1);
         usuario.setStatus(TipoStatus.ATIVO);
         usuario.setIdUsuario(3);
-        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(2);
         gerenteEntity.setUsuario(usuario);
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+        doReturn(true).when(servicoService).ServicosInativos(listaServicos);
         gerenteService.delete(2);
+        Assertions.assertEquals(TipoStatus.INATIVO,gerenteEntity.getStatus());
+        Assertions.assertEquals(TipoStatus.INATIVO,usuario.getStatus());
+
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void deletaGerenteSemSucessoIdEncontradoServicosAtivos() throws Exception {
+        UsuarioEntity usuario = new UsuarioEntity();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        List<ServicoEntity> listaServicos = new ArrayList<>();
+
+
+        gerenteEntity.setServicos(listaServicos);
+        usuario.setUsuario("usuario");
+        usuario.setIdUsuario(1);
+        usuario.setStatus(TipoStatus.ATIVO);
+        usuario.setIdUsuario(3);
+        gerenteEntity.setUsuario(usuario);
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+        doReturn(false).when(servicoService).ServicosInativos(listaServicos);
+        gerenteService.delete(2);
+        Assertions.assertEquals(TipoStatus.ATIVO,gerenteEntity.getStatus());
+        Assertions.assertEquals(TipoStatus.ATIVO,usuario.getStatus());
+
     }
 
     @Test(expected = RegraDeNegocioException.class)
     public void deletaGerenteSemSucessoIdNaoEncotrado() throws Exception {
-        GerenteEntity gerenteEntity = new GerenteEntity();
-        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(2);
+        doReturn(Optional.empty()).when(gerenteRepository).findById(anyInt());
         gerenteService.delete(3);
     }
 
@@ -111,6 +141,7 @@ public class GerenteServiceTest {
 
         usuarioEntity.setUsuario("Dino");                      // Setando Usuário Entity
         usuarioEntity.setSenha("123");
+        usuarioEntity.setRegraEntity(new RegraEntity());
 
         gerenteEntity.setIdGerente(1);                         // Setando Gerente Entity
         gerenteEntity.setNomeCompleto("Dino Silva Sauro");
@@ -118,6 +149,7 @@ public class GerenteServiceTest {
         gerenteEntity.setStatus(TipoStatus.ATIVO);
         gerenteEntity.setUsuario(usuarioEntity);
         doReturn(gerenteEntity).when(gerenteRepository).save(any());
+
 
         GerenteDTO gerenteCriado = gerenteService.create(gerenteCreateDTO);  // Pegando o DTO do Service
 
@@ -157,26 +189,26 @@ public class GerenteServiceTest {
         Assertions.assertNotNull(gerentesDTO);
     }
 
-//    @Test
-//    public void RetornaGerentePorIdComSucesso() throws RegraDeNegocioException {
-//        GerenteEntity gerenteEntity = new GerenteEntity();
-//        RegraEntity regraEntity = new RegraEntity();
-//        UsuarioEntity usuarioEntity = new UsuarioEntity();
-//
-//        regraEntity.setIdRegra(1);                         // Setando id da regra
-//
-//        usuarioEntity.setRegraEntity(regraEntity);// Setando a regra no usuário
-//        usuarioEntity.setSenha("123");
-//
-//        gerenteEntity.setUsuario(usuarioEntity);          // Setando usuário no gerente
-//        gerenteEntity.setIdGerente(2);                    // Setando id do Gerente
-//
-//        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
-//
-//
-//        GerenteDTO gerenteDTO = gerenteService.listById(gerenteEntity.getIdGerente());
-//        Assertions.assertNotNull(gerenteDTO);
-//    }
+    @Test
+    public void RetornaGerentePorIdComSucesso() throws RegraDeNegocioException {
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        RegraEntity regraEntity = new RegraEntity();
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+
+        regraEntity.setIdRegra(1);                         // Setando id da regra
+
+        usuarioEntity.setRegraEntity(regraEntity);// Setando a regra no usuário
+        usuarioEntity.setSenha("123");
+
+        gerenteEntity.setUsuario(usuarioEntity);          // Setando usuário no gerente
+        gerenteEntity.setIdGerente(2);                    // Setando id do Gerente
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+
+
+        GerenteDTO gerenteDTO = gerenteService.listById(gerenteEntity.getIdGerente());
+        Assertions.assertNotNull(gerenteDTO);
+    }
 
     @Test
     public void ListarPorNomeComSucesso(){
@@ -201,15 +233,17 @@ public class GerenteServiceTest {
        gerenteEntity.setUsuario(usuarioEntity);
        gerenteEntity.setNomeCompleto(gerenteAtualizaDTO.getNomeCompleto());
 
+       usuarioEntity.setRegraEntity(new RegraEntity());
        usuarioEntity.setGerenteEntity(gerenteEntity);
 
        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
        doReturn(gerenteEntity).when(gerenteRepository).save(any());
 
-        doReturn(gerenteDTO).when(gerenteService).fromEntity(gerenteEntity);
-
 
         gerenteDTO = gerenteService.update(2,gerenteAtualizaDTO);
+        Assertions.assertNotNull(gerenteDTO);
+        Assertions.assertEquals(gerenteDTO.getNomeCompleto(),gerenteAtualizaDTO.getNomeCompleto());
+        Assertions.assertEquals(gerenteDTO.getEmail(),gerenteAtualizaDTO.getEmail());
 
     }
 
