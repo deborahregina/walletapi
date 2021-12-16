@@ -1,5 +1,6 @@
 package com.dbc.walletapi.testes;
 
+import com.dbc.walletapi.dto.LoginDTO;
 import com.dbc.walletapi.dto.TypeDTO;
 import com.dbc.walletapi.repository.UsuarioRepository;
 import com.dbc.walletapi.service.TypeService;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -50,25 +52,23 @@ public class TypeServiceTest {
     public void listaTypeAdminComSucesso() throws RegraDeNegocioException {
 
         UsuarioEntity usuario = new UsuarioEntity();
+        usuario.setUsuario("User");
 
         doReturn(Optional.of(usuario)).when(usuarioRepository).findById(1);
                 usuario.setIdUsuario(1);
 
         TypeDTO typeDTO = typeService.list("1");
         Assert.assertNotNull(typeDTO);
+        Assertions.assertEquals(typeDTO.getUsuario(), usuario.getUsuario());
 
     }
 
     @Test(expected = RegraDeNegocioException.class)
     public void listaTypeAdminSemSucesso() throws RegraDeNegocioException {
 
-        UsuarioEntity usuario = new UsuarioEntity();
-
-        doReturn(Optional.of(usuario)).when(usuarioRepository).findById(1);
-        usuario.setIdUsuario(1);
-
-        TypeDTO typeDTO = typeService.list("2");
-        Assert.assertNotNull(typeDTO);
+        doReturn(Optional.empty()).when(usuarioRepository).findById(1);
+        TypeDTO typeDTO = typeService.list("1");
+        Assertions.assertNull(typeDTO);
 
     }
 
@@ -92,6 +92,7 @@ public class TypeServiceTest {
         GerenteEntity gerenteEntity = new GerenteEntity();
         UsuarioEntity usuario = new UsuarioEntity();
 
+        usuario.setUsuario("user");
         usuario.setIdUsuario(1);
         gerenteEntity.setUsuario(usuario);
         doReturn(Optional.of(usuario)).when(usuarioRepository).findById(anyInt());
@@ -100,6 +101,38 @@ public class TypeServiceTest {
 
         TypeDTO typeDTO = typeService.list(String.valueOf(gerenteEntity.getUsuario().getIdUsuario()));
         Assert.assertNotNull(typeDTO);
+        Assertions.assertEquals(gerenteEntity.getUsuario().getUsuario(), typeDTO.getUsuario());
+    }
+
+    @Test
+    public void trocouSenhaComSucesso() throws RegraDeNegocioException {
+
+        LoginDTO loginDTO = new LoginDTO();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        UsuarioEntity usuarioAntigo = new UsuarioEntity();
+        UsuarioEntity usuarioNovo = new UsuarioEntity();
+
+
+        loginDTO.setSenha("nova senha");
+        loginDTO.setUsuario("novo usuario");
+
+        usuarioAntigo.setUsuario("novo usuario");
+        usuarioAntigo.setSenha("nova senha");
+        usuarioAntigo.setIdUsuario(1);
+        usuarioNovo.setSenha(loginDTO.getSenha());
+        usuarioNovo.setSenha(loginDTO.getSenha());
+        gerenteEntity.setUsuario(usuarioNovo);
+        gerenteEntity.getUsuario().setIdUsuario(1);
+
+        usuarioNovo.setIdUsuario(usuarioAntigo.getIdUsuario());
+        doReturn(Optional.of(usuarioAntigo)).when(usuarioRepository).findById(1);
+        gerenteEntity.setUsuario(usuarioNovo);
+        doReturn(usuarioNovo).when(usuarioRepository).save(usuarioAntigo);
+
+        TypeDTO typeDTO = typeService.alterarSenhaELoginUsuarioDoAutenticado(String.valueOf(gerenteEntity.getUsuario().getIdUsuario()),loginDTO);
+        Assertions.assertEquals(usuarioNovo.getUsuario(), typeDTO.getUsuario());
+
+
     }
 
 
