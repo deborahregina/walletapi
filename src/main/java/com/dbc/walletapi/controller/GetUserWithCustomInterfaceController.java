@@ -20,7 +20,6 @@ public class GetUserWithCustomInterfaceController {
     private  TypeService typeService;
 
     @RequestMapping(value = "/username", method = RequestMethod.GET)
-    @ApiOperation(value = "Retornar informações do usuário autenticado.")
     @ResponseBody
     public TypeDTO currentUserNameSimple() throws RegraDeNegocioException {
         Authentication authentication = authenticationFacade.getAuthentication();

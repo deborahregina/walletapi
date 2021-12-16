@@ -25,5 +25,4 @@ public class UsuarioDTO {
     @ApiModelProperty(value = "senha")
     private Integer regra;
 
-    //private TipoStatus status
 }

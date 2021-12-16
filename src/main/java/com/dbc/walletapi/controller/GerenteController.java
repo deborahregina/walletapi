@@ -33,7 +33,6 @@ public class GerenteController {
             @ApiResponse(code = 200, message = "Gerentes listados com sucesso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
-    @ApiParam(name = "Gerentes",value = "Endpoint para listar gerentes cadastrados")
     public List<GerenteDTO> list() throws RegraDeNegocioException {
         return gerenteService.list();
     }
@@ -45,9 +44,7 @@ public class GerenteController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema"),
             @ApiResponse(code = 400, message = "Gerente não encontrado")
     })
-    public GerenteDTO listById(
-            @ApiParam(name = "Gerente",value = "Endpoint para listar gerente por ID")
-            @PathVariable("idGerente") Integer idGerente) throws RegraDeNegocioException {
+    public GerenteDTO listById(@PathVariable("idGerente") Integer idGerente) throws RegraDeNegocioException {
         return gerenteService.listById(idGerente);
     }
 
@@ -59,9 +56,7 @@ public class GerenteController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
 
-    public GerenteDTO update(
-            @ApiParam(name = "Gerente, ID",value = "Endpoint para atualizar gerente por ID")
-            @PathVariable("idGerente") Integer idGerente, @RequestBody @Valid GerenteAtualizaDTO gerenteAtualizaDTO) throws RegraDeNegocioException {
+    public GerenteDTO update(@PathVariable("idGerente") Integer idGerente, @RequestBody @Valid GerenteAtualizaDTO gerenteAtualizaDTO) throws RegraDeNegocioException {
         return gerenteService.update(idGerente,gerenteAtualizaDTO);
     }
  
@@ -73,8 +68,7 @@ public class GerenteController {
             @ApiResponse(code = 400, message = "Gerente não encontrado"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
-    public void delete(
-            @PathVariable("idGerente") Integer idGerente) throws Exception {
+    public void delete(@PathVariable("idGerente") Integer idGerente) throws Exception {
             gerenteService.delete(idGerente);
     }
 
@@ -85,9 +79,7 @@ public class GerenteController {
             @ApiResponse(code = 400, message = "Listagem não encontrada"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema")
     })
-    public List<GerenteDTO> listarPorNome(
-            @ApiParam(name = "Nome do gerente",value = "Endpoint para listar gerente por partes do nome")
-            @RequestParam("nome") String nome){
+    public List<GerenteDTO> listarPorNome(@RequestParam("nome") String nome) {
         return gerenteService.listByName(nome);
     }
 }

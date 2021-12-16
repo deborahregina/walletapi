@@ -1,10 +1,7 @@
 package com.dbc.walletapi.service;
 
 import com.dbc.walletapi.dto.*;
-import com.dbc.walletapi.entity.GerenteEntity;
-import com.dbc.walletapi.entity.RegraEntity;
-import com.dbc.walletapi.entity.TipoStatus;
-import com.dbc.walletapi.entity.UsuarioEntity;
+import com.dbc.walletapi.entity.*;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.repository.GerenteRepository;
 import com.dbc.walletapi.repository.RegraRepository;
@@ -24,104 +21,86 @@ public class GerenteService {
 
     private final ObjectMapper objectMapper;
     private final UsuarioRepository usuarioRepository;
-    private final UsuarioService usuarioService;
     private final GerenteRepository gerenteRepository;
     private final RegraRepository regraRepository;
     private final ServicoService servicoService;
 
     public GerenteDTO create(GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
-        gerenteCreateDTO.getUsuario().setRegra(2); // REGRA 2 - GERENTE (REGRA 1 - ADM)
-        UsuarioCreateDTO usuarioCreateDTO = gerenteCreateDTO.getUsuario();
-        UsuarioEntity usuarioNovo = objectMapper.convertValue(usuarioCreateDTO, UsuarioEntity.class);
-        usuarioNovo.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra())
-                .orElseThrow(() -> new RegraDeNegocioException("Regra não encontrada!"))); // coloca regra 2 (gerente)
-        String senha = new BCryptPasswordEncoder().encode(usuarioNovo.getPassword()); // criptografa senha
+        // Primeiro deve ser salvo o usuário do novo gerente criado.
+        gerenteCreateDTO.getUsuario().setRegra(2); // seta regra 2 (gerente) para o novo usuário que vai ser criado, para o gerente.
+        UsuarioEntity usuarioNovo = objectMapper.convertValue(gerenteCreateDTO.getUsuario(), UsuarioEntity.class); //conversão de UsuarioCreateDTO para UsuarioEntity.
+
+        usuarioNovo.setRegraEntity(regraRepository.findById(gerenteCreateDTO.getUsuario()
+                .getRegra()).orElseThrow(() -> new RegraDeNegocioException("Regra não encontrada!"))); // setando regra para usuário a ser criado.
+
+        String senha = new BCryptPasswordEncoder().encode(usuarioNovo.getPassword()); // critografia da senha.
         usuarioNovo.setSenha(senha);
-        usuarioNovo.setStatus(TipoStatus.ATIVO); // usuário ativo
-        UsuarioEntity user = usuarioRepository.save(usuarioNovo); // Salva usuário
+        usuarioNovo.setStatus(TipoStatus.ATIVO); // usuário novo definido como ativo
+        UsuarioEntity user = usuarioRepository.save(usuarioNovo); // Salvando usuário
+
+        // Agora se cria o gerente, depois de ter se criado seu usuário.
         GerenteEntity gerenteEntity = objectMapper.convertValue(gerenteCreateDTO, GerenteEntity.class);
-        gerenteEntity.setUsuario(user);
-        gerenteEntity.setStatus(TipoStatus.ATIVO);
-        gerenteRepository.save(gerenteEntity);
-        return fromEntity(gerenteEntity);
+        gerenteEntity.setUsuario(user); // usuário criado é setado para o novo gerente.
+        gerenteEntity.setStatus(TipoStatus.ATIVO); // status do novo gerente definido como ativo
+        GerenteEntity novoGerente = gerenteRepository.save(gerenteEntity); // salvando gerente novo no banco de dados
+
+        return fromEntity(novoGerente); // retorno de um GerenteDTO.
     }
 
     public List<GerenteDTO> list() {
 
-        List<GerenteEntity> listaDeGerentesEntity = gerenteRepository.listaGerentesAtivos();
-
-        List<GerenteDTO> listaDTO = new ArrayList<>();
-
-        for(GerenteEntity gerenteEntity : listaDeGerentesEntity) {
-            GerenteDTO gerenteDTO = objectMapper.convertValue(gerenteEntity, GerenteDTO.class);
-
-            UsuarioDTO usuarioDTO = objectMapper.convertValue(gerenteEntity.getUsuario(),UsuarioDTO.class);
-            usuarioDTO.setRegra(gerenteEntity.getUsuario().getRegraEntity().getIdRegra());
-            gerenteDTO.setUsuario(usuarioDTO);
-            listaDTO.add(gerenteDTO);
-        }
-
+        List<GerenteEntity> listaDeGerentesEntity = gerenteRepository.listaGerentesAtivos(); // Lista apenas gerentes ativos.
+        List<GerenteDTO> listaDTO = listaDeGerentesEntity.stream()
+                .map(gerenteEntity -> fromEntity(gerenteEntity)).collect(Collectors.toList());
         return listaDTO;
 
     }
 
-    public GerenteDTO listById(Integer idGerente) throws RegraDeNegocioException {
-
-        return fromEntity(gerenteRepository.findById(idGerente).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!")));
-
+    public GerenteDTO listById(Integer idGerente) throws RegraDeNegocioException { //Lista gerentes por ID independente dos status
+        return fromEntity(gerenteRepository.findById(idGerente)
+                .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!")));
     }
 
     public GerenteDTO update(Integer idGerente, GerenteAtualizaDTO gerenteAtualizaDTO) throws RegraDeNegocioException {
-
         GerenteEntity gerenteEntity = gerenteRepository.findById(idGerente).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
-
-
         gerenteEntity.setEmail(gerenteAtualizaDTO.getEmail());
         gerenteEntity.setNomeCompleto(gerenteAtualizaDTO.getNomeCompleto());
-
         GerenteEntity gerenteAtualizado = gerenteRepository.save(gerenteEntity);
-
         return fromEntity(gerenteAtualizado);
     }
 
-    public GerenteDTO fromEntity(GerenteEntity gerenteEntity) { // Transforma um entity em um DTO
-
+    public GerenteDTO fromEntity(GerenteEntity gerenteEntity) { // Transforma um entity em um DTO, método genérico.
         GerenteDTO gerenteDTO = objectMapper.convertValue(gerenteEntity, GerenteDTO.class);
         UsuarioDTO usuarioDTO = objectMapper.convertValue(gerenteEntity.getUsuario(),UsuarioDTO.class);
         usuarioDTO.setRegra(gerenteEntity.getUsuario().getRegraEntity().getIdRegra());
         gerenteDTO.setUsuario(usuarioDTO);
-
-
         return gerenteDTO;
     }
 
     public void delete(Integer idGerente) throws RegraDeNegocioException {
-        GerenteEntity gerenteEntity = findById(idGerente);
+        GerenteEntity gerenteEntity = gerenteRepository.findById(idGerente).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado"));
         if (gerenteEntity.getStatus() == TipoStatus.INATIVO) {
             throw new RegraDeNegocioException("Este gerente já está inativo.");
         }
-
-        if(servicoService.ServicosInativos(gerenteEntity.getServicos())) {
+        if (servicoService.ServicosInativos(gerenteEntity.getServicos())) { // se o gerente não tem serviços ativos, ele é inativado, e seu usuário também.
             gerenteEntity.setStatus(TipoStatus.INATIVO);
-            usuarioService.delete(gerenteEntity.getUsuario()); // desativa usuário do gerente
+            gerenteEntity.getUsuario().setStatus(TipoStatus.INATIVO); // desativa usuário do gerente
             gerenteRepository.save(gerenteEntity);
         }
-        else throw new RegraDeNegocioException("Este gerente tem serviços ativos");
+        else {
+            throw new RegraDeNegocioException("Gerente tem serviços ativos");
+        }
 
     }
 
-    public List<GerenteDTO> listByName(String nome) {
+    public List<GerenteDTO> listByName(String nome) { // Lista por nome independente do status.
         return gerenteRepository.findAll()
                 .stream()
                 .filter(gerente -> gerente.getNomeCompleto().toLowerCase().contains(nome.toLowerCase()))
                 .collect(Collectors.toList()).stream()
-                .map(gerente -> objectMapper.convertValue(gerente, GerenteDTO.class))
-                .collect(Collectors.toList());
+                .map(gerente -> fromEntity(gerente)).collect(Collectors.toList());
     }
 
 
-    private GerenteEntity findById(Integer idGerente) throws RegraDeNegocioException {
-        return gerenteRepository.findById(idGerente).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
-    }
 
 }

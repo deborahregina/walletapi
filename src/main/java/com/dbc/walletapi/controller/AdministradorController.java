@@ -36,7 +36,6 @@ public class AdministradorController {
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
     public String auth(
-            @ApiParam(name = "Login e senha",value = "Endpoint para autenticação, gera um token")
             @RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
         usuarioService.findByLogin(loginDTO.getUsuario()).orElseThrow(() -> new RegraDeNegocioException("Usuário ou senha inválidos"));
         UsernamePasswordAuthenticationToken user =
@@ -78,7 +77,6 @@ public class AdministradorController {
     })
 
     public GerenteDTO postGerente(
-    @ApiParam(name = "Dados de gerente",value = "Endpoint para criação de gerente")
     @RequestBody @Valid GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
 
             return gerenteService.create(gerenteCreateDTO);
