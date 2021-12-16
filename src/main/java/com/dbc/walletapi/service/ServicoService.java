@@ -31,6 +31,7 @@ public class ServicoService {
         if(gerenteEntity.getStatus() == TipoStatus.INATIVO) {
             throw new RegraDeNegocioException("Serviço deve ser atribuído para gerente ativo"); // Evitar atribuir gerente inativo para servico novo
         }
+
         ServicoEntity novoServico = objectMapper.convertValue(servicoCreateDTO, ServicoEntity.class);
         novoServico.setGerenteEntity(gerenteEntity);
         novoServico.setStatus(TipoStatus.ATIVO);
@@ -42,10 +43,13 @@ public class ServicoService {
         ServicoEntity servicoParaAtualizar = findById(idServico);
 
         if(servicoAtualizaDTO.getIdGerente() != null) {
-            GerenteEntity gerente = gerenteRepository.findById(servicoAtualizaDTO.getIdGerente()).orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
-            if (gerente.getStatus() == TipoStatus.INATIVO) {
+            GerenteEntity gerente = gerenteRepository.findById(servicoAtualizaDTO.getIdGerente()) // Confere se o gerente existe
+                    .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
+
+            if (gerente.getStatus() == TipoStatus.INATIVO) { // Confere se o gerente está ativo
                 throw new RegraDeNegocioException("Não é possível atribuir serviço para gerente inativo!");
             }
+
             servicoParaAtualizar.setGerenteEntity(gerente);
         }
 
@@ -75,7 +79,7 @@ public class ServicoService {
         servicoRepository.save(servicoEntity);
     }
 
-    private ServicoEntity findById(Integer id) throws RegraDeNegocioException {  // esse método TEM que ser privado
+    private ServicoEntity findById(Integer id) throws RegraDeNegocioException {
         return servicoRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Serviço não encontrado"));
     }
@@ -106,7 +110,7 @@ public class ServicoService {
         return servicoDTO;
     }
 
-    public boolean ServicosInativos(List<ServicoEntity> servicoEntities) {
+    public boolean ServicosInativos(List<ServicoEntity> servicoEntities) { // verifica se uma lista de serviços é inativa.
 
         for(ServicoEntity servico: servicoEntities) {
             if (servico.getStatus() == TipoStatus.ATIVO) {

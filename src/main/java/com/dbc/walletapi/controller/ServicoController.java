@@ -33,9 +33,9 @@ public class ServicoController {
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public ServicoDTO createServico(
-            @RequestBody @Valid ServicoCreateDTO servicoCreateDTO,
-            @PathVariable Integer idGerente) throws RegraDeNegocioException {
+
+    public ServicoDTO createServico(@RequestBody @Valid ServicoCreateDTO servicoCreateDTO,
+          @PathVariable Integer idGerente) throws RegraDeNegocioException {
         return servicoService.create(servicoCreateDTO, idGerente);
     }
 
@@ -47,6 +47,7 @@ public class ServicoController {
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
+
     public ServicoDTO updateServico(
             @RequestBody @Valid ServicoAtualizaDTO servicoAtualizaDTO,
             @PathVariable Integer idServico) throws RegraDeNegocioException {

@@ -30,26 +30,22 @@ public class TypeService {
     public TypeDTO list(String idUsuario) throws RegraDeNegocioException {
 
         try{
-            Integer idUser = Integer.valueOf(idUsuario);
-
+            Integer idUser = Integer.valueOf(idUsuario); // Transforma a string que contém o ID do usuário em inteiro
             TypeDTO typeUserSistema = new TypeDTO();
             UsuarioEntity usuarioRecuperado = usuarioRepository.findById(idUser)
-                    .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
-
+                    .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!")); // Recupera usuário
             typeUserSistema.setIdUser(usuarioRecuperado.getIdUsuario());
             typeUserSistema.setUsuario(usuarioRecuperado.getUsuario());
-            if(usuarioRecuperado.getIdUsuario() == 1) {
+            if(usuarioRecuperado.getIdUsuario() == 1) { // Caso for gerente, não há mais dados para incrementar nessa variável.
                 return typeUserSistema;
             }
 
-            GerenteEntity gerenteEntity = gerenteRepository.findById(usuarioRecuperado.getGerenteEntity().getIdGerente())
+            GerenteEntity gerenteEntity = gerenteRepository.findById(usuarioRecuperado.getGerenteEntity().getIdGerente()) // caso for um gerente, precisa salvar serviços
                     .orElseThrow(() ->new RegraDeNegocioException("Gerente não encontrado!"));
-
 
             List<ServicoDTO> listServicosDTO = gerenteEntity.getServicos().stream()
                     .map(servicoEntity -> objectMapper.convertValue(servicoEntity,ServicoDTO.class))
-                    .filter(servicoDTO -> servicoDTO.getStatus().equals(TipoStatus.ATIVO)).collect(Collectors.toList());
-
+                    .filter(servicoDTO -> servicoDTO.getStatus().equals(TipoStatus.ATIVO)).collect(Collectors.toList()); // Filtra apenas serviços ativos daquele gerente
 
             typeUserSistema.setIdGerente(gerenteEntity.getIdGerente());
             typeUserSistema.setEmail(gerenteEntity.getEmail());
@@ -62,7 +58,6 @@ public class TypeService {
         } catch (NumberFormatException ex) {
             throw new RegraDeNegocioException("Usuário ou senha inválidos");
         }
-
 
     }
 

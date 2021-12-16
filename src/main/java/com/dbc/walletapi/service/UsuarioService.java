@@ -41,30 +41,12 @@ public class UsuarioService {
 
     }
 
-    public UsuarioDTO create(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
-
-        UsuarioEntity entity = new UsuarioEntity();
-        entity.setUsuario(usuarioCreateDTO.getUsuario());
-        entity.setSenha(new BCryptPasswordEncoder().encode(usuarioCreateDTO.getSenha()));
-        entity.setRegraEntity(regraRepository.findById(usuarioCreateDTO.getRegra())
-                .orElseThrow(() ->  new RegraDeNegocioException("Regra não encontrada!")));
-
-        entity.setStatus(TipoStatus.ATIVO);
-        UsuarioEntity save = usuarioRepository.save(entity);
-        return new UsuarioDTO(save.getIdUsuario(), save.getUsername() , save.getRegraEntity().getIdRegra());
-
-    }
-
-    public List<UsuarioDTO> list() {
+     public List<UsuarioDTO> list() {
 
         List<UsuarioEntity> usuarioEntities = usuarioRepository.findAll();
 
         return usuarioEntities.stream().map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class)).collect(Collectors.toList());
 
-    }
-
-    public void delete(UsuarioEntity usuario) {
-        usuario.setStatus(TipoStatus.INATIVO);
     }
 
 }
