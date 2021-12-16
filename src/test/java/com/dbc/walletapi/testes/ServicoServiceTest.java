@@ -275,7 +275,7 @@ public class ServicoServiceTest {
         doReturn(listaServicos).when(servicoRepository).findAll();
 
         List<ServicoDTO> servicoDTOList = servicoService.listByName(anyString());
-
+        Assertions.assertNotNull(servicoDTOList);
 
     }
 
