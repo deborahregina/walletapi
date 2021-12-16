@@ -35,7 +35,6 @@ public class ServicoService {
         novoServico.setGerenteEntity(gerenteEntity);
         novoServico.setStatus(TipoStatus.ATIVO);
         ServicoEntity servicoSalvo = servicoRepository.save(novoServico);
-
         return fromEntity(servicoSalvo);
     }
 
