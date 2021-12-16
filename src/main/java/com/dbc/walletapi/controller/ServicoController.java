@@ -74,7 +74,7 @@ public class ServicoController {
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
     public void delete(
-            @PathVariable Integer idServico) throws RegraDeNegocioException {
+        @PathVariable Integer idServico) throws RegraDeNegocioException {
         servicoService.delete(idServico);
     }
 

@@ -6,9 +6,7 @@ import com.dbc.walletapi.entity.UsuarioEntity;
 import com.dbc.walletapi.exceptions.CustomGlobalExceptionHandler;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.service.GerenteService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -31,13 +29,15 @@ public class AdministradorController {
 
 
     @PostMapping
-    @ApiOperation(value = "Autenticação")
+    @ApiOperation(value = "Autenticação", notes = "Realizar autenticação do usuário")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Autenticação feita com sucesso"),
             @ApiResponse(code = 400, message = "Dados incorretos"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public String auth(@RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
+    public String auth(
+            @ApiParam(name = "Login e senha",value = "Endpoint para autenticação, gera um token")
+            @RequestBody @Valid LoginDTO loginDTO) throws RegraDeNegocioException {
         usuarioService.findByLogin(loginDTO.getUsuario()).orElseThrow(() -> new RegraDeNegocioException("Usuário ou senha inválidos"));
         UsernamePasswordAuthenticationToken user =
                 new UsernamePasswordAuthenticationToken(
@@ -76,7 +76,10 @@ public class AdministradorController {
             @ApiResponse(code = 403, message = "Você não tem permissao para acessar esse recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
-    public GerenteDTO postGerente(@RequestBody @Valid GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
+
+    public GerenteDTO postGerente(
+    @ApiParam(name = "Dados de gerente",value = "Endpoint para criação de gerente")
+    @RequestBody @Valid GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
 
             return gerenteService.create(gerenteCreateDTO);
 

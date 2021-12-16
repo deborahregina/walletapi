@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import java.math.BigDecimal;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class ServicoServiceTest {
 
+    @Spy
     @InjectMocks
     private ServicoService servicoService;
 
@@ -65,7 +67,6 @@ public class ServicoServiceTest {
     ServicoCreateDTO servicoCreateDTO = new ServicoCreateDTO();
     ServicoEntity servicoSalvo = new ServicoEntity();
     GerenteEntity gerenteEntity = new GerenteEntity();
-    GerenteDTO gerenteDTO = new GerenteDTO();
 
         doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
         servicoCreateDTO.setNome("Google");
@@ -85,7 +86,7 @@ public class ServicoServiceTest {
         doReturn(servicoSalvo).when(servicoRepository).save(any());
 
 
-        ServicoDTO servicoDTO = servicoService.create(servicoCreateDTO,anyInt());  // Pegando o DTO do Service
+        ServicoDTO servicoDTO = servicoService.create(servicoCreateDTO,2);  // Pegando o DTO do Service
         Assertions.assertNotNull(servicoDTO);
 
 }
@@ -105,7 +106,7 @@ public class ServicoServiceTest {
         servicoCreateDTO.setWebSite("www.google.com.br");
         servicoCreateDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
 
-        ServicoDTO servicoDTO = servicoService.create(servicoCreateDTO,anyInt());  // Pegando o DTO do Service
+        ServicoDTO servicoDTO = servicoService.create(servicoCreateDTO,3);  // Pegando o DTO do Service
         Assertions.assertNull(servicoDTO);
 
     }
@@ -135,13 +136,14 @@ public class ServicoServiceTest {
         servicoSalvo.setGerenteEntity(gerenteEntity);
         doReturn(servicoSalvo).when(servicoRepository).save(any());
 
-        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,anyInt());
+        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,2);
         Assertions.assertNotNull(servicoDTO);
 
     }
 
     @Test(expected = RegraDeNegocioException.class)
     public void updateServicoSemSucessoServicoNaoExistente() throws RegraDeNegocioException {
+
 
         ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
         ServicoEntity servicoSalvo = new ServicoEntity();
@@ -165,7 +167,7 @@ public class ServicoServiceTest {
         servicoSalvo.setGerenteEntity(gerenteEntity);
         doReturn(servicoSalvo).when(servicoRepository).save(any());
 
-        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,anyInt());
+        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,3);
         Assertions.assertNull(servicoDTO); // Não salvou
     }
 
@@ -191,7 +193,7 @@ public class ServicoServiceTest {
         servicoSalvo.setWebSite("www.google.com.br");
         servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
 
-        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,anyInt());
+        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,1);
         Assertions.assertNull(servicoDTO); // Não salvou
 
     }
@@ -257,7 +259,6 @@ public class ServicoServiceTest {
         GerenteEntity gerenteEntity = new GerenteEntity();
         List<ServicoEntity> servicosEntity = new ArrayList<>();
 
-        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
         doReturn(servicosEntity).when(servicoRepository).findAll();
 
         List<ServicoDTO> servicosDTO =  servicoService.list();
@@ -266,10 +267,15 @@ public class ServicoServiceTest {
     }
 
     @Test
-    public void listServicosPorNomeComSucesso() {
+    public void listServicosPorNomeComSucesso() {                // Conferir
+        List<ServicoEntity> listaServicos = new ArrayList<>();
+        ServicoDTO servicoDTO = new ServicoDTO();
+        ServicoEntity servicoEntity = new ServicoEntity();
 
+        doReturn(listaServicos).when(servicoRepository).findAll();
 
-        // falta esse aqui
+        List<ServicoDTO> servicoDTOList = servicoService.listByName(anyString());
+
 
     }
 
