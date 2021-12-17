@@ -35,10 +35,11 @@ public class SpringFoxConfig {
                 .useDefaultResponseMessages(false)
                 .apiInfo(new ApiInfoBuilder()
                         .title("Wallet API")
-                        .description("Trabalho final")
+                        .description("Onde está Wallet? API")
                         .version("2.0.0")
                         .license("Apache 2.0")
-                        .contact(new Contact("nome do gurpo","www.dbccompany.com.br","deborah.regina@dbccompany.com"))
+                        .contact(new Contact("Augusto, Brenoly, Deborah, Leonardo, Samuel",
+                                "www.dbccompany.com.br","deborah.regina@dbccompany.com"))
                         .build());
     }
     private ApiKey apiKey() {
