@@ -3,7 +3,6 @@ package com.dbc.walletapi.controller;
 
 import com.dbc.walletapi.dto.*;
 import com.dbc.walletapi.entity.UsuarioEntity;
-import com.dbc.walletapi.exceptions.CustomGlobalExceptionHandler;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.service.GerenteService;
 import io.swagger.annotations.*;
@@ -50,15 +49,15 @@ public class AdministradorController {
             String token = tokenService.generateToken((UsuarioEntity) authenticate.getPrincipal());
             return token;
 
-        } catch (BadCredentialsException ex) {
+        } catch (BadCredentialsException ex) { //Credenciais erradas
 
             throw new RegraDeNegocioException("Usuário ou senha inválidos");
 
-        } catch (LockedException ex) {
+        } catch (LockedException ex) { //Usuários bloqueados
 
             throw new RegraDeNegocioException("Este usuário está bloqueado");
 
-        } catch (DisabledException ex) {
+        } catch (DisabledException ex) { // Usuário inativo (STATUS:1)
 
             throw new RegraDeNegocioException("Usuário desativado");
 
@@ -90,7 +89,7 @@ public class AdministradorController {
             @ApiResponse(code = 500, message = "Foi gerada uma excessão"),
     })
 
-    public GerenteDTO alterarSenha(@RequestBody @Valid LoginDTO loginDTO, @PathVariable("idGerente") Integer IdGerente) throws RegraDeNegocioException {
+    public GerenteDTO alterarSenha(@RequestBody @Valid LoginCreateDTO loginDTO, @PathVariable("idGerente") Integer IdGerente) throws RegraDeNegocioException {
 
         return gerenteService.alteraSenha(loginDTO, IdGerente);
 

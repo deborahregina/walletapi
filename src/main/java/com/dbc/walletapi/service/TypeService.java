@@ -1,10 +1,7 @@
 package com.dbc.walletapi.service;
 
 
-import com.dbc.walletapi.dto.LoginDTO;
-import com.dbc.walletapi.dto.ServicoDTO;
-import com.dbc.walletapi.dto.TypeDTO;
-import com.dbc.walletapi.dto.UsuarioDTO;
+import com.dbc.walletapi.dto.*;
 import com.dbc.walletapi.entity.GerenteEntity;
 import com.dbc.walletapi.entity.ServicoEntity;
 import com.dbc.walletapi.entity.TipoStatus;
@@ -63,7 +60,7 @@ public class TypeService {
 
     }
 
-    public TypeDTO alterarSenhaELoginUsuarioDoAutenticado(String idUser, LoginDTO loginDTO) throws RegraDeNegocioException {
+    public TypeDTO alterarSenhaELoginUsuarioDoAutenticado(String idUser, LoginCreateDTO loginDTO) throws RegraDeNegocioException {
 
         try{
             Integer idUsuario = Integer.valueOf(idUser); // Transforma a string que contém o ID do usuário em inteiro

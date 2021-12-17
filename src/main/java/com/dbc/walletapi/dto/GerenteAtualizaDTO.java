@@ -15,6 +15,8 @@ public class GerenteAtualizaDTO {
     @NotEmpty(message = "Nome não pode ser vazio")
     @ApiModelProperty(value = "Nome completo do gerente")
     private String nomeCompleto;
+
+
     @NotNull(message = "Email não pode ser nulo")
     @NotEmpty(message = "Email não pode ser vazio")
     @ApiModelProperty(value = "E-mail do gerente")
