@@ -1,9 +1,7 @@
 package com.dbc.walletapi.service;
 
-
 import com.dbc.walletapi.dto.*;
 import com.dbc.walletapi.entity.GerenteEntity;
-import com.dbc.walletapi.entity.ServicoEntity;
 import com.dbc.walletapi.entity.TipoStatus;
 import com.dbc.walletapi.entity.UsuarioEntity;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
@@ -57,7 +55,6 @@ public class TypeService {
         } catch (NumberFormatException ex) {
             throw new RegraDeNegocioException("Usuário ou senha inválidos");
         }
-
     }
 
     public TypeDTO alterarSenhaELoginUsuarioDoAutenticado(String idUser, LoginCreateDTO loginDTO) throws RegraDeNegocioException {
@@ -97,9 +94,5 @@ public class TypeService {
         } catch (NumberFormatException | RegraDeNegocioException ex) {
             throw new RegraDeNegocioException("Usuário ou senha inválidos");
         }
-
     }
-
-
-
 }

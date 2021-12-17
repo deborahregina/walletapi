@@ -56,7 +56,6 @@ public class GerenteServiceTest {
         ReflectionTestUtils.setField(gerenteService, "objectMapper",objectMapper);
     }
 
-
     @Test
     public void criarGerenteComSucessoUsarioExistente() throws RegraDeNegocioException {
         GerenteCreateDTO gerenteCreateDTO = new GerenteCreateDTO();
@@ -92,9 +91,10 @@ public class GerenteServiceTest {
         GerenteDTO gerenteCriado = gerenteService.create(gerenteCreateDTO);  // Pegando o DTO do Service
 
         Assertions.assertNotNull(gerenteCriado);
-        Assertions.assertEquals(gerenteCriado.getNomeCompleto(), "Dino Silva Sauro");
-        Assertions.assertEquals(gerenteCriado.getEmail(), "dinoco@gmail.com");
-        Assertions.assertEquals(gerenteCriado.getStatus(), TipoStatus.ATIVO);
+        Assertions.assertEquals(gerenteCriado.getIdGerente(), gerenteEntity.getIdGerente());
+        Assertions.assertEquals(gerenteCriado.getNomeCompleto(), gerenteEntity.getNomeCompleto());
+        Assertions.assertEquals(gerenteCriado.getEmail(), gerenteEntity.getEmail());
+        Assertions.assertEquals(gerenteCriado.getStatus(), gerenteEntity.getStatus());
     }
 
     @Test(expected = RegraDeNegocioException.class)
@@ -353,12 +353,6 @@ public class GerenteServiceTest {
         doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(2);
         gerenteService.delete(2);
     }
-
-
-
-
-
-
 }
 
 

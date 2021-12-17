@@ -6,8 +6,6 @@ import com.dbc.walletapi.repository.GerenteRepository;
 import com.dbc.walletapi.repository.ServicoRepository;
 import com.dbc.walletapi.service.ServicoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +13,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import java.math.BigDecimal;
@@ -23,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import static org.mockito.Mockito.*;
-
 
 @RunWith(MockitoJUnitRunner.class)
 public class ServicoServiceTest {
@@ -61,10 +57,8 @@ public class ServicoServiceTest {
         servicoService.delete(3);
     }
 
-
     @Test
-    public void criaServicoComSucessoGerenteExiste() throws RegraDeNegocioException {
-
+    public void criaServicoComSucessoGerenteExistente() throws RegraDeNegocioException {
     ServicoCreateDTO servicoCreateDTO = new ServicoCreateDTO();
     ServicoEntity servicoSalvo = new ServicoEntity();
     GerenteEntity gerenteEntity = new GerenteEntity();
@@ -96,11 +90,10 @@ public class ServicoServiceTest {
         Assertions.assertEquals(servicoDTO.getPeriocidade(),TipoPeriodicidade.ANUAL);
         Assertions.assertEquals(servicoDTO.getValor(),new BigDecimal("10.00"));
         Assertions.assertEquals(servicoDTO.getWebSite(),"www.google.com.br");
-
 }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void criaServicoSemSucessoGerenteNaoExistente() throws RegraDeNegocioException {
+    public void criaServicoSemSucessoGerenteInexistente() throws RegraDeNegocioException {
 
         ServicoCreateDTO servicoCreateDTO = new ServicoCreateDTO();
        
@@ -115,7 +108,6 @@ public class ServicoServiceTest {
 
         ServicoDTO servicoDTO = servicoService.create(servicoCreateDTO,3);  // Pegando o DTO do Service
         Assertions.assertNull(servicoDTO);
-
     }
 
     @Test
@@ -150,12 +142,10 @@ public class ServicoServiceTest {
         Assertions.assertEquals(servicoAtualizaDTO.getValor(),servicoDTO.getValor());
         Assertions.assertEquals(servicoAtualizaDTO.getPeriocidade(),servicoDTO.getPeriocidade());
         Assertions.assertEquals(servicoAtualizaDTO.getWebSite(),servicoDTO.getWebSite());
-
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void updateServicoSemSucessoServicoNaoExistente() throws RegraDeNegocioException {
-
+    public void updateServicoSemSucessoServicoInexistente() throws RegraDeNegocioException {
         ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
         ServicoEntity servicoSalvo = new ServicoEntity();
         GerenteEntity gerenteEntity = new GerenteEntity();
@@ -186,7 +176,6 @@ public class ServicoServiceTest {
 
     @Test(expected = RegraDeNegocioException.class)
     public void updateServicoSemSucessoGerenteInexistente() throws RegraDeNegocioException {
-
         ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
         ServicoEntity servicoSalvo = new ServicoEntity();
 
@@ -210,12 +199,10 @@ public class ServicoServiceTest {
         Assertions.assertNotEquals(servicoAtualizaDTO.getNome(),servicoDTO.getNome());
         Assertions.assertNotEquals(servicoAtualizaDTO.getPeriocidade(),servicoDTO.getPeriocidade());
         Assertions.assertNotEquals(servicoAtualizaDTO.getWebSite(),servicoDTO.getWebSite());
-
     }
 
     @Test
     public void listByIdServicoComSucessoServicoExistente() throws RegraDeNegocioException {
-
         ServicoEntity servicoSalvo = new ServicoEntity();
         GerenteEntity gerenteEntity = new GerenteEntity();
 
@@ -236,61 +223,52 @@ public class ServicoServiceTest {
         Assertions.assertEquals(servicolistado.getPeriocidade(),TipoPeriodicidade.ANUAL);
         Assertions.assertEquals(servicolistado.getValor(),new BigDecimal("10.00"));
         Assertions.assertEquals(servicolistado.getWebSite(),"www.google.com.br");
-
-
     }
 
     @Test(expected = RegraDeNegocioException.class)
     public void listByIdServicoSemSucessoServicoInexistente() throws RegraDeNegocioException {
-
         doReturn(Optional.empty()).when(servicoRepository).findById(anyInt());
         ServicoDTO servicolist = servicoService.listById(anyInt());
         Assertions.assertNull(servicolist);
-
     }
 
     @Test
-    public void listServicosComSucesso() {
-
+    public void listaServicosComSucesso() {
         List<ServicoDTO> servicosDTO =  servicoService.list();
         Assertions.assertNotNull(servicosDTO);
-
     }
 
     @Test
-    public void listServicosPorNomeComSucesso() {                // Conferir
+    public void listaServicosPorNomeComSucesso() {                // Conferir
         List<ServicoEntity> listaServicos = new ArrayList<>();
 
         doReturn(listaServicos).when(servicoRepository).findAll();
 
         List<ServicoDTO> servicoDTOList = servicoService.listByName("anyString()");
         Assertions.assertNotNull(servicoDTOList);
-
     }
 
     @Test
-    public void listServicoInativosComListaInativa() {
+    public void listaServicoInativosComListaInativa() {
         List<ServicoEntity> servicoEntities = new ArrayList<>();
         ServicoEntity servicoInativo = new ServicoEntity();
 
         servicoInativo.setStatus(TipoStatus.INATIVO);
         servicoEntities.add(servicoInativo);
         Assert.assertTrue(servicoService.ServicosInativos(servicoEntities));
-
     }
 
     @Test
-    public void listServicoInativosComListaAtiva() {
+    public void listaServicoInativosComListaAtiva() {
         List<ServicoEntity> servicoEntities = new ArrayList<>();
         ServicoEntity servicoAnativo = new ServicoEntity();
         servicoAnativo.setStatus(TipoStatus.ATIVO);
         servicoEntities.add(servicoAnativo);
         Assert.assertFalse(servicoService.ServicosInativos(servicoEntities));
-
     }
 
     @Test
-    public void listServicoInativosComListaMista() {
+    public void listaServicoInativosComListaMista() {
         List<ServicoEntity> servicoEntities = new ArrayList<>();
         ServicoEntity servicoAnativo = new ServicoEntity();
         ServicoEntity servicoInativo = new ServicoEntity();
@@ -299,7 +277,5 @@ public class ServicoServiceTest {
         servicoEntities.add(servicoAnativo);
         servicoEntities.add(servicoInativo);
         Assert.assertFalse(servicoService.ServicosInativos(servicoEntities));
-
     }
-
 }

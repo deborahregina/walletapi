@@ -1,7 +1,6 @@
 package com.dbc.walletapi.controller;
 
 import com.dbc.walletapi.dto.LoginCreateDTO;
-import com.dbc.walletapi.dto.LoginDTO;
 import com.dbc.walletapi.dto.TypeDTO;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.security.IAuthenticationFacade;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 
 @Controller

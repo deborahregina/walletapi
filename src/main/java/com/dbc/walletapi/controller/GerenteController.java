@@ -20,6 +20,7 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @Slf4j
+
 public class GerenteController {
 
     private final GerenteService gerenteService;

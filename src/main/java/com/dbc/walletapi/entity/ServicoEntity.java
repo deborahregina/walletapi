@@ -3,12 +3,8 @@ package com.dbc.walletapi.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Getter
 @Setter
@@ -23,17 +19,21 @@ public class ServicoEntity  {
 
     @Column(name = "nome")
     private String nome;
+
     @Column(name = "descricao")
     private String descricao;
+
     @Column(name = "website")
     private String webSite;
+
     @Column(name = "valor")
     private BigDecimal valor;
+
     @Column(name = "moeda")
     private TipoMoeda moeda;
+
     @Column(name = "periodicidade")
     private TipoPeriodicidade periocidade;
-
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,6 +42,4 @@ public class ServicoEntity  {
 
     @Column(name = "status")
     private TipoStatus status;
-
-
 }

@@ -7,10 +7,8 @@ import com.dbc.walletapi.entity.TipoStatus;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.repository.GerenteRepository;
 import com.dbc.walletapi.repository.ServicoRepository;
-import com.dbc.walletapi.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.reflect.ReflectionWorld;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

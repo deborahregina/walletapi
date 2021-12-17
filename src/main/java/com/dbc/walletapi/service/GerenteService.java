@@ -10,8 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,16 +53,13 @@ public class GerenteService {
         } catch (IllegalArgumentException ex) {
             throw new RegraDeNegocioException("Senha não pode ser nula!");
         }
-
     }
 
     public List<GerenteDTO> list() {
-
         List<GerenteEntity> listaDeGerentesEntity = gerenteRepository.listaGerentesAtivos(); // Lista apenas gerentes ativos.
         List<GerenteDTO> listaDTO = listaDeGerentesEntity.stream()
                 .map(gerenteEntity -> fromEntity(gerenteEntity)).collect(Collectors.toList());
         return listaDTO;
-
     }
 
     public GerenteDTO listById(Integer idGerente) throws RegraDeNegocioException { //Lista gerentes por ID independente dos status
@@ -86,7 +81,6 @@ public class GerenteService {
         usuarioDTO.setRegra(gerenteEntity.getUsuario().getRegraEntity().getIdRegra());
         gerenteDTO.setUsuario(usuarioDTO);
         return gerenteDTO;
-
     }
 
     public void delete(Integer idGerente) throws RegraDeNegocioException {
@@ -102,7 +96,6 @@ public class GerenteService {
         else {
             throw new RegraDeNegocioException("Gerente tem serviços ativos");
         }
-
     }
 
     public List<GerenteDTO> listByName(String nome) { // Lista por nome independente do status.
@@ -126,8 +119,5 @@ public class GerenteService {
         usuarioRepository.save(usuario);
 
         return fromEntity(gerente);
-
     }
-
-
 }

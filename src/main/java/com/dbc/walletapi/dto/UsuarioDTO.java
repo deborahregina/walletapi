@@ -20,11 +20,12 @@ public class UsuarioDTO {
     @NotNull
     @ApiModelProperty(value = "ID do usuário")
     private Integer idUsuario;
+
     @NotNull
     @ApiModelProperty(value = "usuário")
     private String usuario;
+
     @JsonIgnore
     @ApiModelProperty(value = "senha")
     private Integer regra;
-
 }
