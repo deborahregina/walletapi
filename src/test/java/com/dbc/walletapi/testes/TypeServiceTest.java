@@ -70,7 +70,6 @@ public class TypeServiceTest {
 
         GerenteEntity gerenteEntity = new GerenteEntity();
 
-        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
         doReturn(Optional.empty()).when(usuarioRepository).findById(anyInt()); // Não encontrou o usuário
 
         TypeDTO typeDTO = typeService.list(String.valueOf(anyInt()));
@@ -87,7 +86,6 @@ public class TypeServiceTest {
         usuario.setIdUsuario(1);
         gerenteEntity.setUsuario(usuario);
         doReturn(Optional.of(usuario)).when(usuarioRepository).findById(anyInt());
-        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
 
 
         TypeDTO typeDTO = typeService.list(String.valueOf(gerenteEntity.getUsuario().getIdUsuario()));

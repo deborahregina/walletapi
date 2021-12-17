@@ -23,7 +23,8 @@ public class UsuarioCreateDTO {
     @NotNull(message = "Senha não pode ser nulo")
     @NotEmpty(message = "Senha não pode ser vazio")
     @ApiModelProperty(value = "Senha")
-    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$", message = "Deve conter no mínimo oito caracteres, pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial")
+    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$",
+            message = "Deve conter no mínimo oito caracteres, pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial")
     private String senha;
 
     @JsonIgnore
