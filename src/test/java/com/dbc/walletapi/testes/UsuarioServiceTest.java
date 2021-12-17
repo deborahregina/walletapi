@@ -13,8 +13,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -55,7 +58,7 @@ public class UsuarioServiceTest {
         Assertions.assertEquals(usuarioEntityBuscado.get().getStatus(), TipoStatus.ATIVO);
     }
 
-    @Test(expected = RegraDeNegocioException.class)
+    @Test(expected = NoSuchElementException.class)
     public void findByLoginSemSucesso() throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = new UsuarioEntity();
         RegraEntity regraEntity = new RegraEntity();
@@ -68,9 +71,9 @@ public class UsuarioServiceTest {
         usuarioEntity.setSenha("123");
         usuarioEntity.setStatus(TipoStatus.ATIVO);
         usuarioEntity.setRegraEntity(regraEntity);
-        doReturn(Optional.of(usuarioEntity)).when(usuarioRepository).findByUsuario("Dino");
+        doReturn(Optional.empty()).when(usuarioRepository).findByUsuario(anyString());
         Optional<UsuarioEntity> usuarioEntityBuscado = usuarioService.findByLogin("Dino");
 
-        Assertions.assertNotNull(usuarioEntityBuscado);
+        Assertions.assertNull(usuarioEntityBuscado.get());
     }
 }

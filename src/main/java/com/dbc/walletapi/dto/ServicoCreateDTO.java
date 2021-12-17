@@ -27,7 +27,8 @@ public class ServicoCreateDTO {
     @NotNull(message = "Website não pode ser nulo")
     @NotEmpty(message = "Website não pode ser vazio")
     @ApiModelProperty(value = "Website do serviço")
-    @Pattern(regexp = "^((ftp|http|https):\\/\\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\\.[a-zA-Z]+)+((\\/)[\\w#]+)*(\\/\\w+\\?[a-zA-Z0-9_]+=\\w+(&[a-zA-Z0-9_]+=\\w+)*)?$", message = "Digite um formato de URL válido.")
+    @Pattern(regexp = "^((ftp|http|https):\\/\\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\\.[a-zA-Z]+)+((\\/)[\\w#]+)*(\\/\\w+\\?[a-zA-Z0-9_]+=\\w+(&[a-zA-Z0-9_]+=\\w+)*)?$",
+            message = "Digite um formato de URL válido.")
     // formato de website
     private String webSite;
 

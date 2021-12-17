@@ -51,7 +51,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
         if(exception.getMessage().contains("usuario_login_key")) {
             body.put("status", badRequest.value());
-            body.put("message", "Login já existente no banco");
+            body.put("message", "Login já existente no banco"); //Mensagem personalizada caso exceção for gerada por usuário repetido.
         }
         else {
             body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
