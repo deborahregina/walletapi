@@ -35,14 +35,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth").permitAll()
                 .antMatchers("/username").permitAll()
                 .antMatchers("/mudar-senha").permitAll()
+                //usuários podem mudar senha caso estiverem autenticados
                 .antMatchers("/auth/createGerente/").hasRole("ADMIN")
                 .antMatchers("/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
 
-                /* O ADM pode se autenticar e acessar todos os endpoints. o Gerente pode apenas se autenticar e acessas seus dados
-                * por meio de /username, que retorna um objeto com apenas suas informações */
+                /* O ADM pode se autenticar e acessar todos os endpoints. o Gerente pode apenas     *
+                * se autenticar e acessas seus dados por meio de /username, que retorna um objeto   *
+                * com apenas suas informações, e mudar sua senha, através do endpoint /mudar-senha  */
 
-                .and().addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new TokenAuthenticationFilter(tokenService),
+                        UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

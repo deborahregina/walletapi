@@ -33,20 +33,30 @@ public class GerenteService {
         usuarioNovo.setRegraEntity(regraRepository.findById(gerenteCreateDTO.getUsuario()
                 .getRegra()).orElseThrow(() -> new RegraDeNegocioException("Regra não encontrada!"))); // setando regra para usuário a ser criado.
 
+        try {
+            if (usuarioNovo.getSenha().isEmpty()) {
+                throw new RegraDeNegocioException("Regra não pode ser vazia!");
+            }
+        } catch (NullPointerException ex) {
+            throw new RegraDeNegocioException("Regra não pode ser vazia!");
+        }
          // critografia da senha.
-        usuarioNovo.setSenha(new BCryptPasswordEncoder().encode(usuarioNovo.getPassword()));
-        usuarioNovo.setStatus(TipoStatus.ATIVO); // usuário novo definido como ativo
-        UsuarioEntity user = usuarioRepository.save(usuarioNovo); // Salvando usuário
+        try {
+            usuarioNovo.setSenha(new BCryptPasswordEncoder().encode(usuarioNovo.getPassword()));
+            usuarioNovo.setStatus(TipoStatus.ATIVO); // usuário novo definido como ativo
+            UsuarioEntity user = usuarioRepository.save(usuarioNovo); // Salvando usuário
+            // Agora se cria o gerente, depois de ter se criado seu usuário.
+            GerenteEntity gerenteEntity = objectMapper.convertValue(gerenteCreateDTO, GerenteEntity.class);
+            gerenteEntity.setUsuario(user); // usuário criado é setado para o novo gerente.
+            gerenteEntity.setStatus(TipoStatus.ATIVO); // status do novo gerente definido como ativo
+            GerenteEntity novoGerente = gerenteRepository.save(gerenteEntity); // salvando gerente novo no banco de dados
+            return fromEntity(novoGerente); // retorno de um GerenteDTO.
 
-        // Agora se cria o gerente, depois de ter se criado seu usuário.
-        GerenteEntity gerenteEntity = objectMapper.convertValue(gerenteCreateDTO, GerenteEntity.class);
-        gerenteEntity.setUsuario(user); // usuário criado é setado para o novo gerente.
-        gerenteEntity.setStatus(TipoStatus.ATIVO); // status do novo gerente definido como ativo
-        GerenteEntity novoGerente = gerenteRepository.save(gerenteEntity); // salvando gerente novo no banco de dados
+        } catch (IllegalArgumentException ex) {
+            throw new RegraDeNegocioException("Senha não pode ser nula!");
+        }
 
-        return fromEntity(novoGerente); // retorno de um GerenteDTO.
     }
-
 
     public List<GerenteDTO> list() {
 
@@ -118,5 +128,6 @@ public class GerenteService {
         return fromEntity(gerente);
 
     }
+
 
 }

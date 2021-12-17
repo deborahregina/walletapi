@@ -83,14 +83,5 @@ public class UsuarioServiceTest {
         Assertions.assertNotNull(usuarioEntityBuscado);
     }
 
-    @Test
-    public void listarUsuarioComSucesso(){
-        List<UsuarioEntity> listaUsuarios = new ArrayList<>();
 
-        doReturn(listaUsuarios).when(usuarioRepository).findAll();
-
-        List<UsuarioDTO> usuarioDTOList = usuarioService.list();
-        Assertions.assertNotNull(usuarioDTOList);
-
-    }
 }
