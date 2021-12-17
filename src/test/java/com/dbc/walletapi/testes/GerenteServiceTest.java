@@ -1,6 +1,4 @@
 package com.dbc.walletapi.testes;
-
-import com.dbc.walletapi.controller.AdministradorController;
 import com.dbc.walletapi.dto.*;
 import com.dbc.walletapi.entity.*;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
@@ -10,21 +8,17 @@ import com.dbc.walletapi.repository.UsuarioRepository;
 import com.dbc.walletapi.service.GerenteService;
 import com.dbc.walletapi.service.ServicoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +56,7 @@ public class GerenteServiceTest {
         ReflectionTestUtils.setField(gerenteService, "objectMapper",objectMapper);
     }
 
+
     @Test
     public void criarGerenteComSucessoUsarioExistente() throws RegraDeNegocioException {
         GerenteCreateDTO gerenteCreateDTO = new GerenteCreateDTO();
@@ -85,6 +80,7 @@ public class GerenteServiceTest {
         usuarioEntity.setSenha("123");
         usuarioEntity.setRegraEntity(new RegraEntity());
 
+        doReturn(usuarioEntity).when(usuarioRepository).save(any());
         gerenteEntity.setIdGerente(1);                         // Setando Gerente Entity
         gerenteEntity.setNomeCompleto("Dino Silva Sauro");
         gerenteEntity.setEmail("dinoco@gmail.com");
@@ -121,18 +117,131 @@ public class GerenteServiceTest {
         Assertions.assertNull(gerenteCriado);
     }
 
+    @Test
+    public void criptografouSenhaGerente() throws RegraDeNegocioException {
+
+        GerenteEntity gerente = new GerenteEntity();
+        GerenteCreateDTO gerenteCreateDTO = new GerenteCreateDTO();
+        UsuarioCreateDTO usuarioCreateDTO = new UsuarioCreateDTO();
+        UsuarioEntity usuario = new UsuarioEntity();
+        RegraEntity regra = new RegraEntity();
+
+        usuarioCreateDTO.setUsuario("novoUsuario");
+        usuarioCreateDTO.setSenha("senha123");
+
+        usuario.setIdUsuario(1);
+        usuario.setUsuario(usuarioCreateDTO.getUsuario());
+        usuario.setSenha(new BCryptPasswordEncoder().encode(usuarioCreateDTO.getSenha()));
+        gerenteCreateDTO.setUsuario(usuarioCreateDTO);
+
+        doReturn(Optional.of(regra)).when(regraRepository).findById(anyInt());
+        usuario.setRegraEntity(regra);
+        doReturn(usuario).when(usuarioRepository).save(any());
+        gerente.setUsuario(usuario);
+        doReturn(gerente).when(gerenteRepository).save(any());
+        usuario.setGerenteEntity(gerente);
+
+
+        GerenteDTO gerenteDTO = gerenteService.create(gerenteCreateDTO);
+        Assertions.assertNotEquals(usuario.getSenha(),usuarioCreateDTO.getSenha()); // senha salva é diferente da senha passada.
+
+    }
 
     @Test
-    public void ListaGerenteComSucesso() throws Exception {
-        List<GerenteEntity> gerentesEntity = new ArrayList<>();
-        doReturn(gerentesEntity).when(gerenteRepository).findAll();
+    public void naoCriptografouSenhaGerente() throws RegraDeNegocioException {
+
+        GerenteEntity gerente = new GerenteEntity();
+        GerenteCreateDTO gerenteCreateDTO = new GerenteCreateDTO();
+        UsuarioCreateDTO usuarioCreateDTO = new UsuarioCreateDTO();
+        UsuarioEntity usuario = new UsuarioEntity();
+        RegraEntity regra = new RegraEntity();
+
+        usuarioCreateDTO.setUsuario("novoUsuario");
+        usuarioCreateDTO.setSenha("senha123");
+
+        usuario.setIdUsuario(1);
+        usuario.setUsuario(usuarioCreateDTO.getUsuario());
+        usuario.setSenha(usuarioCreateDTO.getSenha());
+        gerenteCreateDTO.setUsuario(usuarioCreateDTO);
+
+        doReturn(Optional.of(regra)).when(regraRepository).findById(anyInt());
+        usuario.setRegraEntity(regra);
+        doReturn(usuario).when(usuarioRepository).save(any());
+        gerente.setUsuario(usuario);
+        doReturn(gerente).when(gerenteRepository).save(any());
+        usuario.setGerenteEntity(gerente);
+
+
+        GerenteDTO gerenteDTO = gerenteService.create(gerenteCreateDTO);
+        Assertions.assertEquals(usuario.getSenha(),usuarioCreateDTO.getSenha()); // senha salva é igual da senha passada.
+
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void tentouCriarGerenteComSenhaNula() throws RegraDeNegocioException {
+
+        UsuarioCreateDTO usuarioCreateDTO = new UsuarioCreateDTO();
+        UsuarioEntity usuario = new UsuarioEntity();
+        GerenteCreateDTO gerenteCreateDTO = new GerenteCreateDTO();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        RegraEntity regra = new RegraEntity();
+
+        gerenteCreateDTO.setEmail("novoemail@gmail.com");
+        gerenteCreateDTO.setStatus(TipoStatus.ATIVO);
+        gerenteCreateDTO.setNomeCompleto("Nome Completo");
+        usuarioCreateDTO.setUsuario("novo user");
+
+        doReturn(Optional.of(regra)).when(regraRepository).findById(anyInt());
+
+        usuario.setRegraEntity(regra);
+        usuario.setSenha(usuarioCreateDTO.getSenha());
+        usuario.setGerenteEntity(gerenteEntity);
+        usuarioCreateDTO.setRegra(2);
+        gerenteCreateDTO.setUsuario(usuarioCreateDTO);
+
+        GerenteDTO gerenteDTO = gerenteService.create(gerenteCreateDTO);
+        Assertions.assertNull(gerenteDTO);
+
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void tentouCriarGerenteComSenhaVazia() throws RegraDeNegocioException {
+
+        UsuarioCreateDTO usuarioCreateDTO = new UsuarioCreateDTO();
+        UsuarioEntity usuario = new UsuarioEntity();
+        GerenteCreateDTO gerenteCreateDTO = new GerenteCreateDTO();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        RegraEntity regra = new RegraEntity();
+
+        gerenteCreateDTO.setEmail("novoemail@gmail.com");
+        gerenteCreateDTO.setStatus(TipoStatus.ATIVO);
+        gerenteCreateDTO.setNomeCompleto("Nome Completo");
+        usuarioCreateDTO.setUsuario("novo user");
+        usuarioCreateDTO.setSenha("");
+
+        doReturn(Optional.of(regra)).when(regraRepository).findById(anyInt());
+
+        usuario.setRegraEntity(regra);
+        usuario.setSenha(usuarioCreateDTO.getSenha());
+        usuario.setGerenteEntity(gerenteEntity);
+        gerenteEntity.setUsuario(usuario);
+        usuarioCreateDTO.setRegra(2);
+        gerenteCreateDTO.setUsuario(usuarioCreateDTO);
+
+        GerenteDTO gerenteDTO = gerenteService.create(gerenteCreateDTO);
+        Assertions.assertNull(gerenteDTO);
+
+    }
+
+    @Test
+    public void listaGerenteComSucesso() throws Exception {
 
         List<GerenteDTO> gerentesDTO = gerenteService.list();
         Assertions.assertNotNull(gerentesDTO);
     }
 
     @Test
-    public void RetornaGerentePorIdComSucesso() throws RegraDeNegocioException {
+    public void retornaGerentePorIdComSucesso() throws RegraDeNegocioException {
         GerenteEntity gerenteEntity = new GerenteEntity();
         RegraEntity regraEntity = new RegraEntity();
         UsuarioEntity usuarioEntity = new UsuarioEntity();
@@ -153,7 +262,7 @@ public class GerenteServiceTest {
     }
 
     @Test
-    public void ListarPorNomeComSucesso(){
+    public void listarPorNomeComSucesso(){
         List<GerenteDTO> gerenteDTOS = gerenteService.listByName("Dino");
         Assertions.assertNotNull(gerenteDTOS);
     }
@@ -163,13 +272,11 @@ public class GerenteServiceTest {
        GerenteEntity gerenteEntity = new GerenteEntity();
        UsuarioEntity usuarioEntity = new UsuarioEntity();
        GerenteAtualizaDTO gerenteAtualizaDTO = new GerenteAtualizaDTO();
-       GerenteDTO gerenteDTO = new GerenteDTO();
 
        gerenteAtualizaDTO.setNomeCompleto("Nome Atualizado");
        gerenteAtualizaDTO.setEmail("email@gmail.com");
 
 
-       doReturn(Optional.of(usuarioEntity)).when(usuarioRepository).findById(anyInt());
        gerenteEntity.setEmail(gerenteAtualizaDTO.getEmail());
        gerenteEntity.setStatus(TipoStatus.ATIVO);
        gerenteEntity.setUsuario(usuarioEntity);
@@ -182,7 +289,7 @@ public class GerenteServiceTest {
        doReturn(gerenteEntity).when(gerenteRepository).save(any());
 
 
-        gerenteDTO = gerenteService.update(2,gerenteAtualizaDTO);
+        GerenteDTO gerenteDTO = gerenteService.update(2,gerenteAtualizaDTO);
         Assertions.assertNotNull(gerenteDTO);
         Assertions.assertEquals(gerenteDTO.getNomeCompleto(),gerenteAtualizaDTO.getNomeCompleto());
         Assertions.assertEquals(gerenteDTO.getEmail(),gerenteAtualizaDTO.getEmail());

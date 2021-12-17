@@ -41,9 +41,5 @@ public class UsuarioService {
 
     }
 
-     public List<UsuarioDTO> list() {
-        List<UsuarioEntity> usuarioEntities = usuarioRepository.findAll();
-        return usuarioEntities.stream().map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class)).collect(Collectors.toList());
-    }
 
 }

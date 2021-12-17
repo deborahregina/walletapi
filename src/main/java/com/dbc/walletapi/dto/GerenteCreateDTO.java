@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -26,6 +27,7 @@ public class GerenteCreateDTO {
     @Email(message = "Usar formato de email válido")
     private String email;
 
+    @Valid
     @ApiModelProperty(value = "Usuário e senha do gerente")
     private UsuarioCreateDTO usuario;
 
