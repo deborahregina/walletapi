@@ -7,7 +7,6 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum TipoPeriodicidade {
 
-
     MENSAL(1),
     TRIMESTRAL(2),
     SEMESTRAL(3),

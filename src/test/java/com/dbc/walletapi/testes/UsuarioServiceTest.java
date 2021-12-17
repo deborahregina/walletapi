@@ -1,14 +1,11 @@
 package com.dbc.walletapi.testes;
 
-import com.dbc.walletapi.dto.UsuarioDTO;
 import com.dbc.walletapi.entity.RegraEntity;
 import com.dbc.walletapi.entity.TipoStatus;
 import com.dbc.walletapi.entity.UsuarioEntity;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.repository.UsuarioRepository;
 import com.dbc.walletapi.service.UsuarioService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.internal.bytebuddy.dynamic.DynamicType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -16,10 +13,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.doReturn;
@@ -37,7 +30,6 @@ public class UsuarioServiceTest {
     @Before
     public void init() {
     }
-
 
     @Test
     public void findByLoginComSucesso() throws RegraDeNegocioException {
@@ -81,6 +73,4 @@ public class UsuarioServiceTest {
 
         Assertions.assertNotNull(usuarioEntityBuscado);
     }
-
-
 }
