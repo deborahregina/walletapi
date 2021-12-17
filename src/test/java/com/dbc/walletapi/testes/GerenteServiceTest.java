@@ -106,7 +106,6 @@ public class GerenteServiceTest {
 
         UsuarioCreateDTO usuarioCreateDTO = new UsuarioCreateDTO();
         GerenteCreateDTO gerenteCreateDTO = new GerenteCreateDTO();
-        RegraEntity regraEntity = new RegraEntity();
 
         usuarioCreateDTO.setUsuario("Dino");
         usuarioCreateDTO.setSenha("123");
@@ -138,7 +137,7 @@ public class GerenteServiceTest {
         RegraEntity regraEntity = new RegraEntity();
         UsuarioEntity usuarioEntity = new UsuarioEntity();
 
-        regraEntity.setIdRegra(1);                         // Setando id da regra
+        regraEntity.setIdRegra(2);                         // Setando id da regra
 
         usuarioEntity.setRegraEntity(regraEntity);// Setando a regra no usuário
         usuarioEntity.setSenha("123");
@@ -160,7 +159,7 @@ public class GerenteServiceTest {
     }
 
     @Test
-    public void updateGerenteComSucesso() throws RegraDeNegocioException {                  //Conferir
+    public void updateGerenteComSucesso() throws RegraDeNegocioException {
        GerenteEntity gerenteEntity = new GerenteEntity();
        UsuarioEntity usuarioEntity = new UsuarioEntity();
        GerenteAtualizaDTO gerenteAtualizaDTO = new GerenteAtualizaDTO();
