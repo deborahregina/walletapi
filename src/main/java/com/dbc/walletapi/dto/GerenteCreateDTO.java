@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Data
 public class GerenteCreateDTO {
@@ -18,6 +19,7 @@ public class GerenteCreateDTO {
     @NotNull(message = "Nome não pode ser nulo")
     @NotEmpty(message = "Nome não pode ser vazio")
     @ApiModelProperty(value = "Nome completo do Gerente")
+    @Pattern(regexp = "^([A-z\\'\\.-ᶜ]*(\\s))+[A-z\\'\\.-ᶜ]*$", message = "Digite um nome no formato: Nome Sobrenome")
     private String nomeCompleto;
 
 

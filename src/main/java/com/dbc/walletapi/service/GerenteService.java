@@ -114,7 +114,7 @@ public class GerenteService {
     }
 
 
-    public GerenteDTO alteraSenha(LoginDTO loginDTO, Integer idGerente) throws RegraDeNegocioException {
+    public GerenteDTO alteraSenha(LoginCreateDTO loginDTO, Integer idGerente) throws RegraDeNegocioException {
 
         GerenteEntity gerente = gerenteRepository.findById(idGerente)
                 .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));

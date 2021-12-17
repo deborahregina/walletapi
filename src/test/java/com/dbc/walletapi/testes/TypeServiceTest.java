@@ -1,5 +1,6 @@
 package com.dbc.walletapi.testes;
 
+import com.dbc.walletapi.dto.LoginCreateDTO;
 import com.dbc.walletapi.dto.LoginDTO;
 import com.dbc.walletapi.dto.TypeDTO;
 import com.dbc.walletapi.repository.UsuarioRepository;
@@ -107,7 +108,7 @@ public class TypeServiceTest {
     @Test
     public void trocouSenhaComSucesso() throws RegraDeNegocioException {
 
-        LoginDTO loginDTO = new LoginDTO();
+        LoginCreateDTO loginDTO = new LoginCreateDTO();
         GerenteEntity gerenteEntity = new GerenteEntity();
         UsuarioEntity usuarioAntigo = new UsuarioEntity();
         UsuarioEntity usuarioNovo = new UsuarioEntity();

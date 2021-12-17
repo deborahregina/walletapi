@@ -33,7 +33,6 @@ public class UsuarioServiceTest {
     @Mock
     private UsuarioRepository usuarioRepository;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
     public void init() {
