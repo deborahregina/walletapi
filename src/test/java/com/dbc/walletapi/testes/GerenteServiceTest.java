@@ -63,64 +63,6 @@ public class GerenteServiceTest {
     }
 
     @Test
-    public void deletaGerenteComSucessoIdEncontradoServicosInativos() throws Exception {
-        UsuarioEntity usuario = new UsuarioEntity();
-        GerenteEntity gerenteEntity = new GerenteEntity();
-        List<ServicoEntity> listaServicos = new ArrayList<>();
-
-
-        gerenteEntity.setServicos(listaServicos);
-        usuario.setUsuario("usuario");
-        usuario.setIdUsuario(1);
-        usuario.setStatus(TipoStatus.ATIVO);
-        usuario.setIdUsuario(3);
-        gerenteEntity.setUsuario(usuario);
-
-        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
-        doReturn(true).when(servicoService).ServicosInativos(listaServicos);
-        gerenteService.delete(2);
-        Assertions.assertEquals(TipoStatus.INATIVO,gerenteEntity.getStatus());
-        Assertions.assertEquals(TipoStatus.INATIVO,usuario.getStatus());
-
-    }
-
-    @Test(expected = RegraDeNegocioException.class)
-    public void deletaGerenteSemSucessoIdEncontradoServicosAtivos() throws Exception {
-        UsuarioEntity usuario = new UsuarioEntity();
-        GerenteEntity gerenteEntity = new GerenteEntity();
-        List<ServicoEntity> listaServicos = new ArrayList<>();
-
-
-        gerenteEntity.setServicos(listaServicos);
-        usuario.setUsuario("usuario");
-        usuario.setIdUsuario(1);
-        usuario.setStatus(TipoStatus.ATIVO);
-        usuario.setIdUsuario(3);
-        gerenteEntity.setUsuario(usuario);
-
-        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
-        doReturn(false).when(servicoService).ServicosInativos(listaServicos);
-        gerenteService.delete(2);
-        Assertions.assertEquals(TipoStatus.ATIVO,gerenteEntity.getStatus());
-        Assertions.assertEquals(TipoStatus.ATIVO,usuario.getStatus());
-
-    }
-
-    @Test(expected = RegraDeNegocioException.class)
-    public void deletaGerenteSemSucessoIdNaoEncotrado() throws Exception {
-        doReturn(Optional.empty()).when(gerenteRepository).findById(anyInt());
-        gerenteService.delete(3);
-    }
-
-    @Test(expected = RegraDeNegocioException.class)
-    public void deletaGerenteSemSucessoGerenteJaInativo() throws Exception{
-        GerenteEntity gerenteEntity = new GerenteEntity();
-        gerenteEntity.setStatus(TipoStatus.INATIVO);
-        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(2);
-        gerenteService.delete(2);
-    }
-
-    @Test
     public void criarGerenteComSucessoUsarioExistente() throws RegraDeNegocioException {
         GerenteCreateDTO gerenteCreateDTO = new GerenteCreateDTO();
         UsuarioCreateDTO usuarioCreateDTO = new UsuarioCreateDTO();
@@ -179,6 +121,7 @@ public class GerenteServiceTest {
         GerenteDTO gerenteCriado = gerenteService.create(gerenteCreateDTO);
         Assertions.assertNull(gerenteCriado);
     }
+
 
     @Test
     public void ListaGerenteComSucesso() throws Exception {
@@ -246,6 +189,65 @@ public class GerenteServiceTest {
         Assertions.assertEquals(gerenteDTO.getEmail(),gerenteAtualizaDTO.getEmail());
 
     }
+
+    @Test
+    public void deletaGerenteComSucessoIdEncontradoServicosInativos() throws Exception {
+        UsuarioEntity usuario = new UsuarioEntity();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        List<ServicoEntity> listaServicos = new ArrayList<>();
+
+
+        gerenteEntity.setServicos(listaServicos);
+        usuario.setUsuario("usuario");
+        usuario.setIdUsuario(1);
+        usuario.setStatus(TipoStatus.ATIVO);
+        usuario.setIdUsuario(3);
+        gerenteEntity.setUsuario(usuario);
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+        doReturn(true).when(servicoService).ServicosInativos(listaServicos);
+        gerenteService.delete(2);
+        Assertions.assertEquals(TipoStatus.INATIVO,gerenteEntity.getStatus());
+        Assertions.assertEquals(TipoStatus.INATIVO,usuario.getStatus());
+
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void deletaGerenteSemSucessoIdEncontradoServicosAtivos() throws Exception {
+        UsuarioEntity usuario = new UsuarioEntity();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        List<ServicoEntity> listaServicos = new ArrayList<>();
+
+
+        gerenteEntity.setServicos(listaServicos);
+        usuario.setUsuario("usuario");
+        usuario.setIdUsuario(1);
+        usuario.setStatus(TipoStatus.ATIVO);
+        usuario.setIdUsuario(3);
+        gerenteEntity.setUsuario(usuario);
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+        doReturn(false).when(servicoService).ServicosInativos(listaServicos);
+        gerenteService.delete(2);
+        Assertions.assertEquals(TipoStatus.ATIVO,gerenteEntity.getStatus());
+        Assertions.assertEquals(TipoStatus.ATIVO,usuario.getStatus());
+
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void deletaGerenteSemSucessoIdNaoEncotrado() throws Exception {
+        doReturn(Optional.empty()).when(gerenteRepository).findById(anyInt());
+        gerenteService.delete(3);
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void deletaGerenteSemSucessoGerenteJaInativo() throws Exception{
+        GerenteEntity gerenteEntity = new GerenteEntity();
+        gerenteEntity.setStatus(TipoStatus.INATIVO);
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(2);
+        gerenteService.delete(2);
+    }
+
 
 
 

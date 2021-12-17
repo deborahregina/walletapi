@@ -58,9 +58,13 @@ public class UsuarioServiceTest {
 
         Assertions.assertNotNull(usuarioEntityBuscado);
 
+        Assertions.assertEquals(usuarioEntityBuscado.get().getIdUsuario(), 1);
+        Assertions.assertEquals(usuarioEntityBuscado.get().getUsuario(), "Dino");
+        Assertions.assertEquals(usuarioEntityBuscado.get().getSenha(), "123");
+        Assertions.assertEquals(usuarioEntityBuscado.get().getStatus(), TipoStatus.ATIVO);
     }
 
-    @Test
+    @Test(expected = RegraDeNegocioException.class)
     public void findByLoginSemSucesso() throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = new UsuarioEntity();
         RegraEntity regraEntity = new RegraEntity();

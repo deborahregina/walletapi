@@ -48,21 +48,6 @@ public class ServicoServiceTest {
 
 
     @Test
-    public void deletaServicoComSucessoIdEncontrado() throws Exception {
-        ServicoEntity servicoEntity = new ServicoEntity();
-        doReturn(Optional.of(servicoEntity)).when(servicoRepository).findById(anyInt());
-        servicoService.delete(2);
-        Assertions.assertEquals(TipoStatus.INATIVO, servicoEntity.getStatus());
-    }
-
-    @Test(expected = RegraDeNegocioException.class)
-    public void deletaServicoSemSucessoIdNaoEncontrado() throws RegraDeNegocioException {
-        doReturn(Optional.empty()).when(servicoRepository).findById(anyInt());
-        servicoService.delete(3);
-    }
-
-
-    @Test
     public void criaServicoComSucessoGerenteExiste() throws RegraDeNegocioException {
 
     ServicoCreateDTO servicoCreateDTO = new ServicoCreateDTO();
@@ -116,93 +101,6 @@ public class ServicoServiceTest {
 
         ServicoDTO servicoDTO = servicoService.create(servicoCreateDTO,3);  // Pegando o DTO do Service
         Assertions.assertNull(servicoDTO);
-
-    }
-
-    @Test
-    public void updateServicoComSucessoServicoExistente() throws RegraDeNegocioException {
-
-        ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
-        ServicoEntity servicoSalvo = new ServicoEntity();
-        GerenteEntity gerenteEntity = new GerenteEntity();
-
-        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
-        servicoAtualizaDTO.setNome("Google");
-        servicoAtualizaDTO.setDescricao("Novo serviço");
-        servicoAtualizaDTO.setMoeda(TipoMoeda.DOLAR);
-        servicoAtualizaDTO.setValor(new BigDecimal("10.00"));
-        servicoAtualizaDTO.setWebSite("www.google.com.br");
-        servicoAtualizaDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
-
-        doReturn(Optional.of(servicoSalvo)).when(servicoRepository).findById(anyInt());
-        servicoSalvo.setNome("Google");
-        servicoSalvo.setDescricao("Novo serviço");
-        servicoSalvo.setMoeda(TipoMoeda.DOLAR);
-        servicoSalvo.setValor(new BigDecimal("10.00"));
-        servicoSalvo.setWebSite("www.google.com.br");
-        servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
-        servicoSalvo.setGerenteEntity(gerenteEntity);
-        doReturn(servicoSalvo).when(servicoRepository).save(any());
-
-        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,2);
-        Assertions.assertNotNull(servicoDTO);
-
-    }
-
-    @Test(expected = RegraDeNegocioException.class)
-    public void updateServicoSemSucessoServicoNaoExistente() throws RegraDeNegocioException {
-
-
-        ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
-        ServicoEntity servicoSalvo = new ServicoEntity();
-        GerenteEntity gerenteEntity = new GerenteEntity();
-
-        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
-        servicoAtualizaDTO.setNome("Google");
-        servicoAtualizaDTO.setDescricao("Novo serviço");
-        servicoAtualizaDTO.setMoeda(TipoMoeda.DOLAR);
-        servicoAtualizaDTO.setValor(new BigDecimal("10.00"));
-        servicoAtualizaDTO.setWebSite("www.google.com.br");
-        servicoAtualizaDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
-
-        doReturn(Optional.empty()).when(servicoRepository).findById(anyInt()); // a "busca no banco" não retorna um objeto.
-        servicoSalvo.setNome("Google");
-        servicoSalvo.setDescricao("Novo serviço");
-        servicoSalvo.setMoeda(TipoMoeda.DOLAR);
-        servicoSalvo.setValor(new BigDecimal("10.00"));
-        servicoSalvo.setWebSite("www.google.com.br");
-        servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
-        servicoSalvo.setGerenteEntity(gerenteEntity);
-        doReturn(servicoSalvo).when(servicoRepository).save(any());
-
-        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,3);
-        Assertions.assertNull(servicoDTO); // Não salvou
-    }
-
-    @Test(expected = RegraDeNegocioException.class)
-    public void updateServicoSemSucessoGerenteInexistente() throws RegraDeNegocioException {
-
-        ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
-        ServicoEntity servicoSalvo = new ServicoEntity();
-        GerenteEntity gerenteEntity = new GerenteEntity();
-
-        doReturn(Optional.empty()).when(gerenteRepository).findById(anyInt());
-        servicoAtualizaDTO.setNome("Google");
-        servicoAtualizaDTO.setDescricao("Novo serviço");
-        servicoAtualizaDTO.setMoeda(TipoMoeda.DOLAR);
-        servicoAtualizaDTO.setValor(new BigDecimal("10.00"));
-        servicoAtualizaDTO.setWebSite("www.google.com.br");
-        servicoAtualizaDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
-
-        servicoSalvo.setNome("Google");
-        servicoSalvo.setDescricao("Novo serviço");
-        servicoSalvo.setMoeda(TipoMoeda.DOLAR);
-        servicoSalvo.setValor(new BigDecimal("10.00"));
-        servicoSalvo.setWebSite("www.google.com.br");
-        servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
-
-        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,1);
-        Assertions.assertNull(servicoDTO); // Não salvou
 
     }
 
@@ -324,4 +222,104 @@ public class ServicoServiceTest {
 
     }
 
+    @Test
+    public void updateServicoComSucessoServicoExistente() throws RegraDeNegocioException {
+
+        ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
+        ServicoEntity servicoSalvo = new ServicoEntity();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+        servicoAtualizaDTO.setNome("Google");
+        servicoAtualizaDTO.setDescricao("Novo serviço");
+        servicoAtualizaDTO.setMoeda(TipoMoeda.DOLAR);
+        servicoAtualizaDTO.setValor(new BigDecimal("10.00"));
+        servicoAtualizaDTO.setWebSite("www.google.com.br");
+        servicoAtualizaDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
+
+        doReturn(Optional.of(servicoSalvo)).when(servicoRepository).findById(anyInt());
+        servicoSalvo.setNome("Google");
+        servicoSalvo.setDescricao("Novo serviço");
+        servicoSalvo.setMoeda(TipoMoeda.DOLAR);
+        servicoSalvo.setValor(new BigDecimal("10.00"));
+        servicoSalvo.setWebSite("www.google.com.br");
+        servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
+        servicoSalvo.setGerenteEntity(gerenteEntity);
+        doReturn(servicoSalvo).when(servicoRepository).save(any());
+
+        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,2);
+        Assertions.assertNotNull(servicoDTO);
+
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void updateServicoSemSucessoServicoNaoExistente() throws RegraDeNegocioException {
+
+
+        ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
+        ServicoEntity servicoSalvo = new ServicoEntity();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+
+        doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
+        servicoAtualizaDTO.setNome("Google");
+        servicoAtualizaDTO.setDescricao("Novo serviço");
+        servicoAtualizaDTO.setMoeda(TipoMoeda.DOLAR);
+        servicoAtualizaDTO.setValor(new BigDecimal("10.00"));
+        servicoAtualizaDTO.setWebSite("www.google.com.br");
+        servicoAtualizaDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
+
+        doReturn(Optional.empty()).when(servicoRepository).findById(anyInt()); // a "busca no banco" não retorna um objeto.
+        servicoSalvo.setNome("Google");
+        servicoSalvo.setDescricao("Novo serviço");
+        servicoSalvo.setMoeda(TipoMoeda.DOLAR);
+        servicoSalvo.setValor(new BigDecimal("10.00"));
+        servicoSalvo.setWebSite("www.google.com.br");
+        servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
+        servicoSalvo.setGerenteEntity(gerenteEntity);
+        doReturn(servicoSalvo).when(servicoRepository).save(any());
+
+        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,3);
+        Assertions.assertNull(servicoDTO); // Não salvou
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void updateServicoSemSucessoGerenteInexistente() throws RegraDeNegocioException {
+
+        ServicoAtualizaDTO servicoAtualizaDTO = new ServicoAtualizaDTO();
+        ServicoEntity servicoSalvo = new ServicoEntity();
+        GerenteEntity gerenteEntity = new GerenteEntity();
+
+        doReturn(Optional.empty()).when(gerenteRepository).findById(anyInt());
+        servicoAtualizaDTO.setNome("Google");
+        servicoAtualizaDTO.setDescricao("Novo serviço");
+        servicoAtualizaDTO.setMoeda(TipoMoeda.DOLAR);
+        servicoAtualizaDTO.setValor(new BigDecimal("10.00"));
+        servicoAtualizaDTO.setWebSite("www.google.com.br");
+        servicoAtualizaDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
+
+        servicoSalvo.setNome("Google");
+        servicoSalvo.setDescricao("Novo serviço");
+        servicoSalvo.setMoeda(TipoMoeda.DOLAR);
+        servicoSalvo.setValor(new BigDecimal("10.00"));
+        servicoSalvo.setWebSite("www.google.com.br");
+        servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
+
+        ServicoDTO servicoDTO = servicoService.update(servicoAtualizaDTO,1);
+        Assertions.assertNull(servicoDTO); // Não salvou
+
+    }
+
+    @Test
+    public void deletaServicoComSucessoIdEncontrado() throws Exception {
+        ServicoEntity servicoEntity = new ServicoEntity();
+        doReturn(Optional.of(servicoEntity)).when(servicoRepository).findById(anyInt());
+        servicoService.delete(2);
+        Assertions.assertEquals(TipoStatus.INATIVO, servicoEntity.getStatus());
+    }
+
+    @Test(expected = RegraDeNegocioException.class)
+    public void deletaServicoSemSucessoIdNaoEncontrado() throws RegraDeNegocioException {
+        doReturn(Optional.empty()).when(servicoRepository).findById(anyInt());
+        servicoService.delete(3);
+    }
 }
