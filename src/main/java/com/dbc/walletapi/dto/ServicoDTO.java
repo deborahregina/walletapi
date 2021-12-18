@@ -37,8 +37,11 @@ public class ServicoDTO {
     @ApiModelProperty(value = "Status do serviço: ATIVO/INATIVO")
     private TipoStatus status;
 
+    @ApiModelProperty(value = "Gerente responsável pelo serviço")
     private GerenteDTO gerente;
 
+    @ApiModelProperty(value = "Data de criação do serviço")
+    private String data;
 
 
 }

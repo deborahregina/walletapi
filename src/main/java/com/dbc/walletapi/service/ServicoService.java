@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,9 +32,12 @@ public class ServicoService {
             throw new RegraDeNegocioException("Serviço deve ser atribuído para gerente ativo"); // Evitar atribuir gerente inativo para servico novo
         }
 
+        LocalDateTime dataCriacao = LocalDateTime.now();
+
         ServicoEntity novoServico = objectMapper.convertValue(servicoCreateDTO, ServicoEntity.class);
         novoServico.setGerenteEntity(gerenteEntity);
         novoServico.setStatus(TipoStatus.ATIVO);
+        novoServico.setData(dataCriacao);
         ServicoEntity servicoSalvo = servicoRepository.save(novoServico);
         return fromEntity(servicoSalvo);
     }
@@ -100,10 +105,12 @@ public class ServicoService {
     }
 
     public ServicoDTO fromEntity(ServicoEntity servicoEntity) {
+        DateTimeFormatter formatData = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         ServicoDTO servicoDTO = objectMapper.convertValue(servicoEntity, ServicoDTO.class);
         GerenteDTO gerente = objectMapper.convertValue(servicoEntity.getGerenteEntity(), GerenteDTO.class);
         UsuarioDTO user = objectMapper.convertValue(servicoEntity.getGerenteEntity().getUsuario(), UsuarioDTO.class);
         servicoDTO.setGerente(gerente);
+        servicoDTO.setData(formatData.format(servicoEntity.getData()));
         servicoDTO.getGerente().setUsuario(user);
         return servicoDTO;
     }
