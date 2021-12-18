@@ -22,6 +22,7 @@ public class TypeService {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final GerenteRepository gerenteRepository;
+    private final ServicoService servicoService;
 
 
     public TypeDTO list(String idUsuario) throws RegraDeNegocioException {
@@ -41,7 +42,7 @@ public class TypeService {
                     .orElseThrow(() ->new RegraDeNegocioException("Gerente não encontrado!"));
 
             List<ServicoDTO> listServicosDTO = gerenteEntity.getServicos().stream()
-                    .map(servicoEntity -> objectMapper.convertValue(servicoEntity,ServicoDTO.class))
+                    .map(servicoEntity -> servicoService.fromEntity(servicoEntity))
                     .filter(servicoDTO -> servicoDTO.getStatus().equals(TipoStatus.ATIVO)).collect(Collectors.toList()); // Filtra apenas serviços ativos daquele gerente
 
             typeUserSistema.setIdGerente(gerenteEntity.getIdGerente());
