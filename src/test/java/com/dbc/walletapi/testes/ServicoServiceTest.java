@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,10 +38,13 @@ public class ServicoServiceTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    //private final DateTimeFormatter formatData = DateTimeFormatter.ofPattern("dd-MM-yyyy");;
+
 
     @Before
     public void init() {
         ReflectionTestUtils.setField(servicoService, "objectMapper",objectMapper);
+       // ReflectionTestUtils.setField(servicoService, "formatData",formatData);
     }
 
 
