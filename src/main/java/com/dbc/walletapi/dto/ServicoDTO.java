@@ -3,11 +3,14 @@ package com.dbc.walletapi.dto;
 import com.dbc.walletapi.entity.TipoMoeda;
 import com.dbc.walletapi.entity.TipoPeriodicidade;
 import com.dbc.walletapi.entity.TipoStatus;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+
 
 @Data
 @AllArgsConstructor
@@ -41,7 +44,7 @@ public class ServicoDTO {
     private GerenteDTO gerente;
 
     @ApiModelProperty(value = "Data de criação do serviço")
-    private String data;
+    private LocalDate data;
 
 
 }

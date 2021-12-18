@@ -10,7 +10,7 @@ public class WebSecurityConfigTest {
     @Test
     public void generatePass() {
 
-        System.out.println(new BCryptPasswordEncoder().encode("senha123"));
+        System.out.println(new BCryptPasswordEncoder().encode("Vemser@2021"));
 
     }
 }

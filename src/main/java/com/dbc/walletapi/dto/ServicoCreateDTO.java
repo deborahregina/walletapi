@@ -2,12 +2,15 @@ package com.dbc.walletapi.dto;
 
 import com.dbc.walletapi.entity.TipoMoeda;
 import com.dbc.walletapi.entity.TipoPeriodicidade;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+
 
 @Data
 @AllArgsConstructor
@@ -44,4 +47,6 @@ public class ServicoCreateDTO {
     @NotNull
     @ApiModelProperty(value = "Periodicidade: MENSAL:0, TRIMESTRAL:1, SEMESTRAL:2, ANUAL:3")
     private TipoPeriodicidade periocidade;
+
+    private LocalDate data;
 }

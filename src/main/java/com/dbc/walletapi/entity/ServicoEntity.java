@@ -1,11 +1,15 @@
 package com.dbc.walletapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
+
+
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 @Getter
 @Setter
@@ -45,5 +49,5 @@ public class ServicoEntity  {
     private TipoStatus status;
 
     @Column(name = "data_criacao")
-    private LocalDateTime data;
+    private LocalDate data;
 }
