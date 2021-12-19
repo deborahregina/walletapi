@@ -80,9 +80,9 @@ public class ServicoController {
     @GetMapping("/{idServico}")
     @ApiOperation(value = "Lista servico por ID")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Gerente listado com sucesso"),
+            @ApiResponse(code = 200, message = "Serviço listado com sucesso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema"),
-            @ApiResponse(code = 400, message = "Gerente não encontrado")
+            @ApiResponse(code = 400, message = "Serviço não encontrado")
     })
     public ServicoDTO listById (
             @PathVariable("idServico") Integer idServico) throws RegraDeNegocioException {
@@ -104,9 +104,9 @@ public class ServicoController {
     @GetMapping("/{idGerente}/procura-por-gerente/")
     @ApiOperation(value = "Lista servico por ID de gerente")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Gerente listado com sucesso"),
+            @ApiResponse(code = 200, message = "Serviço listado com sucesso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema"),
-            @ApiResponse(code = 400, message = "Gerente não encontrado")
+            @ApiResponse(code = 400, message = "Serviço não encontrado")
     })
     public List<ServicoDTO> listByIdGerente (
             @PathVariable("idGerente") Integer idGerente) throws RegraDeNegocioException {
