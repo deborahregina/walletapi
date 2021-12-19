@@ -21,12 +21,11 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ServicoService {
+public class ServicoService<ServicosDTO> {
 
     private final ObjectMapper objectMapper;
     private final ServicoRepository servicoRepository;
     private final GerenteRepository gerenteRepository;
-    private final DateTimeFormatter formatData = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public ServicoDTO create(ServicoCreateDTO servicoCreateDTO, Integer idGerente) throws RegraDeNegocioException {
         GerenteEntity gerenteEntity = gerenteRepository.findById(idGerente).orElseThrow
@@ -116,6 +115,7 @@ public class ServicoService {
         return servicoDTO;
     }
 
+
     public boolean ServicosInativos(List<ServicoEntity> servicoEntities) { // verifica se uma lista de serviços é inativa.
 
         for(ServicoEntity servico: servicoEntities) {
@@ -124,6 +124,17 @@ public class ServicoService {
             }
         }
         return true;
+    }
+
+    public List<ServicoDTO> listaServicoPorIdGerente(Integer idGerente) throws RegraDeNegocioException {
+
+        GerenteEntity gerente = gerenteRepository.findById(idGerente)
+                .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
+        List<ServicoEntity> servicos = servicoRepository.getServicosAtivosIdGerente(gerente.getIdGerente());
+
+        return servicos.stream().map(servicoEntity -> objectMapper.convertValue(servicoEntity, ServicoDTO.class))
+                .collect(Collectors.toList());
+
     }
 
 

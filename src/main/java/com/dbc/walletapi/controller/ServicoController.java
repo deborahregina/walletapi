@@ -101,5 +101,16 @@ public class ServicoController {
         return servicoService.listByName(nome);
     }
 
+    @GetMapping("/{idGerente}/procuraPorGerente/")
+    @ApiOperation(value = "Lista servico por ID de gerente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Gerente listado com sucesso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema"),
+            @ApiResponse(code = 400, message = "Gerente não encontrado")
+    })
+    public List<ServicoDTO> listByIdGerente (
+            @PathVariable("idGerente") Integer idGerente) throws RegraDeNegocioException {
+        return servicoService.listaServicoPorIdGerente(idGerente);
+    }
 
 }
