@@ -130,6 +130,9 @@ public class ServicoService<ServicosDTO> {
 
         GerenteEntity gerente = gerenteRepository.findById(idGerente)
                 .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
+        if (gerente.getStatus() == TipoStatus.INATIVO) {
+            throw new RegraDeNegocioException("Este gerente está inativo!");
+        }
         List<ServicoEntity> servicos = servicoRepository.getServicosAtivosIdGerente(gerente.getIdGerente());
 
         return servicos.stream().map(servicoEntity -> fromEntity(servicoEntity))
