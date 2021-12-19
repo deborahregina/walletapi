@@ -132,10 +132,15 @@ public class ServicoService<ServicosDTO> {
                 .orElseThrow(() -> new RegraDeNegocioException("Gerente não encontrado!"));
         List<ServicoEntity> servicos = servicoRepository.getServicosAtivosIdGerente(gerente.getIdGerente());
 
-        return servicos.stream().map(servicoEntity -> objectMapper.convertValue(servicoEntity, ServicoDTO.class))
+        return servicos.stream().map(servicoEntity -> fromEntity(servicoEntity))
                 .collect(Collectors.toList());
 
     }
 
+    public List<ServicoDTO> listByMesEAno(Integer ano, Integer mes) {
+
+        return servicoRepository.getServicosPorMesEAno(ano,mes).stream().map(servicoEntity -> fromEntity(servicoEntity))
+                .collect(Collectors.toList());
+    }
 
 }
