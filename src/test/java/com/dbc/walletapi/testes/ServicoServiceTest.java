@@ -15,10 +15,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import javax.xml.crypto.Data;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import static org.mockito.Mockito.*;
@@ -66,6 +70,8 @@ public class ServicoServiceTest {
     ServicoCreateDTO servicoCreateDTO = new ServicoCreateDTO();
     ServicoEntity servicoSalvo = new ServicoEntity();
     GerenteEntity gerenteEntity = new GerenteEntity();
+    Calendar c = Calendar.getInstance();
+
 
         doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
         servicoCreateDTO.setNome("Google");
@@ -74,6 +80,8 @@ public class ServicoServiceTest {
         servicoCreateDTO.setValor(new BigDecimal("10.00"));
         servicoCreateDTO.setWebSite("www.google.com.br");
         servicoCreateDTO.setPeriocidade(TipoPeriodicidade.ANUAL);
+        servicoCreateDTO.setData(LocalDate.of(2021, 11, 11));
+        LocalDate dataTeste = servicoCreateDTO.getData();    // Guardar numa variável a data passada
 
         servicoSalvo.setNome("Google");
         servicoSalvo.setDescricao("Novo serviço");
@@ -82,6 +90,7 @@ public class ServicoServiceTest {
         servicoSalvo.setWebSite("www.google.com.br");
         servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
         servicoSalvo.setGerenteEntity(gerenteEntity);
+        servicoSalvo.setData(dataTeste);
         doReturn(servicoSalvo).when(servicoRepository).save(any());
 
 
@@ -94,13 +103,13 @@ public class ServicoServiceTest {
         Assertions.assertEquals(servicoDTO.getPeriocidade(),TipoPeriodicidade.ANUAL);
         Assertions.assertEquals(servicoDTO.getValor(),new BigDecimal("10.00"));
         Assertions.assertEquals(servicoDTO.getWebSite(),"www.google.com.br");
+        Assertions.assertEquals(servicoDTO.getData(), dataTeste);
 }
 
     @Test(expected = RegraDeNegocioException.class)
     public void criaServicoSemSucessoGerenteInexistente() throws RegraDeNegocioException {
 
         ServicoCreateDTO servicoCreateDTO = new ServicoCreateDTO();
-       
 
         doReturn(Optional.empty()).when(gerenteRepository).findById(anyInt());
         servicoCreateDTO.setNome("Google");
@@ -217,6 +226,8 @@ public class ServicoServiceTest {
         servicoSalvo.setWebSite("www.google.com.br");
         servicoSalvo.setPeriocidade(TipoPeriodicidade.ANUAL);
         servicoSalvo.setGerenteEntity(gerenteEntity);
+        servicoSalvo.setData(LocalDate.now());
+        LocalDate dataTeste = servicoSalvo.getData();
         doReturn(Optional.of(servicoSalvo)).when(servicoRepository).findById(anyInt());
 
         ServicoDTO servicolistado = servicoService.listById(anyInt());
@@ -227,6 +238,7 @@ public class ServicoServiceTest {
         Assertions.assertEquals(servicolistado.getPeriocidade(),TipoPeriodicidade.ANUAL);
         Assertions.assertEquals(servicolistado.getValor(),new BigDecimal("10.00"));
         Assertions.assertEquals(servicolistado.getWebSite(),"www.google.com.br");
+        Assertions.assertEquals(servicolistado.getData(), dataTeste);
     }
 
     @Test(expected = RegraDeNegocioException.class)
@@ -281,5 +293,10 @@ public class ServicoServiceTest {
         servicoEntities.add(servicoAnativo);
         servicoEntities.add(servicoInativo);
         Assert.assertFalse(servicoService.ServicosInativos(servicoEntities));
+    }
+
+    @Test
+    public void listaPorMesAno(){
+        List<ServicoEntity> servicoEntities = new ArrayList<>();
     }
 }

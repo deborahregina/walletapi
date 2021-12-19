@@ -9,10 +9,7 @@ public enum TipoMoeda {
 
     REAL(1),
     DOLAR(2),
-    EURO(3),
-    IENE(4),
-    YUAN(5);
-
+    EURO(3);
 
     private Integer tipo;
 

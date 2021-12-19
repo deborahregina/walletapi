@@ -73,7 +73,7 @@ public class ServicoService<ServicosDTO> {
     public List<ServicoDTO> list() {
         return servicoRepository.getServicosAtivos().
                 stream()
-                .map(servico -> fromEntity(servico))
+                .map(this::fromEntity)
                 .collect(Collectors.toList());
     }
 
@@ -101,7 +101,7 @@ public class ServicoService<ServicosDTO> {
                 .stream()
                 .filter(servico -> servico.getNome().toLowerCase().contains(nome.toLowerCase()))
                 .collect(Collectors.toList()).stream()
-                .map(servico -> fromEntity(servico))
+                .map(this::fromEntity)
                 .collect(Collectors.toList());
     }
 

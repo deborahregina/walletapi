@@ -50,5 +50,4 @@ public class ServicoAtualizaDTO {
     private Integer idGerente;
 
 
-
 }
