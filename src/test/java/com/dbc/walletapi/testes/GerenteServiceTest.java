@@ -211,7 +211,7 @@ public class GerenteServiceTest {
     }
 
     @DisplayName("Criacao criacao de usuário com senha vazia")
-    @Test(expected = RegraDeNegocioException.class)
+    @Test(expected = NullPointerException.class)
     public void tentouCriarGerenteComSenhaVazia() throws RegraDeNegocioException {
 
         UsuarioCreateDTO usuarioCreateDTO = new UsuarioCreateDTO();
@@ -323,7 +323,7 @@ public class GerenteServiceTest {
         gerenteEntity.setUsuario(usuario);
 
         doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
-        doReturn(true).when(servicoService).ServicosInativos(listaServicos);
+        doReturn(true).when(servicoService).servicosInativos(listaServicos);
         gerenteService.delete(2);
         Assertions.assertEquals(TipoStatus.INATIVO,gerenteEntity.getStatus());
         Assertions.assertEquals(TipoStatus.INATIVO,usuario.getStatus());
@@ -346,7 +346,7 @@ public class GerenteServiceTest {
         gerenteEntity.setUsuario(usuario);
 
         doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(anyInt());
-        doReturn(false).when(servicoService).ServicosInativos(listaServicos);
+        doReturn(false).when(servicoService).servicosInativos(listaServicos);
         gerenteService.delete(2);
         Assertions.assertEquals(TipoStatus.ATIVO,gerenteEntity.getStatus());
         Assertions.assertEquals(TipoStatus.ATIVO,usuario.getStatus());

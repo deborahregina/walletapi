@@ -38,7 +38,7 @@ public class ServicoAtualizaDTO {
     private BigDecimal valor;
 
     @NotNull
-    @ApiModelProperty(value = "Nome da moeda em que se contrata o serviço: DOLAR:0, REAL:1, EURO:2, IENE:3, YUAN:4")
+    @ApiModelProperty(value = "Nome da moeda em que se contrata o serviço: DOLAR:0, REAL:1, EURO:2")
     private TipoMoeda moeda;
 
     @NotNull

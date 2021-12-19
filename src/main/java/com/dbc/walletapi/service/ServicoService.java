@@ -120,7 +120,7 @@ public class ServicoService<ServicosDTO> {
     }
 
 
-    public boolean ServicosInativos(List<ServicoEntity> servicoEntities) { // verifica se uma lista de serviços é inativa.
+    public boolean servicosInativos(List<ServicoEntity> servicoEntities) { // verifica se uma lista de serviços é inativa.
 
         for (ServicoEntity servico : servicoEntities) {
             if (servico.getStatus() == TipoStatus.ATIVO) {
@@ -137,9 +137,9 @@ public class ServicoService<ServicosDTO> {
         if (gerente.getStatus() == TipoStatus.INATIVO) {
             throw new RegraDeNegocioException("Este gerente está inativo!");
         }
-        List<ServicoEntity> servicos = servicoRepository.getServicosAtivosIdGerente(gerente.getIdGerente());
 
-        return servicos.stream().map(servicoEntity -> fromEntity(servicoEntity))
+        return servicoRepository.getServicosAtivosIdGerente(gerente.getIdGerente()).stream()
+                .map(servicoEntity -> fromEntity(servicoEntity))
                 .collect(Collectors.toList());
 
     }

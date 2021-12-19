@@ -24,21 +24,14 @@ public class GerenteService {
     private final ServicoService servicoService;
 
     public GerenteDTO create(GerenteCreateDTO gerenteCreateDTO) throws RegraDeNegocioException {
-  // Primeiro deve ser salvo o usuário do novo gerente criado.
-        gerenteCreateDTO.getUsuario().setRegra(2); // seta regra 2 (gerente) para o novo usuário que vai ser criado, para o gerente.
+        // Primeiro deve ser salvo o usuário do novo gerente criado.
+        gerenteCreateDTO.getUsuario().setRegra(2);
+        // seta regra 2 (gerente) para o novo usuário que vai ser criado, para o gerente.
         UsuarioEntity usuarioNovo = objectMapper.convertValue(gerenteCreateDTO.getUsuario(), UsuarioEntity.class); //conversão de UsuarioCreateDTO para UsuarioEntity.
 
         usuarioNovo.setRegraEntity(regraRepository.findById(gerenteCreateDTO.getUsuario()
                 .getRegra()).orElseThrow(() -> new RegraDeNegocioException("Regra não encontrada!"))); // setando regra para usuário a ser criado.
 
-        try {
-            if (usuarioNovo.getSenha().isEmpty()) {
-                throw new RegraDeNegocioException("Regra não pode ser vazia!");
-            }
-        } catch (NullPointerException ex) {
-            throw new RegraDeNegocioException("Regra não pode ser vazia!");
-        }
-         // critografia da senha.
         try {
             usuarioNovo.setSenha(new BCryptPasswordEncoder().encode(usuarioNovo.getPassword()));
             usuarioNovo.setStatus(TipoStatus.ATIVO); // usuário novo definido como ativo
@@ -53,13 +46,13 @@ public class GerenteService {
         } catch (IllegalArgumentException ex) {
             throw new RegraDeNegocioException("Senha não pode ser nula!");
         }
+
     }
 
     public List<GerenteDTO> list() {
         List<GerenteEntity> listaDeGerentesEntity = gerenteRepository.listaGerentesAtivos(); // Lista apenas gerentes ativos.
-        List<GerenteDTO> listaDTO = listaDeGerentesEntity.stream()
+        return listaDeGerentesEntity.stream()
                 .map(gerenteEntity -> fromEntity(gerenteEntity)).collect(Collectors.toList());
-        return listaDTO;
     }
 
     public GerenteDTO listById(Integer idGerente) throws RegraDeNegocioException { //Lista gerentes por ID independente dos status
@@ -88,7 +81,7 @@ public class GerenteService {
         if (gerenteEntity.getStatus() == TipoStatus.INATIVO) {
             throw new RegraDeNegocioException("Este gerente já está inativo.");
         }
-        if (servicoService.ServicosInativos(gerenteEntity.getServicos())) { // se o gerente não tem serviços ativos, ele é inativado, e seu usuário também.
+        if (servicoService.servicosInativos(gerenteEntity.getServicos())) { // se o gerente não tem serviços ativos, ele é inativado, e seu usuário também.
             gerenteEntity.setStatus(TipoStatus.INATIVO);
             gerenteEntity.getUsuario().setStatus(TipoStatus.INATIVO); // desativa usuário do gerente
             gerenteRepository.save(gerenteEntity);
