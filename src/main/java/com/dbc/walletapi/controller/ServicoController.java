@@ -113,15 +113,4 @@ public class ServicoController {
         return servicoService.listaServicoPorIdGerente(idGerente);
     }
 
-    @GetMapping("/procura-por-intervalo-data")
-    @ApiOperation(value = "Lista servico por ano e mes")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Gerente listado com sucesso"),
-            @ApiResponse(code = 500, message = "Foi gerada uma exceção no sistema"),
-            @ApiResponse(code = 400, message = "Gerente não encontrado")
-    })
-    public List<ServicoDTO> listByMesEAno (
-            @RequestParam("ano") Integer ano, @RequestParam("mes") Integer mes) throws RegraDeNegocioException {
-        return servicoService.listByMesEAno(ano,mes);
-    }
-}
+ }

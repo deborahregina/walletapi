@@ -1,15 +1,18 @@
 package com.dbc.walletapi.controller;
 
 import com.dbc.walletapi.dto.LoginCreateDTO;
+import com.dbc.walletapi.dto.ServicoDTO;
 import com.dbc.walletapi.dto.TypeDTO;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.security.IAuthenticationFacade;
+import com.dbc.walletapi.service.ServicoService;
 import com.dbc.walletapi.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class GetUserWithCustomInterfaceController {
@@ -18,6 +21,8 @@ public class GetUserWithCustomInterfaceController {
     private  IAuthenticationFacade authenticationFacade;
     @Autowired
     private  TypeService typeService;
+    @Autowired
+    private ServicoService servicoService;
 
     @RequestMapping(value = "/username", method = RequestMethod.GET)
     @ResponseBody
@@ -34,4 +39,13 @@ public class GetUserWithCustomInterfaceController {
         String idUser = authentication.getName();
         return typeService.alterarSenhaELoginUsuarioDoAutenticado(idUser, loginDTO);
     }
+
+    @RequestMapping(value = "/list-servicos-mes-ano", method = RequestMethod.GET)
+    @ResponseBody
+    public List<ServicoDTO> getByAnoEMES(@RequestParam("ano") Integer ano, @RequestParam("mes") Integer mes) throws RegraDeNegocioException {
+        Authentication authentication = authenticationFacade.getAuthentication();
+        String idUser = authentication.getName();
+        return servicoService.listByMesEAno(ano,mes,idUser);
+    }
+
 }

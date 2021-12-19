@@ -20,4 +20,7 @@ public interface ServicoRepository extends JpaRepository<ServicoEntity, Integer>
 
     @Query(value = " select * from servico s where extract(year from s.data_criacao) = :ano and extract(month from s.data_criacao) = :mes and s.status = 0", nativeQuery = true)
     List<ServicoEntity> getServicosPorMesEAno(Integer ano, Integer mes);
+
+    @Query(value = " select * from servico s where extract(year from s.data_criacao) = :ano and extract(month from s.data_criacao) = :mes and s.status = 0 and s.id_gerente = :idGerente", nativeQuery = true)
+    List<ServicoEntity> getServicosPorMesEAnoEIDGerente(Integer ano, Integer mes, Integer idGerente);
 }
