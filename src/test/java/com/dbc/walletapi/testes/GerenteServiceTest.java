@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -56,6 +57,7 @@ public class GerenteServiceTest {
         ReflectionTestUtils.setField(gerenteService, "objectMapper",objectMapper);
     }
 
+    @DisplayName("Criacao de gerente com sucesso")
     @Test
     public void criarGerenteComSucessoUsarioExistente() throws RegraDeNegocioException {
         GerenteCreateDTO gerenteCreateDTO = new GerenteCreateDTO();
@@ -97,6 +99,7 @@ public class GerenteServiceTest {
         Assertions.assertEquals(gerenteCriado.getStatus(), gerenteEntity.getStatus());
     }
 
+    @DisplayName("Criacao de gerente sem sucesso, quando não é possível encontrar usuário.")
     @Test(expected = RegraDeNegocioException.class)
     public void criarGerenteSemSucessoRegraDoUsarioNaoEncontrada() throws RegraDeNegocioException {
 
@@ -117,6 +120,7 @@ public class GerenteServiceTest {
         Assertions.assertNull(gerenteCriado);
     }
 
+    @DisplayName("Senha criptografada com sucesso")
     @Test
     public void criptografouSenhaGerente() throws RegraDeNegocioException {
 
@@ -147,6 +151,7 @@ public class GerenteServiceTest {
 
     }
 
+    @DisplayName("Senha não foi criptografada.")
     @Test
     public void naoCriptografouSenhaGerente() throws RegraDeNegocioException {
 
@@ -177,6 +182,7 @@ public class GerenteServiceTest {
 
     }
 
+    @DisplayName("Criação de usuário com senha nula.")
     @Test(expected = RegraDeNegocioException.class)
     public void tentouCriarGerenteComSenhaNula() throws RegraDeNegocioException {
 
@@ -204,6 +210,7 @@ public class GerenteServiceTest {
 
     }
 
+    @DisplayName("Criacao criacao de usuário com senha vazia")
     @Test(expected = RegraDeNegocioException.class)
     public void tentouCriarGerenteComSenhaVazia() throws RegraDeNegocioException {
 
@@ -233,6 +240,7 @@ public class GerenteServiceTest {
 
     }
 
+    @DisplayName("Listagem de gerentes feita com sucesso.")
     @Test
     public void listaGerenteComSucesso() throws Exception {
 
@@ -240,6 +248,7 @@ public class GerenteServiceTest {
         Assertions.assertNotNull(gerentesDTO);
     }
 
+    @DisplayName("Listagem de gerente por id com sucesso.")
     @Test
     public void retornaGerentePorIdComSucesso() throws RegraDeNegocioException {
         GerenteEntity gerenteEntity = new GerenteEntity();
@@ -261,12 +270,14 @@ public class GerenteServiceTest {
         Assertions.assertNotNull(gerenteDTO);
     }
 
+    @DisplayName("Listagem por nome de gerente com sucesso.")
     @Test
     public void listarPorNomeComSucesso(){
         List<GerenteDTO> gerenteDTOS = gerenteService.listByName("Dino");
         Assertions.assertNotNull(gerenteDTOS);
     }
 
+    @DisplayName("Atualização de dados de gerente com sucesso.")
     @Test
     public void updateGerenteComSucesso() throws RegraDeNegocioException {
        GerenteEntity gerenteEntity = new GerenteEntity();
@@ -296,6 +307,7 @@ public class GerenteServiceTest {
 
     }
 
+    @DisplayName("Deleta gerente com sucesso.")
     @Test
     public void deletaGerenteComSucessoIdEncontradoServicosInativos() throws Exception {
         UsuarioEntity usuario = new UsuarioEntity();
@@ -318,6 +330,7 @@ public class GerenteServiceTest {
 
     }
 
+    @DisplayName("Deleta gerente sem sucesso pois possui serviços ativos.")
     @Test(expected = RegraDeNegocioException.class)
     public void deletaGerenteSemSucessoIdEncontradoServicosAtivos() throws Exception {
         UsuarioEntity usuario = new UsuarioEntity();
@@ -340,12 +353,14 @@ public class GerenteServiceTest {
 
     }
 
+    @DisplayName("Deleta gerente sem sucesso pois gerente não foi encontrado.")
     @Test(expected = RegraDeNegocioException.class)
     public void deletaGerenteSemSucessoIdNaoEncotrado() throws Exception {
         doReturn(Optional.empty()).when(gerenteRepository).findById(anyInt());
         gerenteService.delete(3);
     }
 
+    @DisplayName("Deleta gerente sem sucesso pois ele já está inativo.")
     @Test(expected = RegraDeNegocioException.class)
     public void deletaGerenteSemSucessoGerenteJaInativo() throws Exception{
         GerenteEntity gerenteEntity = new GerenteEntity();
@@ -353,6 +368,8 @@ public class GerenteServiceTest {
         doReturn(Optional.of(gerenteEntity)).when(gerenteRepository).findById(2);
         gerenteService.delete(2);
     }
+
+
 }
 
 
