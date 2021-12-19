@@ -40,7 +40,7 @@ public class TokenService {
         if (usuarioRepository.findByUsuario(usuario.getUsuario()).get() == null) {
             throw new RegraDeNegocioException("Usuário ou senha inválidos");
         }
-        //tempoExpiração
+
         Date exp = new Date(generateDate.getTime() + Long.parseLong(expiration));
 
         List<String> permissoes = usuario.getAuthorities().stream()

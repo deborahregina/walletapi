@@ -272,7 +272,7 @@ public class ServicoServiceTest {
 
         servicoInativo.setStatus(TipoStatus.INATIVO);
         servicoEntities.add(servicoInativo);
-        Assert.assertTrue(servicoService.ServicosInativos(servicoEntities));
+        Assert.assertTrue(servicoService.servicosInativos(servicoEntities));
     }
 
     @DisplayName("Procura por serviços inativos em uma lista com serviços ativos.")
@@ -282,7 +282,7 @@ public class ServicoServiceTest {
         ServicoEntity servicoAnativo = new ServicoEntity();
         servicoAnativo.setStatus(TipoStatus.ATIVO);
         servicoEntities.add(servicoAnativo);
-        Assert.assertFalse(servicoService.ServicosInativos(servicoEntities));
+        Assert.assertFalse(servicoService.servicosInativos(servicoEntities));
     }
 
     @DisplayName("Procura por serviços inativos em uma lista com serviços ativos e inativos.")
@@ -295,7 +295,7 @@ public class ServicoServiceTest {
         servicoInativo.setStatus(TipoStatus.INATIVO);
         servicoEntities.add(servicoAnativo);
         servicoEntities.add(servicoInativo);
-        Assert.assertFalse(servicoService.ServicosInativos(servicoEntities));
+        Assert.assertFalse(servicoService.servicosInativos(servicoEntities));
     }
 
 
