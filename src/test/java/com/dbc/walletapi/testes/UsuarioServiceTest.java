@@ -1,6 +1,5 @@
 package com.dbc.walletapi.testes;
 
-import com.dbc.walletapi.dto.UsuarioDTO;
 import com.dbc.walletapi.entity.RegraEntity;
 import com.dbc.walletapi.entity.TipoStatus;
 import com.dbc.walletapi.entity.UsuarioEntity;

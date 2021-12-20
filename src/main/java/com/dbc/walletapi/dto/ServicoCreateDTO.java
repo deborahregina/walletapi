@@ -2,7 +2,6 @@ package com.dbc.walletapi.dto;
 
 import com.dbc.walletapi.entity.TipoMoeda;
 import com.dbc.walletapi.entity.TipoPeriodicidade;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
