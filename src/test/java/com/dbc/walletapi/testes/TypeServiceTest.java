@@ -45,7 +45,11 @@ public class TypeServiceTest {
     public void listaTypeAdminComSucesso() throws RegraDeNegocioException {
 
         UsuarioEntity usuario = new UsuarioEntity();
+        RegraEntity regra = new RegraEntity();
+
         usuario.setUsuario("User");
+        regra.setIdRegra(1);
+        usuario.setRegraEntity(regra);
 
         doReturn(Optional.of(usuario)).when(usuarioRepository).findById(1);
                 usuario.setIdUsuario(1);
@@ -81,7 +85,10 @@ public class TypeServiceTest {
 
         GerenteEntity gerenteEntity = new GerenteEntity();
         UsuarioEntity usuario = new UsuarioEntity();
+        RegraEntity regra = new RegraEntity();
 
+        regra.setIdRegra(1);
+        usuario.setRegraEntity(regra);
         usuario.setUsuario("user");
         usuario.setIdUsuario(1);
         gerenteEntity.setUsuario(usuario);
@@ -100,7 +107,10 @@ public class TypeServiceTest {
         GerenteEntity gerenteEntity = new GerenteEntity();
         UsuarioEntity usuarioAntigo = new UsuarioEntity();
         UsuarioEntity usuarioNovo = new UsuarioEntity();
+        RegraEntity regra = new RegraEntity();
 
+        regra.setIdRegra(1);
+        usuarioAntigo.setRegraEntity(regra);
 
         loginDTO.setSenha("nova senha");
         loginDTO.setUsuario("novo usuario");
@@ -116,6 +126,8 @@ public class TypeServiceTest {
         usuarioNovo.setIdUsuario(usuarioAntigo.getIdUsuario());
         doReturn(Optional.of(usuarioAntigo)).when(usuarioRepository).findById(1);
         gerenteEntity.setUsuario(usuarioNovo);
+        regra.setIdRegra(1);
+        usuarioNovo.setRegraEntity(regra);
         doReturn(usuarioNovo).when(usuarioRepository).save(usuarioAntigo);
 
         TypeDTO typeDTO = typeService.alterarSenhaELoginUsuarioDoAutenticado(String.valueOf(gerenteEntity.getUsuario().getIdUsuario()),loginDTO);
