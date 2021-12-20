@@ -34,7 +34,7 @@ public class TypeService {
                     .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!")); // Recupera usuário
             typeUserSistema.setIdUser(usuarioRecuperado.getIdUsuario());
             typeUserSistema.setUsuario(usuarioRecuperado.getUsuario());
-            if(usuarioRecuperado.getIdUsuario() == 1) { // Caso for gerente, não há mais dados para incrementar nessa variável.
+            if(usuarioRecuperado.getRegraEntity().getIdRegra() == 1) { // Caso for admin (regra 1), não há mais dados para incrementar nessa variável.
                 return typeUserSistema;
             }
 
@@ -73,7 +73,7 @@ public class TypeService {
             typeUserSistema.setIdUser(novosDadosUsuario.getIdUsuario());
             typeUserSistema.setUsuario(novosDadosUsuario.getUsuario());
 
-            if(usuarioRecuperado.getIdUsuario() == 1) { // Caso for gerente, não há mais dados para incrementar nessa variável.
+            if(usuarioRecuperado.getRegraEntity().getIdRegra() == 1) { // Caso for gerente, não há mais dados para incrementar nessa variável.
                 return typeUserSistema;
             }
 
@@ -81,7 +81,7 @@ public class TypeService {
                     .orElseThrow(() ->new RegraDeNegocioException("Gerente não encontrado!"));
 
             List<ServicoDTO> listServicosDTO = gerenteEntity.getServicos().stream()
-                    .map(servicoEntity -> objectMapper.convertValue(servicoEntity,ServicoDTO.class))
+                    .map(servicoEntity -> servicoService.fromEntity(servicoEntity))
                     .filter(servicoDTO -> servicoDTO.getStatus().equals(TipoStatus.ATIVO)).collect(Collectors.toList()); // Filtra apenas serviços ativos daquele gerente
 
             typeUserSistema.setIdGerente(gerenteEntity.getIdGerente());
