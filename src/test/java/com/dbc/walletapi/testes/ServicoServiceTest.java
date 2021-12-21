@@ -19,6 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -316,27 +317,43 @@ public class ServicoServiceTest {
       // Assertions.assertNotNull(listaServicos);
     }
 
-    @DisplayName("Lista serviços com ID do gerente.")
+    @DisplayName("Valor total em reais dos serviços por ID do gerente.")
     @Test
     public void listaServicosPorIdGerenteUsandoMesEAno() throws Exception{
         List<ServicoEntity> servicoEntities = new ArrayList<>();
+        List<ServicoEntity> servicoEntities1 = new ArrayList<>();
         ServicoEntity servico = new ServicoEntity();
+        ServicoEntity servico2 = new ServicoEntity();
         UsuarioEntity usuario = new UsuarioEntity();
         GerenteEntity gerente = new GerenteEntity();
+        RegraEntity regra = new RegraEntity();
+
+        regra.setIdRegra(1);
 
         servico.setGerenteEntity(gerente);
+
+        servico.setValor(BigDecimal.valueOf(200.0));             // Setando Serviço Ativo
+        servico.setPeriocidade(TipoPeriodicidade.MENSAL);
+
+        servico2.setValor(BigDecimal.valueOf(100.0));            // Setando Serviço Inativo
+        servico.setPeriocidade(TipoPeriodicidade.MENSAL);
+
         servicoEntities.add(servico);
+        servicoEntities1.add(servico2);
         gerente.setIdGerente(2);
         doReturn(Optional.of(usuario)).when(usuarioRepository).findById(anyInt());
         usuario.setIdUsuario(2);
+        usuario.setRegraEntity(regra);
         usuario.setGerenteEntity(gerente);
         gerente.setUsuario(usuario);
 
-        //doReturn(Optional.of(gerente)).when(gerenteRepository).findById(anyInt());
-        //doReturn(servicoEntities).when(servicoRepository).getServicosPorMesEAnoEIDGerente(anyInt(),anyInt(),anyInt());
+        doReturn(Optional.of(gerente)).when(gerenteRepository).findById(anyInt());
+        doReturn(servicoEntities).when(servicoRepository).getServicosPorMesEAnoAtivosInativos(anyInt(),anyInt());
+        doReturn(servicoEntities1).when(servicoRepository).getServicosPorMesEAnoInativos(anyInt(), anyInt());
 
-        //List<ServicoDTO> listaServicos = servicoService.listByMesEAno(2021,9,"2");
-        //Assertions.assertNotNull(listaServicos);
+        BigDecimal totalServicos = servicoService.listByMesEAno(2021,10,"2");
+        Assertions.assertNotNull(totalServicos);
+        Assertions.assertEquals(totalServicos.setScale(0), BigDecimal.valueOf(200));
     }
 
     @DisplayName("Lista serviços com ID do gerente, mas usuario não encontrado.")
@@ -355,9 +372,8 @@ public class ServicoServiceTest {
         usuario.setGerenteEntity(gerente);
         gerente.setUsuario(usuario);
 
-
-       // List<ServicoDTO> listaServicos = servicoService.listByMesEAno(2021,9,"2");
-        //Assertions.assertNull(listaServicos);
+       BigDecimal totalSevicos = servicoService.listByMesEAno(2021,9,"2");
+       Assertions.assertNull(totalSevicos);
     }
 
 }
