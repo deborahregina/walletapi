@@ -351,7 +351,6 @@ public class ServicoServiceTest {
         usuario.setGerenteEntity(gerente);
         gerente.setUsuario(usuario);
 
-        doReturn(Optional.of(gerente)).when(gerenteRepository).findById(anyInt());
         doReturn(servicoEntities).when(servicoRepository).getServicosPorMesEAnoAtivosInativos(anyInt(),anyInt());
         doReturn(servicoEntities1).when(servicoRepository).getServicosPorMesEAnoInativos(anyInt(), anyInt());
 
