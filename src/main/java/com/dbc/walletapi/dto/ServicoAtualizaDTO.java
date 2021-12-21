@@ -49,5 +49,6 @@ public class ServicoAtualizaDTO {
     @Min(value = 1)
     private Integer idGerente;
 
+    private BigDecimal valorOriginal;
 
 }

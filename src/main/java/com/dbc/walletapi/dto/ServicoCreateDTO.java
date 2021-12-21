@@ -48,4 +48,6 @@ public class ServicoCreateDTO {
     private TipoPeriodicidade periocidade;
 
     private LocalDate data;
+
+    private BigDecimal valorOriginal;
 }

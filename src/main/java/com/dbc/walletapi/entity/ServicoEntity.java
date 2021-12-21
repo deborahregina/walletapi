@@ -53,4 +53,7 @@ public class ServicoEntity  {
 
     @Column(name = "DATA_DELETE")
     private LocalDate dataDeletado;
+
+    @Column(name = "VALOR_ORIGINAL")
+    private BigDecimal valorOriginal;
 }

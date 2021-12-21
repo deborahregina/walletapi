@@ -61,6 +61,7 @@ public class ServicoService<ServicosDTO> {
         servicoParaAtualizar.setNome(servicoAtualizaDTO.getNome()); // atualiza nome
         servicoParaAtualizar.setPeriocidade(servicoAtualizaDTO.getPeriocidade()); // atualiza periodicidade
         servicoParaAtualizar.setWebSite(servicoAtualizaDTO.getWebSite()); // atualiza website
+        servicoParaAtualizar.setValorOriginal(servicoAtualizaDTO.getValorOriginal());
         servicoParaAtualizar.setStatus(TipoStatus.ATIVO);
 
         ServicoEntity servicoEditado = servicoRepository.save(servicoParaAtualizar);

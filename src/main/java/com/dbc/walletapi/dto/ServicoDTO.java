@@ -46,5 +46,6 @@ public class ServicoDTO {
     @ApiModelProperty(value = "Data de criação do serviço")
     private LocalDate data;
 
+    private BigDecimal valorOriginal;
 
 }
