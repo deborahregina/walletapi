@@ -50,4 +50,7 @@ public class ServicoEntity  {
 
     @Column(name = "data_criacao")
     private LocalDate data;
+
+    @Column(name = "DATA_DELETE")
+    private LocalDate dataDeletado;
 }

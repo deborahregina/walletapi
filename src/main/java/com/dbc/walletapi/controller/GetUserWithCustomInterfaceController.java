@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -42,7 +43,7 @@ public class GetUserWithCustomInterfaceController {
 
     @RequestMapping(value = "/list-servicos-mes-ano", method = RequestMethod.GET)
     @ResponseBody
-    public List<ServicoDTO> getByAnoEMES(@RequestParam("ano") Integer ano, @RequestParam("mes") Integer mes) throws RegraDeNegocioException {
+    public BigDecimal getByAnoEMES(@RequestParam("ano") Integer ano, @RequestParam("mes") Integer mes) throws RegraDeNegocioException {
         Authentication authentication = authenticationFacade.getAuthentication();
         String idUser = authentication.getName();
         return servicoService.listByMesEAno(ano,mes,idUser);
