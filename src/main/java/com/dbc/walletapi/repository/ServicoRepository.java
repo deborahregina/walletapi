@@ -24,13 +24,13 @@ public interface ServicoRepository extends JpaRepository<ServicoEntity, Integer>
     List<ServicoEntity> getServicosPorMesEAnoAtivosInativos(Integer ano, Integer mes);
 
     // deletar somas status = 1
-    @Query(value = "select * from servico s where extract(month from s.data_delete) < :mes and extract(year from s.data_delete) = :ano", nativeQuery = true)
+    @Query(value = "select * from servico s where extract(month from s.data_delete) <= :mes and extract(year from s.data_delete) = :ano", nativeQuery = true)
     List<ServicoEntity> getServicosPorMesEAnoInativos(Integer ano, Integer mes);
 
     @Query(value = " select * from servico s where extract(year from s.data_criacao) = :ano and extract(month from s.data_criacao) <= :mes and s.id_gerente = :idGerente", nativeQuery = true)
     List<ServicoEntity> getServicosPorMesEAnoEIDGerenteAtivoEInativo(Integer ano, Integer mes, Integer idGerente);
 
-    @Query(value = " select * from servico s where extract(month from s.data_delete) < :mes and extract(year from s.data_delete) = :ano and s.id_gerente = :idGerente", nativeQuery = true)
+    @Query(value = " select * from servico s where extract(month from s.data_delete) <= :mes and extract(year from s.data_delete) = :ano and s.id_gerente = :idGerente", nativeQuery = true)
     List<ServicoEntity> getServicosPorMesEAnoEIDGerenteInativo(Integer ano, Integer mes, Integer idGerente);
 
     @Query(value = "select * from servico s where s.status = 0 and s.moeda = :moeda ",nativeQuery = true)
