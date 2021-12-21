@@ -4,6 +4,7 @@ import com.dbc.walletapi.entity.TipoMoeda;
 import com.dbc.walletapi.entity.TipoPeriodicidade;
 import com.dbc.walletapi.entity.TipoStatus;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true) // Esta anotação foi inserida para testes no mockito.
 public class ServicoDTO {
 
     private Integer idServico;

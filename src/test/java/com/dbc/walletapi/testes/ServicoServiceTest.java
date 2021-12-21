@@ -302,24 +302,28 @@ public class ServicoServiceTest {
 
     @DisplayName("Lista serviços com ID do admin, passando mes e ano.")
     @Test
-    public void listaServicosIDdeADMINUsandoMesEAno() throws Exception{
+    public void valorServicosIDdeADMINUsandoMesEAno() throws Exception{
        List<ServicoEntity> servicoEntities = new ArrayList<>();
        UsuarioEntity usuario = new UsuarioEntity();
        ServicoEntity servico = new ServicoEntity();
+       RegraEntity regra = new RegraEntity();
 
+       regra.setIdRegra(1);
+
+       usuario.setRegraEntity(regra);
 
        servicoEntities.add(servico);
        doReturn(Optional.of(usuario)).when(usuarioRepository).findById(1);
        usuario.setIdUsuario(1);
 
 
-       //Integer listaServicos = servicoService.listByMesEAno(2021,9,"1");
-      // Assertions.assertNotNull(listaServicos);
+       BigDecimal valor = servicoService.listByMesEAno(2021,9,"1");
+       Assertions.assertNotNull(valor);
     }
 
     @DisplayName("Valor total em reais dos serviços por ID do gerente.")
     @Test
-    public void listaServicosPorIdGerenteUsandoMesEAno() throws Exception{
+    public void valorServicosPorIdGerenteUsandoMesEAno() throws Exception{
         List<ServicoEntity> servicoEntities = new ArrayList<>();
         List<ServicoEntity> servicoEntities1 = new ArrayList<>();
         ServicoEntity servico = new ServicoEntity();
@@ -347,7 +351,6 @@ public class ServicoServiceTest {
         usuario.setGerenteEntity(gerente);
         gerente.setUsuario(usuario);
 
-        doReturn(Optional.of(gerente)).when(gerenteRepository).findById(anyInt());
         doReturn(servicoEntities).when(servicoRepository).getServicosPorMesEAnoAtivosInativos(anyInt(),anyInt());
         doReturn(servicoEntities1).when(servicoRepository).getServicosPorMesEAnoInativos(anyInt(), anyInt());
 
@@ -358,7 +361,7 @@ public class ServicoServiceTest {
 
     @DisplayName("Lista serviços com ID do gerente, mas usuario não encontrado.")
     @Test(expected = RegraDeNegocioException.class)
-    public void listaServicosPorIdGerenteUsandoMesEAnoSemSucesso() throws Exception{
+    public void valorServicosPorIdGerenteUsandoMesEAnoSemSucesso() throws Exception{
         List<ServicoEntity> servicoEntities = new ArrayList<>();
         ServicoEntity servico = new ServicoEntity();
         UsuarioEntity usuario = new UsuarioEntity();
