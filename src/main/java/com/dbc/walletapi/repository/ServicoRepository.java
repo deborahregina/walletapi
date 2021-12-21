@@ -1,6 +1,7 @@
 package com.dbc.walletapi.repository;
 
 import com.dbc.walletapi.entity.ServicoEntity;
+import com.dbc.walletapi.entity.TipoMoeda;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -31,5 +32,11 @@ public interface ServicoRepository extends JpaRepository<ServicoEntity, Integer>
 
     @Query(value = " select * from servico s where extract(month from s.data_delete) < :mes and extract(year from s.data_delete) = :ano and s.id_gerente = :idGerente", nativeQuery = true)
     List<ServicoEntity> getServicosPorMesEAnoEIDGerenteInativo(Integer ano, Integer mes, Integer idGerente);
+
+    @Query(value = "select * from servico s where s.status = 0 and s.moeda = :moeda ",nativeQuery = true)
+    List<ServicoEntity> getServicosAtivosPorMoeda(Integer moeda);
+
+    @Query(value = "select * from servico s where s.status = 0 and s.moeda = :moeda and s.id_gerente = :idGerente",nativeQuery = true)
+    List<ServicoEntity> getServicosAtivosPorMoedaIdGerente(Integer moeda, Integer idGerente);
 
 }

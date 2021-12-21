@@ -182,4 +182,49 @@ public class ServicoService<ServicosDTO> {
         }
         return somaTotal;
     }
+
+    public BigDecimal getValorOriginal(String idUser, Integer tipoMoeda) throws RegraDeNegocioException {
+
+        try {
+            Integer idUsuario = Integer.valueOf(idUser);
+
+            UsuarioEntity usuarioRecuperado = usuarioRepository.findById(idUsuario)
+                    .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!"));
+
+            if (usuarioRecuperado.getRegraEntity().getIdRegra() == 1) { // caso usuário for o admin
+               List<ServicoEntity> listaServicos = servicoRepository.getServicosAtivosPorMoeda(tipoMoeda);
+               return calculaValorOriginal(listaServicos);
+
+            }
+            GerenteEntity gerenteEntity = gerenteRepository.findById(usuarioRecuperado.getGerenteEntity().getIdGerente())
+                    .orElseThrow(() ->new RegraDeNegocioException("Gerente não encontrado!"));
+
+            List<ServicoEntity> listaServicos = servicoRepository.getServicosAtivosPorMoedaIdGerente(tipoMoeda,gerenteEntity.getIdGerente());
+            return calculaValorOriginal(listaServicos);
+
+        } catch (NumberFormatException ex) {
+            throw new RegraDeNegocioException("Usuário ou senha inválidos");
+        }
+    }
+
+
+
+    public BigDecimal calculaValorOriginal(List<ServicoEntity> servicoEntities) {
+
+        BigDecimal somaTotal = BigDecimal.ZERO;
+        for(ServicoEntity servico :  servicoEntities) {
+            if (servico.getPeriocidade() == TipoPeriodicidade.TRIMESTRAL) {
+                somaTotal = somaTotal.add(servico.getValorOriginal().divide(BigDecimal.valueOf(3),2, RoundingMode.HALF_UP));
+            }
+            if(servico.getPeriocidade() == TipoPeriodicidade.SEMESTRAL) {
+                somaTotal = somaTotal.add(servico.getValorOriginal().divide(BigDecimal.valueOf(6),2, RoundingMode.HALF_UP));
+            }
+            if(servico.getPeriocidade() == TipoPeriodicidade.ANUAL) {
+                somaTotal = somaTotal.add(servico.getValorOriginal().divide(BigDecimal.valueOf(12),2, RoundingMode.HALF_UP));
+            } if(servico.getPeriocidade() == TipoPeriodicidade.MENSAL) {
+                somaTotal = somaTotal.add(servico.getValorOriginal());
+            }
+        }
+        return somaTotal;
+    }
 }

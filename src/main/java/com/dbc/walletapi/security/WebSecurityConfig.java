@@ -35,6 +35,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/username").permitAll()
                 .antMatchers("/mudar-senha").permitAll()
                 .antMatchers("/list-servicos-mes-ano").permitAll()
+                .antMatchers("/list-servicos-dolar").permitAll()
+                .antMatchers("/list-servicos-euro").permitAll()
+                .antMatchers("/list-servicos-real").permitAll()
                 //usuários podem mudar senha caso estiverem autenticados
                 .antMatchers("/auth/createGerente/").hasRole("ADMIN")
                 .antMatchers("/**").hasRole("ADMIN")
