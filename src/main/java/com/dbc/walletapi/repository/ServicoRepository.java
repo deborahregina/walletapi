@@ -18,9 +18,18 @@ public interface ServicoRepository extends JpaRepository<ServicoEntity, Integer>
     @Query(value = " select * from servico s where s.status = 0 and s.id_gerente = :idGerente", nativeQuery = true)
     List<ServicoEntity> getServicosAtivosIdGerente(Integer idGerente);
 
-    @Query(value = " select * from servico s where extract(year from s.data_criacao) = :ano and extract(month from s.data_criacao) = :mes and s.status = 0", nativeQuery = true)
-    List<ServicoEntity> getServicosPorMesEAno(Integer ano, Integer mes);
+    //soma total
+    @Query(value = " select * from servico s where extract(year from s.data_criacao) = :ano and extract(month from s.data_criacao) <= :mes", nativeQuery = true)
+    List<ServicoEntity> getServicosPorMesEAnoAtivosInativos(Integer ano, Integer mes);
 
-    @Query(value = " select * from servico s where extract(year from s.data_criacao) = :ano and extract(month from s.data_criacao) = :mes and s.status = 0 and s.id_gerente = :idGerente", nativeQuery = true)
-    List<ServicoEntity> getServicosPorMesEAnoEIDGerente(Integer ano, Integer mes, Integer idGerente);
+    // deletar somas status = 1
+    @Query(value = "select * from servico s where extract(month from s.data_delete) < :mes and extract(year from s.data_delete) = :ano", nativeQuery = true)
+    List<ServicoEntity> getServicosPorMesEAnoInativos(Integer ano, Integer mes);
+
+    @Query(value = " select * from servico s where extract(year from s.data_criacao) = :ano and extract(month from s.data_criacao) <= :mes and s.id_gerente = :idGerente", nativeQuery = true)
+    List<ServicoEntity> getServicosPorMesEAnoEIDGerenteAtivoEInativo(Integer ano, Integer mes, Integer idGerente);
+
+    @Query(value = " select * from servico s where extract(month from s.data_delete) < :mes and extract(year from s.data_delete) = :ano and s.id_gerente = :idGerente", nativeQuery = true)
+    List<ServicoEntity> getServicosPorMesEAnoEIDGerenteInativo(Integer ano, Integer mes, Integer idGerente);
+
 }

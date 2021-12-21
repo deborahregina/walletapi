@@ -1,10 +1,7 @@
 package com.dbc.walletapi.service;
 
 import com.dbc.walletapi.dto.*;
-import com.dbc.walletapi.entity.GerenteEntity;
-import com.dbc.walletapi.entity.ServicoEntity;
-import com.dbc.walletapi.entity.TipoStatus;
-import com.dbc.walletapi.entity.UsuarioEntity;
+import com.dbc.walletapi.entity.*;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.repository.GerenteRepository;
 import com.dbc.walletapi.repository.ServicoRepository;
@@ -13,6 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,6 +78,7 @@ public class ServicoService<ServicosDTO> {
     public void delete(Integer id) throws RegraDeNegocioException {
         ServicoEntity servicoEntity = findById(id);
         servicoEntity.setStatus(TipoStatus.INATIVO);
+        servicoEntity.setDataDeletado(LocalDate.now());
         servicoRepository.save(servicoEntity);
     }
 
@@ -138,7 +139,7 @@ public class ServicoService<ServicosDTO> {
 
     }
 
-    public List<ServicoDTO> listByMesEAno(Integer ano, Integer mes, String idUser) throws RegraDeNegocioException {
+    public BigDecimal listByMesEAno(Integer ano, Integer mes, String idUser) throws RegraDeNegocioException {
 
         try {
             Integer idUsuario = Integer.valueOf(idUser); // Transforma a string que contém o ID do usuário em inteiro
@@ -146,18 +147,38 @@ public class ServicoService<ServicosDTO> {
             UsuarioEntity usuarioRecuperado = usuarioRepository.findById(idUsuario)
                     .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado!")); // Recupera usuário
 
-            if (usuarioRecuperado.getIdUsuario() == 1) { // caso usuário for o admin
-                return servicoRepository.getServicosPorMesEAno(ano, mes)
-                        .stream().map(servicoEntity -> fromEntity(servicoEntity)).collect(Collectors.toList()); // retorna a lista de todos os serviços do mes e ano
+            if (usuarioRecuperado.getRegraEntity().getIdRegra() == 1) { // caso usuário for o admin
+                return calculaValorMensal(servicoRepository.getServicosPorMesEAnoAtivosInativos(ano, mes))
+                        .subtract(calculaValorMensal(servicoRepository.getServicosPorMesEAnoInativos(ano,mes)));
+
             }
             GerenteEntity gerenteEntity = gerenteRepository.findById(usuarioRecuperado.getGerenteEntity().getIdGerente()) // caso for um gerente, precisa salvar serviços
                     .orElseThrow(() ->new RegraDeNegocioException("Gerente não encontrado!"));
 
-            return servicoRepository.getServicosPorMesEAnoEIDGerente(ano,mes,gerenteEntity.getIdGerente())
-                    .stream().map(servicoEntity -> fromEntity(servicoEntity)).collect(Collectors.toList()); // retorna apenas serviços do gerente autenticado.
+            return calculaValorMensal(servicoRepository.getServicosPorMesEAnoEIDGerenteAtivoEInativo(ano,mes,gerenteEntity.getIdGerente()))
+                    .subtract(calculaValorMensal(servicoRepository.getServicosPorMesEAnoEIDGerenteInativo(ano,mes,gerenteEntity.getIdGerente())));
 
         } catch (NumberFormatException ex) {
             throw new RegraDeNegocioException("Usuário ou senha inválidos");
         }
+    }
+
+    public BigDecimal calculaValorMensal(List<ServicoEntity> servicoEntities) {
+
+        BigDecimal somaTotal = BigDecimal.ZERO;
+        for(ServicoEntity servico :  servicoEntities) {
+            if (servico.getPeriocidade() == TipoPeriodicidade.TRIMESTRAL) {
+                somaTotal = somaTotal.add(servico.getValor().divide(BigDecimal.valueOf(3),2, RoundingMode.HALF_UP));
+            }
+            if(servico.getPeriocidade() == TipoPeriodicidade.SEMESTRAL) {
+                somaTotal = somaTotal.add(servico.getValor().divide(BigDecimal.valueOf(6),2, RoundingMode.HALF_UP));
+            }
+            if(servico.getPeriocidade() == TipoPeriodicidade.ANUAL) {
+                somaTotal = somaTotal.add(servico.getValor().divide(BigDecimal.valueOf(12),2, RoundingMode.HALF_UP));
+            } if(servico.getPeriocidade() == TipoPeriodicidade.MENSAL) {
+                somaTotal = somaTotal.add(servico.getValor());
+            }
+        }
+        return somaTotal;
     }
 }
