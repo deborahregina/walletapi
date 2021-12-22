@@ -28,7 +28,7 @@ public class TokenService {
     private static final String CLAIN_PERMISSOES = "permissoes";
     private final UsuarioRepository usuarioRepository;
 
-    @Value("${jwt.expiration}")
+    @Value("1200000")
     private String expiration;
 
     @Value("${jwt.secret}")

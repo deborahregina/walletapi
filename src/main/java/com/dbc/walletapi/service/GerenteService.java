@@ -99,7 +99,6 @@ public class GerenteService {
                 .map(gerente -> fromEntity(gerente)).collect(Collectors.toList());
     }
 
-
     public GerenteDTO alteraSenha(LoginCreateDTO loginDTO, Integer idGerente) throws RegraDeNegocioException {
 
         GerenteEntity gerente = gerenteRepository.findById(idGerente)
