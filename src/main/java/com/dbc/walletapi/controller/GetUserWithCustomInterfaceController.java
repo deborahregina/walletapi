@@ -1,9 +1,7 @@
 package com.dbc.walletapi.controller;
 
 import com.dbc.walletapi.dto.LoginCreateDTO;
-import com.dbc.walletapi.dto.ServicoDTO;
 import com.dbc.walletapi.dto.TypeDTO;
-import com.dbc.walletapi.entity.TipoMoeda;
 import com.dbc.walletapi.exceptions.RegraDeNegocioException;
 import com.dbc.walletapi.security.IAuthenticationFacade;
 import com.dbc.walletapi.service.ServicoService;
