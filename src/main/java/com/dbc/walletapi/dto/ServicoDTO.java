@@ -50,4 +50,6 @@ public class ServicoDTO {
 
     private BigDecimal valorOriginal;
 
+    private LocalDate dataDeletado;
+
 }
