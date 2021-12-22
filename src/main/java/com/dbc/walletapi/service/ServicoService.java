@@ -174,7 +174,8 @@ public class ServicoService<ServicosDTO> {
             }
             if(servico.getPeriocidade() == TipoPeriodicidade.ANUAL) {
                 somaTotal = somaTotal.add(servico.getValor().divide(BigDecimal.valueOf(12),2, RoundingMode.HALF_UP));
-            } if(servico.getPeriocidade() == TipoPeriodicidade.MENSAL) {
+            }
+            if(servico.getPeriocidade() == TipoPeriodicidade.MENSAL) {
                 somaTotal = somaTotal.add(servico.getValor());
             }
         }
@@ -204,7 +205,6 @@ public class ServicoService<ServicosDTO> {
             throw new RegraDeNegocioException("Usuário ou senha inválidos");
         }
     }
-
 
 
     public BigDecimal calculaValorOriginal(List<ServicoEntity> servicoEntities) {

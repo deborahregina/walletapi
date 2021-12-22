@@ -7,6 +7,7 @@ import com.dbc.walletapi.repository.ServicoRepository;
 import com.dbc.walletapi.repository.UsuarioRepository;
 import com.dbc.walletapi.service.ServicoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -379,4 +380,39 @@ public class ServicoServiceTest {
        Assertions.assertNull(totalSevicos);
     }
 
+    @DisplayName("Calculando valor mensal dos serviços")
+    @Test
+    public void calcularValorMensal(){
+        ServicoEntity servicoEntity = new ServicoEntity();
+        ServicoEntity servicoEntity1 = new ServicoEntity();
+        List<ServicoEntity> listaServicos = new ArrayList<>();
+
+        servicoEntity.setValor(BigDecimal.valueOf(1200));
+        servicoEntity.setPeriocidade(TipoPeriodicidade.ANUAL);
+        listaServicos.add(servicoEntity);
+
+        servicoEntity1.setValor(BigDecimal.valueOf(900));
+        servicoEntity.setPeriocidade(TipoPeriodicidade.TRIMESTRAL);
+        listaServicos.add(servicoEntity1);
+
+        BigDecimal totalServicos = servicoService.calculaValorMensal(listaServicos);
+
+        Assertions.assertEquals(totalServicos.setScale(0), BigDecimal.valueOf(400));
+    }
+
+    @DisplayName("Calculando Valor do serviço por Moeda")
+    @Test
+    public void retornandoValorOriginal(){
+        ServicoEntity servicoEntity = new ServicoEntity();
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+        RegraEntity regraEntity = new RegraEntity();
+
+        regraEntity.setIdRegra(1);
+
+        usuarioEntity.setIdUsuario(1);
+        usuarioEntity.setRegraEntity(regraEntity);
+
+
+
+    }
 }
