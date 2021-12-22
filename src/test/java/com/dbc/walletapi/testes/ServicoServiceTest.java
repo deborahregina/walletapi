@@ -400,19 +400,4 @@ public class ServicoServiceTest {
         Assertions.assertEquals(totalServicos.setScale(0), BigDecimal.valueOf(400));
     }
 
-    @DisplayName("Calculando Valor do serviço por Moeda")
-    @Test
-    public void retornandoValorOriginal(){
-        ServicoEntity servicoEntity = new ServicoEntity();
-        UsuarioEntity usuarioEntity = new UsuarioEntity();
-        RegraEntity regraEntity = new RegraEntity();
-
-        regraEntity.setIdRegra(1);
-
-        usuarioEntity.setIdUsuario(1);
-        usuarioEntity.setRegraEntity(regraEntity);
-
-
-
-    }
 }
