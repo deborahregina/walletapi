@@ -70,10 +70,8 @@ public class ServicoService<ServicosDTO> {
     }
 
     public List<ServicoDTO> list() {
-        return servicoRepository.getServicosAtivos().
-                stream()
-                .map(this::fromEntity)
-                .collect(Collectors.toList());
+        return servicoRepository.findAll().stream()
+                .map(servicoEntity -> fromEntity(servicoEntity)).collect(Collectors.toList());
     }
 
     public void delete(Integer id) throws RegraDeNegocioException {
@@ -134,9 +132,9 @@ public class ServicoService<ServicosDTO> {
             throw new RegraDeNegocioException("Este gerente está inativo!");
         }
 
-        return servicoRepository.getServicosAtivosIdGerente(gerente.getIdGerente()).stream()
-                .map(servicoEntity -> fromEntity(servicoEntity))
+        return gerente.getServicos().stream().map(servicoEntity -> fromEntity(servicoEntity))
                 .collect(Collectors.toList());
+
 
     }
 

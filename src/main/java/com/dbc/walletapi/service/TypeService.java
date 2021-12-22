@@ -43,7 +43,8 @@ public class TypeService {
 
             List<ServicoDTO> listServicosDTO = gerenteEntity.getServicos().stream()
                     .map(servicoEntity -> servicoService.fromEntity(servicoEntity))
-                    .filter(servicoDTO -> servicoDTO.getStatus().equals(TipoStatus.ATIVO)).collect(Collectors.toList()); // Filtra apenas serviços ativos daquele gerente
+                    .collect(Collectors.toList());
+                     // Filtra apenas serviços ativos daquele gerente
 
             typeUserSistema.setIdGerente(gerenteEntity.getIdGerente());
             typeUserSistema.setEmail(gerenteEntity.getEmail());
